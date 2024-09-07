@@ -19,6 +19,7 @@ function App() {
           <Route path="/available" element={<Available />} />
           <Route path="/description" element={<Description />} />
           <Route path="/registration" element={<Registration />} />
+          <Route path="/description/:id" element={<Description />} />
         </Routes>
       </div>
     </Router>

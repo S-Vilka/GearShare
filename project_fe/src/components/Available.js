@@ -30,13 +30,17 @@ function Available() {
         <h1>Available Tools</h1>
         <div className="tool-list">
           {currentTools.map((tool) => (
-            <div key={tool.id} className="tool-item">
+            <Link
+              to={`/description/${tool.id}`}
+              key={tool.id}
+              className="tool-item"
+            >
               <div className="image-placeholder">
                 {/* Replace with image */}
                 <div className="placeholder-text">Tool Image</div>
               </div>
               <h3>{tool.name}</h3>
-            </div>
+            </Link>
           ))}
         </div>
         <Pagination

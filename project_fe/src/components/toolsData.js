@@ -4,14 +4,14 @@ export const tools = [
     name: "Cordless Drill",
     description: "Lorem ipsum dolor sit amet, consectetur adipiscing elit.",
     details:
-      "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.",
+      "Lorem ipsum dolor sit amet, consectetur adipiscing elit. minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.",
   },
   {
     id: 2,
     name: "Circular Saw",
     description: "Ut enim ad minim veniam, quis nostrud exercitation ullamco.",
     details:
-      "Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.",
+      "Duis aute irure dolor in reprehenderit in voluptate velit esse cillumerunt mollit anim id est laborum.",
   },
   {
     id: 3,
@@ -19,7 +19,7 @@ export const tools = [
     description:
       "Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
     details:
-      "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.",
+      "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed doitation ullamco laboris nisi ut aliquip ex ea commodo consequat.",
   },
   {
     id: 4,
@@ -84,29 +84,28 @@ export const tools = [
     name: "Cordless Drill",
     description: "Lorem ipsum dolor sit amet, consectetur adipiscing elit.",
     details:
-      "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.",
+      "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod.",
   },
   {
     id: 13,
     name: "Circular Saw",
     description: "Ut enim ad minim veniam, quis nostrud exercitation ullamco.",
     details:
-      "Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.",
+      "Duis aute irure dolor in reprehenderit in voluptate velit esse cillumnt.",
   },
   {
     id: 14,
     name: "Impact Driver",
     description:
       "Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
-    details:
-      "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.",
+    details: "Lorem ipsum dolor sit amet, consectetur adipiscing elit.",
   },
   {
     id: 15,
     name: "Impact Wrench",
     description: "Ut enim ad minim veniam, quis nostrud exercitation ullamco.",
     details:
-      "Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.",
+      "Duis aute irure dolor in reprehenderit in voluptate velit esse cillum.",
   },
   {
     id: 16,
@@ -164,14 +163,14 @@ export const tools = [
     name: "Cordless Drill",
     description: "Lorem ipsum dolor sit amet, consectetur adipiscing elit.",
     details:
-      "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.",
+      "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do ex ea commodo consequat.",
   },
   {
     id: 24,
     name: "Circular Saw",
     description: "Ut enim ad minim veniam, quis nostrud exercitation ullamco.",
     details:
-      "Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.",
+      "Duis aute irure dolor in culpa qui officia deserunt mollit anim id est laborum.",
   },
   {
     id: 25,
@@ -179,25 +178,24 @@ export const tools = [
     description:
       "Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
     details:
-      "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.",
+      "Lorem ipsum dolor sit amet, consectetur adipiscing elit, commodo consequat.",
   },
   {
     id: 26,
     name: "Impact Wrench",
     description: "Ut enim ad minim veniam, quis nostrud exercitation ullamco.",
     details:
-      "Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.",
+      "Duis aute irure dolor in reprehenderit in voluptate velit esse cillum",
   },
   {
     id: 27,
     name: "Chainsaw",
     description: "Ut enim ad minim veniam, quis nostrud exercitation ullamco.",
     details:
-      "Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.",
+      "Duis aute irure dolor in reprehenderit in voluptate velit esse cillum",
   },
   {
     id: 28,
-    name: "Jigsaw",
     description: "Ut enim ad minim veniam, quis nostrud exercitation ullamco.",
     details:
       "Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.",
