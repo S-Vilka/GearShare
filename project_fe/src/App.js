@@ -6,6 +6,7 @@ import Profile from "./components/Profile";
 import Available from "./components/Available";
 import Description from "./components/Description";
 import Registration from "./components/Registration";
+import Settings from "./components/Settings/Settings";
 
 function App() {
   return (
@@ -19,6 +20,7 @@ function App() {
           <Route path="/available" element={<Available />} />
           <Route path="/description" element={<Description />} />
           <Route path="/registration" element={<Registration />} />
+          <Route path="/settings" element={<Settings />} />
         </Routes>
       </div>
     </Router>
