@@ -18,8 +18,8 @@ function App() {
           <Route path="/about" element={<About />} />
           <Route path="/profile" element={<Profile />} />
           <Route path="/available" element={<Available />} />
-          <Route path="/description" element={<Description />} />
           <Route path="/registration" element={<Registration />} />
+          <Route path="/description/:id" element={<Description />} />
           <Route path="/settings" element={<Settings />} />
         </Routes>
       </div>

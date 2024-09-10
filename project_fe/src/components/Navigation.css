@@ -1,0 +1,153 @@
+.navbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0 10px;
+  background-color: #fff;
+  border-bottom: 1px solid #e5e5e5;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  font-family: "Inter-Regular", Helvetica;
+}
+
+/* Left part of navbar */
+.nav-left ul {
+  display: flex;
+  list-style: none;
+  gap: 15px;
+  margin-left: -30px; /* Adjust the value to move further left */
+}
+
+.nav-left ul li a {
+  text-decoration: none;
+  color: #001858;
+  font-size: 16px;
+  padding: 7px;
+  transition: color 0.3s ease, transform 0.3s ease;
+}
+
+.nav-left ul li a:hover {
+  color: #28a745; /* Change to green on hover */
+}
+
+/* Centered logo */
+.nav-center {
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+}
+
+.nav-center .logo {
+  font-size: 30px;
+  font-weight: bold;
+  color: #001858;
+}
+
+/* Right part of navbar */
+.nav-right {
+  display: flex;
+  gap: 20px;
+  padding-right: 30px;
+  align-items: center; /* Ensures the buttons are vertically aligned */
+}
+
+/* Button styles */
+.btn {
+  border: none;
+  border-radius: 30px;
+  padding: 12px 32px; /* Make padding consistent */
+  font-size: 16px;
+  text-decoration: none;
+  text-align: center;
+  cursor: pointer;
+  height: 48px; /* Consistent height for both buttons */
+  display: flex;
+  align-items: center; /* Vertically center the text */
+  justify-content: center; /* Horizontally center the text */
+  box-sizing: border-box; /* Ensure padding is included in size */
+  margin: 0; /* Remove any default margin */
+}
+
+/* Login button */
+.login-btn {
+  background-color: #28a745;
+  color: white;
+}
+
+/* Join Now button */
+.join-btn {
+  background-color: #001858;
+  color: white;
+}
+
+/* Hover effects */
+.btn:hover {
+  opacity: 0.8;
+}
+
+
+/* Modal styling */
+.modal {
+  background: #fff;
+  padding: 20px;
+  border-radius: 8px;
+  max-width: 500px;
+  margin: auto;
+  position: relative;
+  top: 20%;
+}
+
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.7);
+}
+
+.modal h2 {
+  margin-bottom: 20px;
+}
+
+.modal form {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.modal form label {
+  font-size: 14px;
+  color: #333;
+}
+
+.modal form input {
+  padding: 10px;
+  font-size: 14px;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+}
+
+.modal .btn {
+  margin-top: 20px;
+}
+
+/* Scrollable join modal */
+.modal.join-form {
+  max-height: 400px; /* Adjust the height as needed */
+  overflow-y: auto;
+  padding-right: 10px; /* Prevent content from being hidden by the scrollbar */
+}
+
+/* Scrollbar appears */
+.modal.join-form::-webkit-scrollbar {
+  width: 6px;
+}
+
+.modal.join-form::-webkit-scrollbar-thumb {
+  background-color: rgba(0, 24, 88, 0.7);
+  border-radius: 10px;
+}
+
+.modal.join-form::-webkit-scrollbar-track {
+  background: #f1f1f1;
+}
