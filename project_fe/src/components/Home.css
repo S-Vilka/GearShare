@@ -1,3 +1,4 @@
+/* General page styling */
 .home-page {
   align-items: center;
   background-color: #ffffff;
@@ -8,98 +9,109 @@
   position: relative;
 }
 
+/* Card Styling */
 .card {
-  align-items: flex-start;
-  display: flex;
-  flex: 0 0 auto;
-  flex-direction: column;
-  justify-content: center;
-  position: relative;
-  width: 1320px;
+  width: 100%;
+  max-width: 1320px;
+  padding: 20px;
 }
 
+/* Column styling */
 .column {
-  align-items: flex-start;
-  align-self: stretch;
   display: flex;
-  flex: 0 0 auto;
   flex-direction: column;
   gap: 32px;
   justify-content: center;
-  padding: 0px 0px 48px;
-  position: relative;
   width: 100%;
 }
 
+/* Content block styling */
 .content {
   align-items: flex-start;
-  align-self: stretch;
   display: flex;
-  flex: 0 0 auto;
   flex-direction: column;
   gap: 24px;
-  position: relative;
   width: 100%;
 }
 
+/* Heading styling */
 .heading {
-  align-self: stretch;
   color: #031749;
-  font-family: "Inter-Bold", Helvetica;
+  font-family: "Inter-Bold", Helvetica, sans-serif;
   font-size: 56px;
   font-weight: 700;
-  letter-spacing: 0;
-  line-height: 67.2px;
+  line-height: 1.2;
   margin-top: -1px;
-  position: relative;
 }
 
+@media (max-width: 768px) {
+  .heading {
+    font-size: 36px;
+  }
+}
+
+/* Description styling */
 .description {
-  align-self: stretch;
   color: #031749;
-  font-family: "Inter-Regular", Helvetica;
+  font-family: "Inter-Regular", Helvetica, sans-serif;
   font-size: 25px;
   font-weight: 400;
-  letter-spacing: 0;
-  line-height: 27px;
-  position: relative;
+  line-height: 1.5;
 }
 
+@media (max-width: 768px) {
+  .description {
+    font-size: 18px;
+  }
+}
+
+/* Frame for buttons */
 .frame {
   display: flex;
-  align-items: center; /* Aligns buttons vertically */
-  justify-content: center; /* Aligns buttons horizontally */
-  gap: 24px; /* Space between the buttons */
-  width: 100%; /* Ensures the flex container takes full width */
-  position: relative;
-  font-family: "Inter-Regular", Helvetica;
+  flex-direction: row; /* Aligns buttons in a row */
+  align-items: center;
+  justify-content: center;
+  gap: 24px;
+  width: 100%;
+  font-family: "Inter-Regular", Helvetica, sans-serif;
 }
 
+/* For smaller screens, buttons will stack vertically */
+@media (max-width: 768px) {
+  .frame {
+    flex-direction: column; /* Stack buttons on small screens */
+  }
+}
+
+/* Button styles */
 .join-btn, .frame li a {
-  display: flex; /* Flexbox ensures full control over content alignment */
-  justify-content: center; /* Center text horizontally */
-  align-items: center; /* Center text vertically */
-  padding: 12px 32px; /* Adjusted padding */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 12px 32px;
   font-size: 16px;
   border-radius: 500px;
-  min-width: 160px;
-  height: 48px;
-  box-sizing: border-box; /* Ensures padding and border are included in size calculations */
-  margin: 0; /* Removes any default margin that might cause misalignment */
+  box-sizing: border-box;
+  margin: 0;
   text-decoration: none;
   transition: background-color 0.3s ease;
 }
 
 .join-btn {
-  background-color: #031749;
-  color: white;
+  background-color: #031749 !important;
+  color: white !important;
   border: none;
 }
 
+.join-btn:hover {
+  background-color: #004aad;
+}
+
+/* List item in frame */
 .frame li {
   list-style-type: none;
-  margin: 0; /* Ensures no margin for list item */
-  padding: 0; /* Ensures no padding for list item */
+  margin: 0;
+  padding: 0;
 }
 
 .frame li a {
@@ -109,104 +121,45 @@
 }
 
 .frame li a:hover {
-  background-color: #d1e0ff; /* Lighter blue background on hover */
+  background-color: #d1e0ff;
 }
 
-
+/* Video container */
 .video {
-  align-items: center;
-  align-self: stretch;
   display: flex;
-  flex: 0 0 auto;
-  flex-direction: column;
-  gap: 10px;
-  position: relative;
+  justify-content: center;
+  align-items: center;
   width: 100%;
+  height: 500px;
+  background-color: #F0F0F0;
 }
 
 .placeholder-lightbox {
-  align-self: stretch;
-  background-color: #03174980;
+  background-color: #F0F0F0; /* Updated background color */
   height: 500px;
-  position: relative;
   width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
 .play-button {
-  height: 64px;
-  left: 628px;
-  position: absolute;
-  top: 152px;
   width: 64px;
+  height: 64px;
 }
 
 .play-button:hover {
-  background-color: #004aad; /* Lighter blue on hover */
+  background-color: #004aad;
 }
 
-/* Modal styling */
-.modal {
-  background: #fff;
-  padding: 20px;
-  border-radius: 8px;
-  max-width: 500px;
-  margin: auto;
-  position: relative;
-  top: 20%;
-}
-
-.modal-overlay {
-  position: fixed;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  background-color: rgba(0, 0, 0, 0.7);
-}
-
-.modal h2 {
-  margin-bottom: 20px;
-}
-
-.modal form {
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
-}
-
-.modal form label {
-  font-size: 14px;
-  color: #333;
-}
-
-.modal form input {
-  padding: 10px;
-  font-size: 14px;
-  border: 1px solid #ddd;
-  border-radius: 4px;
-}
-
-.modal .btn {
-  margin-top: 20px;
-}
-
-/* Scrollable join modal */
-.modal.join-form {
-  max-height: 400px; /* Adjust the height as needed */
-  overflow-y: auto;
-  padding-right: 10px; /* Prevent content from being hidden by the scrollbar */
-}
-
-/* Ensure scrollbar appears */
-.modal.join-form::-webkit-scrollbar {
-  width: 6px;
-}
-
-.modal.join-form::-webkit-scrollbar-thumb {
-  background-color: rgba(0, 24, 88, 0.7);
-  border-radius: 10px;
-}
-
-.modal.join-form::-webkit-scrollbar-track {
-  background: #f1f1f1;
+/* Responsive adjustments for the play button and video container */
+@media (max-width: 768px) {
+  .placeholder-lightbox {
+    height: 300px;
+  }
+  
+  .play-button {
+    width: 48px;
+    height: 48px;
+  }
 }
