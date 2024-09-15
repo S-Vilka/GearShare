@@ -1,4 +1,5 @@
-export const tools = [
+module.exports = {
+  tools: [
   {
     id: 1,
     name: "Cordless Drill",
@@ -207,4 +208,5 @@ export const tools = [
     details:
       "Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.",
   },
-];
+],
+};
