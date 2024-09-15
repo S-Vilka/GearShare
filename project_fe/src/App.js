@@ -6,6 +6,8 @@ import Profile from "./components/Profile";
 import Available from "./components/Available";
 import Description from "./components/Description";
 import Registration from "./components/Registration";
+import Settings from "./components/Settings/Settings";
+import 'bootstrap/dist/css/bootstrap.min.css';
 
 function App() {
   return (
@@ -17,9 +19,9 @@ function App() {
           <Route path="/about" element={<About />} />
           <Route path="/profile" element={<Profile />} />
           <Route path="/available" element={<Available />} />
-          <Route path="/description" element={<Description />} />
           <Route path="/registration" element={<Registration />} />
           <Route path="/description/:id" element={<Description />} />
+          <Route path="/settings" element={<Settings />} />
         </Routes>
       </div>
     </Router>
