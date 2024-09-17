@@ -30,7 +30,7 @@ export const tools = [
   },
   {
     id: 5,
-    name: "Impact Wrench",
+    name: "Welding Machine",
     description: "Ut enim ad minim veniam, quis nostrud exercitation ullamco.",
     details:
       "Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.",
@@ -196,6 +196,7 @@ export const tools = [
   },
   {
     id: 28,
+    name: "Jigsaw",
     description: "Ut enim ad minim veniam, quis nostrud exercitation ullamco.",
     details:
       "Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.",

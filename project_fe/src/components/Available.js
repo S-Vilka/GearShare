@@ -2,15 +2,17 @@ import React, { useState } from "react";
 import { Link } from "react-router-dom";
 import "./Available.css";
 import { tools } from "./toolsData";
+import { formatToImageName } from "./FormatImageName";
 import Pagination from "./Pagination";
 
 function Available() {
   const [currentPage, setCurrentPage] = useState(1);
-  const toolsPerPage = 30;
+  const toolsPerPage = 20;
   const indexOfLastTool = currentPage * toolsPerPage;
   const indexOfFirstTool = indexOfLastTool - toolsPerPage;
   const currentTools = tools.slice(indexOfFirstTool, indexOfLastTool);
   const totalPages = Math.ceil(tools.length / toolsPerPage);
+
   return (
     <div className="available-page">
       <nav className="navbar">
@@ -36,10 +38,16 @@ function Available() {
               className="tool-item"
             >
               <div className="image-placeholder">
-                {/* Replace with image */}
-                <div className="placeholder-text">Tool Image</div>
+                {tool.name && (
+                  <img
+                    src={require(`../images/${formatToImageName(
+                      tool.name
+                    )}.jpg`)}
+                    alt={tool.name}
+                  />
+                )}
               </div>
-              <h3>{tool.name}</h3>
+              <h3>{tool.name || "Unnamed Tool"}</h3>
             </Link>
           ))}
         </div>
