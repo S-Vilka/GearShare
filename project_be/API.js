@@ -13,7 +13,7 @@ app.use(requestLogger);
 app.get("/", (req, res) => res.send("API Running!"));
 
 // routes
-app.use('/tools', toolRouter);
+app.use('/api/tools', toolRouter);
 
 app.use(unknownEndpoint);
 app.use(errorHandler);
