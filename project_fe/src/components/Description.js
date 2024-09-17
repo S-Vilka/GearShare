@@ -1,11 +1,16 @@
 import React from "react";
-import { useParams } from "react-router-dom";
+import { useParams, useNavigate } from "react-router-dom";
 import { tools } from "./toolsData";
+import { formatToImageName } from "./FormatImageName";
 import "./Description.css";
 
 function Description() {
   const { id } = useParams();
+  const navigate = useNavigate();
   const tool = tools.find((t) => t.id === parseInt(id));
+  const handleBackClick = () => {
+    navigate(-1);
+  };
 
   if (!tool) {
     return <div>Tool not found</div>;
@@ -23,12 +28,15 @@ function Description() {
           <h2>Contact info:</h2>
           <p>{tool.details}</p>
           <div className="image-placeholder">
-            <div className="placeholder-text">Tool Image</div>
+            <img
+              src={require(`../images/${formatToImageName(tool.name)}.jpg`)}
+              alt={tool.name}
+            />
           </div>
         </div>
       </div>
       <div className="button-container">
-        <button>Back</button>
+        <button onClick={handleBackClick}>Back</button>
       </div>
     </div>
   );

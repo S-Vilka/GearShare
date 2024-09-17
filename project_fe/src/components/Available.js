@@ -3,11 +3,12 @@ import { Link } from "react-router-dom";
 import { Container, Row, Col, Button } from "react-bootstrap";
 import "./Available.css";
 import { tools } from "./toolsData";
+import { formatToImageName } from "./FormatImageName";
 import Pagination from "./Pagination";
 
 function Available() {
   const [currentPage, setCurrentPage] = useState(1);
-  const toolsPerPage = 30;
+  const toolsPerPage = 20;
   const indexOfLastTool = currentPage * toolsPerPage;
   const indexOfFirstTool = indexOfLastTool - toolsPerPage;
   const currentTools = tools.slice(indexOfFirstTool, indexOfLastTool);
@@ -29,9 +30,17 @@ function Available() {
           >
             <Link to={`/description/${tool.id}`} className="tool-link">
               <div className="image-placeholder">
-                <div className="placeholder-text">Tool Image</div>
+                {tool.name && (
+                  <img
+                    src={require(`../images/${formatToImageName(
+                      tool.name
+                    )}.jpg`)}
+                    alt={tool.name}
+                  />
+                )}
+
               </div>
-              <h3>{tool.name}</h3>
+              <h3>{tool.name || "Unnamed Tool"}</h3>
             </Link>
           </Col>
         ))}
