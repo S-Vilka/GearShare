@@ -1,7 +1,23 @@
+import Tools from "./Tools/Tools";
+import UserProfile from "./Profile/UserProfile";
+
 function Profile() {
   return (
     <div>
-      <h1>Profile Page</h1>
+      <div className="profileToolsWrapper">
+        <div className="profileContainer">
+          <UserProfile
+            name="Joonas Ronimus"
+            address="Metropolia"
+            zip="03453"
+            email="joonas.ronimus@metropolia.fi"
+            profilePicture="./src/profileImage.jpeg"
+          />
+        </div>
+        <div className="toolsContainer">
+          <Tools />
+        </div>
+      </div>
     </div>
   );
 }

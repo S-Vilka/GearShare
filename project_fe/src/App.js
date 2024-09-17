@@ -6,10 +6,10 @@ import Profile from "./components/Profile";
 import Available from "./components/Available";
 import Description from "./components/Description";
 import Registration from "./components/Registration";
-import Login from './components/Login';
-import Join from './components/Join';
+import Login from "./components/Login";
+import Join from "./components/Join";
 import Settings from "./components/Settings/Settings";
-import 'bootstrap/dist/css/bootstrap.min.css';
+import "bootstrap/dist/css/bootstrap.min.css";
 
 function App() {
   return (
@@ -29,8 +29,6 @@ function App() {
         </Routes>
       </div>
     </Router>
-
-    
   );
 }
 
