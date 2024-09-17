@@ -1,0 +1,24 @@
+.profileImage{
+    width: 10rem;
+    height: 10rem;
+    margin-bottom: 10rem;
+}
+
+.card{
+    width: 20rem;
+    margin-top: 1rem;
+    margin-left: 1rem;
+    
+}
+.profileContainer {
+    flex: 1;
+    margin-right: 2rem; /* Adjust as needed */
+    width: 20rem;
+    
+}
+
+.profileContainer .profileContainer .profileCard.card{
+    border: 1px solid;
+    border-color: #001858;
+    border-radius: 10px;
+}
