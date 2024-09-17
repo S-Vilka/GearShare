@@ -50,8 +50,8 @@ const patchUser = async (req, res) => {
   try {
     const updatedUser = await User.findOneAndUpdate(
       { _id: userId },
-      { ...req.body },
-      { new: true }
+      { $set: req.body },
+      { new: true, runValidators: true }
     );
     if (updatedUser) {
       res.status(200).json(updatedUser);
@@ -59,7 +59,9 @@ const patchUser = async (req, res) => {
       res.status(404).json({ message: "User not found" });
     }
   } catch (error) {
-    res.status(500).json({ message: "Failed to update user" });
+    res
+      .status(500)
+      .json({ message: "Failed to update user", error: error.message });
   }
 };
 
