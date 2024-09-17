@@ -1,63 +1,36 @@
 import React, { useState } from "react";
 import { Container, Row, Col, Form, Button } from "react-bootstrap";
-import './Settings.css';
 
-const Settings = () => {
+const Join = () => {
   const [firstName, setFirstName] = useState('');
   const [lastName, setLastName] = useState('');
   const [address, setAddress] = useState('');
   const [city, setCity] = useState('');
   const [postalCode, setPostalCode] = useState('');
   const [email, setEmail] = useState('');
-  const [profileImage, setProfileImage] = useState(null);
+  const [password, setPassword] = useState('');
 
   const handleSubmit = (e) => {
     e.preventDefault();
 
-    const formData = { firstName, lastName, address, city, postalCode, email };
-    console.log('Form data submitted:', formData);
+    const formData = { firstName, lastName, address, city, postalCode, email, password };
+    console.log('Join Now data submitted:', formData);
 
+    // Clear form fields
     setFirstName('');
     setLastName('');
     setAddress('');
     setCity('');
     setPostalCode('');
     setEmail('');
-  };
-
-  const handleImageChange = (e) => {
-    const file = e.target.files[0];
-    if (file) {
-      const imageUrl = URL.createObjectURL(file);
-      setProfileImage(imageUrl);
-    }
+    setPassword('');
   };
 
   return (
     <Container fluid className="settings-page">
       <Row className="justify-content-center align-items-center">
         <Col md={8} className="form-container">
-          <h1 className="heading mb-4">Settings</h1>
-
-          {/* Profile Picture Section */}
-          <div className="profile-picture-row">
-            <div className="profile-picture-container">
-              <div className="profile-picture">
-                {profileImage ? (
-                  <img src={profileImage} alt="Profile" className="profile-image" />
-                ) : (
-                  "150 × 150"
-                )}
-              </div>
-              <Form.Control
-                type="file"
-                accept="image/*"
-                onChange={handleImageChange}
-                className="choose-file-btn"
-              />
-            </div>
-          </div>
-
+          <h1 className="heading mb-4">Join Now</h1>
           <Form onSubmit={handleSubmit}>
             <Row className="mb-3">
               <Col md={6}>
@@ -68,6 +41,7 @@ const Settings = () => {
                     value={firstName}
                     onChange={(e) => setFirstName(e.target.value)}
                     placeholder="Enter first name"
+                    required
                   />
                 </Form.Group>
               </Col>
@@ -79,23 +53,24 @@ const Settings = () => {
                     value={lastName}
                     onChange={(e) => setLastName(e.target.value)}
                     placeholder="Enter last name"
+                    required
                   />
                 </Form.Group>
               </Col>
             </Row>
 
+            <Form.Group className="mb-3" controlId="formAddress">
+              <Form.Label>Address</Form.Label>
+              <Form.Control
+                type="text"
+                value={address}
+                onChange={(e) => setAddress(e.target.value)}
+                placeholder="Enter address"
+                required
+              />
+            </Form.Group>
+
             <Row className="mb-3">
-              <Col md={6}>
-                <Form.Group controlId="formAddress">
-                  <Form.Label>Address</Form.Label>
-                  <Form.Control
-                    type="text"
-                    value={address}
-                    onChange={(e) => setAddress(e.target.value)}
-                    placeholder="Enter address"
-                  />
-                </Form.Group>
-              </Col>
               <Col md={6}>
                 <Form.Group controlId="formCity">
                   <Form.Label>City</Form.Label>
@@ -104,38 +79,48 @@ const Settings = () => {
                     value={city}
                     onChange={(e) => setCity(e.target.value)}
                     placeholder="Enter city"
+                    required
                   />
                 </Form.Group>
               </Col>
-            </Row>
-
-            <Row className="mb-3">
               <Col md={6}>
                 <Form.Group controlId="formPostalCode">
                   <Form.Label>Postal Code</Form.Label>
                   <Form.Control
-                    type="number"
+                    type="text"
                     value={postalCode}
                     onChange={(e) => setPostalCode(e.target.value)}
                     placeholder="Enter postal code"
-                  />
-                </Form.Group>
-              </Col>
-              <Col md={6}>
-                <Form.Group controlId="formEmail">
-                  <Form.Label>Email</Form.Label>
-                  <Form.Control
-                    type="email"
-                    value={email}
-                    onChange={(e) => setEmail(e.target.value)}
-                    placeholder="Enter email"
+                    required
                   />
                 </Form.Group>
               </Col>
             </Row>
 
+            <Form.Group className="mb-3" controlId="formEmail">
+              <Form.Label>Email</Form.Label>
+              <Form.Control
+                type="email"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                placeholder="Enter email"
+                required
+              />
+            </Form.Group>
+
+            <Form.Group className="mb-3" controlId="formPassword">
+              <Form.Label>Password</Form.Label>
+              <Form.Control
+                type="password"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                placeholder="Enter password"
+                required
+              />
+            </Form.Group>
+
             <Button variant="primary" type="submit" className="save-btn">
-              Save Changes
+              Join Now
             </Button>
           </Form>
         </Col>
@@ -144,4 +129,4 @@ const Settings = () => {
   );
 };
 
-export default Settings;
+export default Join;
