@@ -6,6 +6,8 @@ import Profile from "./components/Profile";
 import Available from "./components/Available";
 import Description from "./components/Description";
 import Registration from "./components/Registration";
+import Login from './components/Login';
+import Join from './components/Join';
 import Settings from "./components/Settings/Settings";
 import 'bootstrap/dist/css/bootstrap.min.css';
 
@@ -21,6 +23,8 @@ function App() {
           <Route path="/available" element={<Available />} />
           <Route path="/registration" element={<Registration />} />
           <Route path="/description/:id" element={<Description />} />
+          <Route path="/login" element={<Login />} />
+          <Route path="/join" element={<Join />} />
           <Route path="/settings" element={<Settings />} />
         </Routes>
       </div>

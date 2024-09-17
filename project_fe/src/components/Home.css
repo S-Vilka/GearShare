@@ -68,7 +68,7 @@
 /* Frame for buttons */
 .frame {
   display: flex;
-  flex-direction: row; /* Aligns buttons in a row */
+  flex-direction: row; 
   align-items: center;
   justify-content: center;
   gap: 24px;

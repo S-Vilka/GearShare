@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
+import { Container, Row, Col, Button } from "react-bootstrap";
 import "./Available.css";
 import { tools } from "./toolsData";
 import Pagination from "./Pagination";
@@ -11,45 +12,40 @@ function Available() {
   const indexOfFirstTool = indexOfLastTool - toolsPerPage;
   const currentTools = tools.slice(indexOfFirstTool, indexOfLastTool);
   const totalPages = Math.ceil(tools.length / toolsPerPage);
+
   return (
-    <div className="available-page">
-      <nav className="navbar">
-        <div className="nav-links">
-          <Link to="/">Home</Link>
-          <Link to="/profile">Profile</Link>
-        </div>
-        <div className="logo">
-          <img src="/path-to-your-logo.png" alt="Logo" />
-        </div>
-        <div className="search-bar">
-          <input type="text" placeholder="Search..." />
-          <button>Search</button>
-        </div>
-      </nav>
-      <main>
-        <h1>Available Tools</h1>
-        <div className="tool-list">
-          {currentTools.map((tool) => (
-            <Link
-              to={`/description/${tool.id}`}
-              key={tool.id}
-              className="tool-item"
-            >
+    <Container fluid className="available-page">
+      <Row>
+        <Col>
+          <h1 className="text-center">Available Tools</h1>
+        </Col>
+      </Row>
+      <Row className="tool-list">
+        {currentTools.map((tool) => (
+          <Col
+            key={tool.id}
+            lg={3} md={4} sm={6} xs={12}
+            className="tool-item mb-4"
+          >
+            <Link to={`/description/${tool.id}`} className="tool-link">
               <div className="image-placeholder">
-                {/* Replace with image */}
                 <div className="placeholder-text">Tool Image</div>
               </div>
               <h3>{tool.name}</h3>
             </Link>
-          ))}
-        </div>
-        <Pagination
-          currentPage={currentPage}
-          totalPages={totalPages}
-          onPageChange={setCurrentPage}
-        />
-      </main>
-    </div>
+          </Col>
+        ))}
+      </Row>
+      <Row className="pagination-row">
+        <Col>
+          <Pagination
+            currentPage={currentPage}
+            totalPages={totalPages}
+            onPageChange={setCurrentPage}
+          />
+        </Col>
+      </Row>
+    </Container>
   );
 }
 
