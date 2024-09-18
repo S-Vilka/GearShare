@@ -16,6 +16,9 @@ https://trello.com/b/oAu1YCCQ/group-5-project-scrum-board
 https://www.figma.com/board/xvGOaKZsDpvlpdZwaDRGJf/Group-5-project-SCRUM?node-id=0-1&node-type=CANVAS&t=oBvC9XO1Ww451DJe-0
 
 
+Team contributions can be seen in Trello and ceremony insights are included in the presentation.
+
+
 
 
 
