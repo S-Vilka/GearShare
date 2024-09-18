@@ -57,13 +57,20 @@
   display: flex;
   justify-content: center;
   margin-top: 20px;
+  margin-bottom: 1rem;
 }
-button {
-  color: #c0c5d1;
-  font-size: 1.2rem;
-  margin-top: 1rem;
-  text-decoration: none;
-  padding: 10px 20px;
-  background-color: #413f3f;
-  border-radius: 2rem;
+.back-button {
+  padding: 8px;
+  color: white;
+  border: none;
+  border-radius: 15px;
+  font-size: 2rem;
+  font-family: "Inter-Bold", Helvetica, sans-serif;
+  font-weight: bold;
+  background-color: #007bff;
+  transition: background-color 0.3s ease;
+  margin: 0 5px;
+}
+.back-button:hover {
+  background-color: #007bffb9;
 }

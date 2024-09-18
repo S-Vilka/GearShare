@@ -36,7 +36,9 @@ function Description() {
         </div>
       </div>
       <div className="button-container">
-        <button onClick={handleBackClick}>Back</button>
+        <button className="back-button" onClick={handleBackClick}>
+          Back
+        </button>
       </div>
     </div>
   );

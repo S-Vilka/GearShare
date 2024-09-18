@@ -60,3 +60,25 @@ h3 {
   display: flex;
   justify-content: center;
 }
+
+.pagination button {
+  padding: 8px;
+  color: white;
+  border: none;
+  border-radius: 15px;
+  font-size: 14px;
+  font-family: "Arial", sans-serif;
+  font-weight: bold;
+  background-color: #007bff;
+  transition: background-color 0.3s ease;
+  margin: 0 5px;
+}
+
+.pagination button:hover {
+  background-color: #007bffb9;
+}
+
+.pagination button:disabled {
+  background-color: #cccccc;
+  cursor: not-allowed;
+}
