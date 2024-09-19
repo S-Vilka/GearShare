@@ -1,16 +1,40 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { useParams, useNavigate } from "react-router-dom";
-import { tools } from "./toolsData";
 import { formatToImageName } from "./FormatImageName";
 import "./Description.css";
 
 function Description() {
   const { id } = useParams();
   const navigate = useNavigate();
-  const tool = tools.find((t) => t.id === parseInt(id));
+  const [tool, setTool] = useState(null);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const fetchTool = async () => {
+      try {
+        const response = await fetch(`http://localhost:4000/api/tools/${id}`);
+        if (!response.ok) {
+          throw new Error("Tool not found");
+        }
+        const data = await response.json();
+        setTool(data);
+      } catch (error) {
+        console.error("Error fetching tool:", error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchTool();
+  }, [id]);
+
   const handleBackClick = () => {
     navigate(-1);
   };
+
+  if (loading) {
+    return <div>Loading...</div>;
+  }
 
   if (!tool) {
     return <div>Tool not found</div>;

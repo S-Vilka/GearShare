@@ -1,5 +1,6 @@
 const express = require("express");
 const connectDB = require("./config/db");
+const cors = require("cors");
 const userRouter = require("./routes/userRouter");
 const toolRouter = require("./routes/toolsRouter");
 const {
@@ -16,6 +17,7 @@ connectDB();
 // Middleware
 app.use(express.json());
 app.use(requestLogger);
+app.use(cors());
 
 // Routes
 app.get("/", (req, res) => res.send("API Running!"));

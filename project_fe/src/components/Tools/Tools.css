@@ -5,7 +5,6 @@
   box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
   transform: translateY(-5px);
   transition: all 0.3s ease;
-  padding: 3rem;
 }
 
 .toolCard.card:hover {
@@ -22,7 +21,7 @@
 
 .profileContainer {
   flex: 1;
-  margin-right: 2rem; /* Adjust as needed */
+  margin-right: 2rem;
   width: 20rem;
 }
 
