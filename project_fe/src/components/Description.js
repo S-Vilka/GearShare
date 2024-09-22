@@ -2,6 +2,7 @@ import React from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { tools } from "./toolsData";
 import { formatToImageName } from "./FormatImageName";
+import { Container, Row, Col, Button } from "react-bootstrap";
 import "./Description.css";
 
 function Description() {
@@ -17,30 +18,30 @@ function Description() {
   }
 
   return (
-    <div>
-      <h1 className="tool-container"> {tool.name}</h1>
-      <div className="tool-description">
-        <div className="description-section">
+    <Container className="tool-container">
+      <h1>{tool.name}</h1>
+      <Row className="tool-description" style={{ justifyContent: 'space-between' }}>
+        <Col xs={12} md={5} className="description-section">
           <h2>Tool Description</h2>
           <p>{tool.description}</p>
-        </div>
-        <div className="contact-section">
-          <h2>Contact info:</h2>
-          <p>{tool.details}</p>
           <div className="image-placeholder">
             <img
               src={require(`../images/${formatToImageName(tool.name)}.jpg`)}
               alt={tool.name}
             />
           </div>
-        </div>
-      </div>
+        </Col>
+        <Col xs={12} md={5} className="contact-section">
+          <h2>Contact info:</h2>
+          <p>{tool.details}</p>
+        </Col>
+      </Row>
       <div className="button-container">
-        <button className="back-button" onClick={handleBackClick}>
+        <Button className="back-button" onClick={handleBackClick}>
           Back
-        </button>
+        </Button>
       </div>
-    </div>
+    </Container>
   );
 }
 
