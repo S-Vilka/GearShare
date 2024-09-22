@@ -1,4 +1,5 @@
 const express = require("express");
+const cors = require("cors"); // npm install cors (if not installed)
 const connectDB = require("./config/db");
 const userRouter = require("./routes/userRouter");
 const toolRouter = require("./routes/toolsRouter");
@@ -14,6 +15,7 @@ const port = process.env.PORT || 4000;
 connectDB();
 
 // Middleware
+app.use(cors()); // Enable CORS for all routes
 app.use(express.json());
 app.use(requestLogger);
 
