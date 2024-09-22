@@ -5,11 +5,32 @@ const Login = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    const formData = { email, password };
-    console.log('Login data submitted:', formData);
 
+    const formData = { email, password };
+
+    try {
+      const response = await fetch("http://localhost:4000/api/users/login", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(formData),
+      });
+
+      if (response.ok) {
+        const result = await response.json();
+        console.log("Login successful:", result);
+        localStorage.setItem("token", result.token);  // Store the JWT in localStorage
+      } else {
+        console.error("Login failed");
+      }
+    } catch (error) {
+      console.error("Error:", error.message);
+    }
+
+    // Clear form fields after submission
     setEmail('');
     setPassword('');
   };
