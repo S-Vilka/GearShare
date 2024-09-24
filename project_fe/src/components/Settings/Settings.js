@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Container, Row, Col, Form, Button } from "react-bootstrap";
 import './Settings.css';
 
@@ -9,21 +9,73 @@ const Settings = () => {
   const [city, setCity] = useState('');
   const [postalCode, setPostalCode] = useState('');
   const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const [message, setMessage] = useState('');
   const [profileImage, setProfileImage] = useState(null);
 
-  const handleSubmit = (e) => {
+  const userId = "66f03bd97c72abc72d644b84";  
+
+
+  // Fetch user data based on id
+  useEffect(() => {
+    const fetchUserData = async () => {
+      try {
+        const response = await fetch(`/api/users/${userId}`, {
+          method: 'GET',
+          headers: {
+            'Content-Type': 'application/json'
+          }
+        });
+        
+        if (response.ok) {
+          const userData = await response.json();  
+          setFirstName(userData.firstName);
+          setLastName(userData.lastName);
+          setAddress(userData.address);
+          setCity(userData.city);
+          setPostalCode(userData.postalCode);
+          setEmail(userData.email);
+          //setProfileImage(userData.profileImage);
+          setPassword(userData.password);
+        } else {
+          console.error("Failed to fetch user data");
+        }
+      } catch (error) {
+        console.error("Error fetching user data:", error);
+      }
+    };
+  
+    fetchUserData();
+  }, []);
+  
+
+  // Updates user data when form is submitted
+  const handleSubmit = async (e) => {
     e.preventDefault();
-
+  
     const formData = { firstName, lastName, address, city, postalCode, email };
-    console.log('Form data submitted:', formData);
-
-    setFirstName('');
-    setLastName('');
-    setAddress('');
-    setCity('');
-    setPostalCode('');
-    setEmail('');
+  
+    try {
+      const response = await fetch(`/api/users/${userId}`, {
+        method: 'PATCH',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(formData) 
+      });
+  
+      if (response.ok) {
+        console.log("User data updated successfully");
+        setMessage("Profile updated successfully ")
+        setTimeout(() => setMessage(''), 3000);
+      } else {
+        console.error("Failed to update user data");
+      }
+    } catch (error) {
+      console.error("Error updating user data:", error);
+    }
   };
+  
 
   const handleImageChange = (e) => {
     const file = e.target.files[0];
@@ -39,7 +91,7 @@ const Settings = () => {
         <Col md={8} className="form-container">
           <h1 className="heading mb-4">Settings</h1>
 
-          {/* Profile Picture Section */}
+          
           <div className="profile-picture-row">
             <div className="profile-picture-container">
               <div className="profile-picture">
@@ -133,10 +185,27 @@ const Settings = () => {
                 </Form.Group>
               </Col>
             </Row>
+            
+            <Row className="mb-3">
+              <Col md={6}>
+              <Form.Group className="mb-3" controlId="formPassword">
+              <Form.Label>Password</Form.Label>
+              <Form.Control
+                type="password"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                placeholder="Enter password"
+                required
+              />
+                </Form.Group>
+              </Col>
+            </Row>
 
             <Button variant="primary" type="submit" className="save-btn">
               Save Changes
             </Button>
+
+            {message && <p className="settings-message">{message}</p>}
           </Form>
         </Col>
       </Row>

@@ -4,13 +4,13 @@ const Schema = mongoose.Schema;
 
 const userSchema = new Schema(
   {
-    FirstName: { type: String, required: true },
-    LastName: { type: String, required: true },
-    Email: { type: String, required: true },
-    City: { type: String, required: true },
-    StreetName: { type: String, required: true },
-    PostalCode: { type: String, required: true },
-    Password: { type: String, required: true },
+    firstName: { type: String, required: true },
+    lastName: { type: String, required: true },
+    email: { type: String, required: true },
+    city: { type: String, required: true },
+    address: { type: String, required: true },
+    postalCode: { type: String, required: true },
+    password: { type: String, required: true },
   },
   { timestamps: true }
 );
