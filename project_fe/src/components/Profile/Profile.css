@@ -1,22 +1,64 @@
-.profileImage {
-  width: 10rem;
-  height: 10rem;
-  margin-bottom: 10rem;
+
+
+
+
+
+
+.ProfileContainer {
+  padding-right: 1rem;
+  
+  height: 20rem;
 }
 
-.card {
-  width: 20rem;
+.ProfileCard{
   margin-top: 1rem;
-  margin-left: 1rem;
-}
-.profileContainer {
-  flex: 1;
-  margin-right: 2rem; /* Adjust as needed */
-  width: 20rem;
+ 
 }
 
-.profileContainer .profileContainer .profileCard.card {
-  border: 1px solid;
-  border-color: #001858;
+.ToolsContainer{
+  
+  
+}
+
+.ToolCard{
+  width: 15rem;
+  margin: 1rem;
+}
+
+
+
+
+.Tools{
+  padding: 1rem;
+  
+}
+
+.Available{
+ 
+  justify-content: center;
+  display: flex;
+  flex-wrap: wrap;
+}
+
+.Borrowed{
+  justify-content: center;
+  display: flex;
+  flex-wrap: wrap;
+
+}
+
+.AddButton{
   border-radius: 10px;
+  padding: 1rem;
+  margin: 1rem;
+  background-color: #28a745;
+  color: white;
+}
+
+.DeleteButton{
+  border-radius: 10px;
+  padding: 1rem;
+  margin: 1rem;
+  background-color: #a72835;
+  color: white;
 }

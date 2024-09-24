@@ -1,22 +1,17 @@
-import React from "react";
-import { Container, Row, Col } from "react-bootstrap";
-import Toolsdata from "./Toolsdata";
-import "./Tools.css";
+import React from 'react'
+import { Button, Card} from 'react-bootstrap'
 
-function Tools() {
+function ToolsCard({name, description, details}) {
   return (
-    <div className="toolsContainer">
-      <Container>
-        <Row>
-          {[...Array(9)].map((_, index) => (
-            <Col key={index} xs={12} sm={6} md={4}>
-              <Toolsdata />
-            </Col>
-          ))}
-        </Row>
-      </Container>
-    </div>
-  );
+    <Card>
+        <Card.Body>
+            <Card.Title>{name}</Card.Title>
+            <Card.Text>{description}</Card.Text>
+            <Card.Text>{details}</Card.Text>
+            <Button>X</Button>
+        </Card.Body>
+    </Card>
+  )
 }
 
-export default Tools;
+export default ToolsCard
