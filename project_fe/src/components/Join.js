@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { Container, Row, Col, Form, Button } from "react-bootstrap";
 
 const Join = () => {
+  // State variables to hold form data
   const [firstName, setFirstName] = useState('');
   const [lastName, setLastName] = useState('');
   const [address, setAddress] = useState('');
@@ -10,13 +11,32 @@ const Join = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
 
-  const handleSubmit = (e) => {
+  // Function to handle form submission
+  const handleSubmit = async (e) => {
     e.preventDefault();
 
     const formData = { firstName, lastName, address, city, postalCode, email, password };
-    console.log('Join Now data submitted:', formData);
 
-    // Clear form fields
+    try {
+      const response = await fetch("http://localhost:4000/users", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(formData),
+      });
+
+      if (response.ok) {
+        const result = await response.json();
+        console.log("User created successfully:", result);
+      } else {
+        console.error("Failed to create user");
+      }
+    } catch (error) {
+      console.error("Error:", error.message);
+    }
+
+    // Clear form fields after submission
     setFirstName('');
     setLastName('');
     setAddress('');
