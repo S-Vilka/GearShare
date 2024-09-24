@@ -1,4 +1,3 @@
-
 const mongoose = require("mongoose");
 
 const Schema = mongoose.Schema;
@@ -10,7 +9,8 @@ const toolsSchema = new Schema(
     details: { type: String, required: true },
     available: { type: Boolean, required: true },
   },
-  { timestamps: true }
+  { timestamps: true },
+  { collection: "tools" }
 );
 
 module.exports = mongoose.model("Tools", toolsSchema);

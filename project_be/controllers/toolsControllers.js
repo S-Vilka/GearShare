@@ -1,13 +1,16 @@
 const Tools = require("../models/toolsModel.js");
 const mongoose = require("mongoose");
 
-//GET /tools
+//GET AllTools
 const getAllTools = async (req, res) => {
   try {
-    const tools = await Tools.find({}).sort({ createdAt: -1 });
-    res.status(200).json(tools);
+    console.log("Attempting to fetch all tools");
+    const tools = await Tools.find();
+    console.log("Tools fetched:", tools);
+    res.json(tools);
   } catch (error) {
-    res.status(500).json({ message: "Failed to retrieve tools" });
+    console.error("Error fetching tools:", error);
+    res.status(500).json({ message: "Server error" });
   }
 };
 
@@ -17,13 +20,15 @@ const createTool = async (req, res) => {
     const newTool = await Tools.create({ ...req.body });
     res.status(201).json(newTool);
   } catch (error) {
-    if (error.name === 'ValidationError') {
+    if (error.name === "ValidationError") {
       res.status(400).json({ message: "Invalid input", error: error.message });
     } else {
-      res.status(500).json({ message: "Failed to create tool", error: error.message });
+      res
+        .status(500)
+        .json({ message: "Failed to create tool", error: error.message });
     }
   }
-  };
+};
 
 // GET /tools/:toolId
 const getToolById = async (req, res) => {
@@ -45,7 +50,6 @@ const getToolById = async (req, res) => {
   }
 };
 
-
 // PATCH /tools/:toolId
 const patchTool = async (req, res) => {
   const { toolId } = req.params;
@@ -58,7 +62,7 @@ const patchTool = async (req, res) => {
     const updatedTool = await Tools.findOneAndUpdate(
       { _id: toolId },
       { ...req.body },
-      { new: true } 
+      { new: true }
     );
     if (updatedTool) {
       res.status(200).json(updatedTool);
@@ -69,7 +73,6 @@ const patchTool = async (req, res) => {
     res.status(500).json({ message: "Failed to update tool" });
   }
 };
-
 
 // DELETE /tools/:toolId
 const deleteTool = async (req, res) => {
@@ -90,7 +93,6 @@ const deleteTool = async (req, res) => {
     res.status(500).json({ message: "Failed to delete tool" });
   }
 };
-
 
 module.exports = {
   getAllTools,
