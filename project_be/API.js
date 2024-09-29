@@ -4,11 +4,15 @@ const cors = require("cors");
 const userRouter = require("./routes/userRouter");
 const toolRouter = require("./routes/toolsRouter");
 const path = require("path");
+const {
+  requestLogger,
+  unknownEndpoint,
+  errorHandler,
+} = require("./middleware/customMiddleware");
 
 const app = express();
 const port = process.env.PORT || 4000;
 const fs = require("fs");
-
 const uploadDir = path.join(__dirname, "public", "toolsImages");
 
 fs.access(uploadDir, fs.constants.W_OK, (err) => {
@@ -28,6 +32,9 @@ app.use("/public", express.static(path.join(__dirname, "public")));
 
 app.use("/api/users", userRouter);
 app.use("/api/tools", toolRouter);
+// Error handling
+app.use(unknownEndpoint);
+app.use(errorHandler);
 
 app.listen(port, () =>
   console.log(`Server is running on http://localhost:${port}`)
