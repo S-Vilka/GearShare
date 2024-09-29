@@ -1,5 +1,6 @@
 const express = require("express");
 const router = express.Router();
+const authMiddleware = require("../middleware/authMiddleware");
 const {
   getAllUsers,
   getUserById,
@@ -10,7 +11,7 @@ const {
 } = require("../controllers/userController");
 
 // GET /users
-router.get("/", getAllUsers);
+router.get("/",authMiddleware, getAllUsers);
 
 // POST /users
 router.post("/", createUser);
@@ -19,12 +20,12 @@ router.post("/", createUser);
 router.post("/login", loginUser);
 
 // GET /users/:userId
-router.get("/:userId", getUserById);
+router.get("/:userId",authMiddleware, getUserById);
 
 // PUT /users/:userId
-router.patch("/:userId", patchUser);
+router.patch("/:userId", authMiddleware, patchUser);
 
 // DELETE /users/:userId
-router.delete("/:userId", deleteUser);
+router.delete("/:userId", authMiddleware, deleteUser);
 
 module.exports = router;

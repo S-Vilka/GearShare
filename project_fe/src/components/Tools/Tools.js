@@ -4,6 +4,12 @@ import Toolsdata from "./Toolsdata";
 import "./Tools.css";
 
 function Tools() {
+
+  const token = localStorage.getItem("token");
+  if (!token) {
+    window.location.href = "/";
+  }
+
   return (
     <div className="toolsContainer">
       <Container>

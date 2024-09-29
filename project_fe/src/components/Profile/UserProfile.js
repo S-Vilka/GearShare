@@ -4,6 +4,10 @@ import "./Profile.css";
 import profilePic from "./PP.jpg";
 
 function UserProfile({ name, address, zip, email }) {
+  const token = localStorage.getItem("token");
+  if (!token) {
+    window.location.href = "/";
+  }
   return (
     <div className="profileContainer">
       <Card className="profileCard">
