@@ -1,21 +1,30 @@
-const express = require('express');
+const express = require("express");
 const router = express.Router();
+const upload = require("../middleware/multerConfig");
 const {
-    getAllTools,
-    getToolById,
-    createTool,
-    patchTool,
-    deleteTool,
-  } = require("../controllers/toolsControllers.js"); 
+  getAllTools,
+  getToolById,
+  createTool,
+  patchTool,
+  deleteTool,
+  getSharedTools,
+  getBorrowedTools,
+} = require("../controllers/toolsControllers.js");
 
-  
 // ROUTES
 
 // GET /tools
 router.get("/", getAllTools);
 
 // POST /tools
-router.post("/", createTool);
+
+router.post("/", upload.single("image"), createTool);
+
+// GET shared tools
+router.get("/shared", getSharedTools);
+
+// GET borrowed tools
+router.get("/borrowed", getBorrowedTools);
 
 // GET /tools/:toolId
 router.get("/:toolId", getToolById);

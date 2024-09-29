@@ -14,7 +14,8 @@ const getAllUsers = async (req, res) => {
 };
 // POST /users
 const createUser = async (req, res) => {
-  const { firstName, lastName, email, password, address, city, postalCode } = req.body;
+  const { firstName, lastName, email, password, address, city, postalCode } =
+    req.body;
 
   try {
     // Check if the user already exists
@@ -32,15 +33,17 @@ const createUser = async (req, res) => {
       firstName,
       lastName,
       email,
-      password: hashedPassword,  // Save the hashed password
+      password: hashedPassword, // Save the hashed password
       address,
       city,
-      postalCode
+      postalCode,
     });
 
     res.status(201).json(newUser);
   } catch (error) {
-    res.status(400).json({ message: "Failed to create user", error: error.message });
+    res
+      .status(400)
+      .json({ message: "Failed to create user", error: error.message });
   }
 };
 
@@ -63,9 +66,9 @@ const loginUser = async (req, res) => {
 
     // Create a JWT token
     const token = jwt.sign(
-      { userId: user._id, email: user.email },  // Payload data
-      process.env.JWT_SECRET,                  // Secret key from .env file
-      { expiresIn: "1h" }                      // Token expiration (1 hour)
+      { userId: user._id, email: user.email }, // Payload data
+      process.env.JWT_SECRET, // Secret key from .env file
+      { expiresIn: "1h" } // Token expiration (1 hour)
     );
 
     res.status(200).json({ token, userId: user._id, email: user.email });
@@ -77,11 +80,14 @@ const loginUser = async (req, res) => {
 // GET /users/:userId
 const getUserById = async (req, res) => {
   const { userId } = req.params;
+  console.log("Received userId:", userId);
   if (!mongoose.Types.ObjectId.isValid(userId)) {
+    console.log("Invalid user ID");
     return res.status(400).json({ message: "Invalid user ID" });
   }
   try {
-    const user = await User.findById(userId);
+    const user = await User.findOne({ _id: userId });
+    console.log("User found:", user);
     if (user) {
       res.status(200).json(user);
     } else {

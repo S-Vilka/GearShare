@@ -1,15 +1,12 @@
 const Tools = require("../models/toolsModel.js");
 const mongoose = require("mongoose");
 
-//GET AllTools
+// GET AllTools
 const getAllTools = async (req, res) => {
   try {
-    console.log("Attempting to fetch all tools");
     const tools = await Tools.find();
-    console.log("Tools fetched:", tools);
     res.json(tools);
   } catch (error) {
-    console.error("Error fetching tools:", error);
     res.status(500).json({ message: "Server error" });
   }
 };
@@ -17,16 +14,17 @@ const getAllTools = async (req, res) => {
 // POST /tools
 const createTool = async (req, res) => {
   try {
-    const newTool = await Tools.create({ ...req.body });
-    res.status(201).json(newTool);
+    console.log("File received:", req.file);
+    const newTool = new Tools({
+      ...req.body,
+      imageUrl: req.file ? `/toolsImages/${req.file.filename}` : null,
+    });
+    console.log("newTool:", newTool);
+    const savedTool = await newTool.save();
+    res.status(201).json(savedTool);
   } catch (error) {
-    if (error.name === "ValidationError") {
-      res.status(400).json({ message: "Invalid input", error: error.message });
-    } else {
-      res
-        .status(500)
-        .json({ message: "Failed to create tool", error: error.message });
-    }
+    console.error("Error creating tool:", error);
+    res.status(400).json({ message: error.message });
   }
 };
 
@@ -94,10 +92,51 @@ const deleteTool = async (req, res) => {
   }
 };
 
+// Get shared tools
+const getSharedTools = async (req, res) => {
+  const { userId } = req.query;
+  console.log("Received userId:", userId);
+
+  if (!userId) {
+    console.log("UserId is missing");
+    return res
+      .status(400)
+      .json({ message: "userId query parameter is required" });
+  }
+
+  try {
+    const sharedTools = await Tools.find({ owner: userId });
+    console.log("Shared tools found:", sharedTools.length);
+    res.status(200).json(sharedTools);
+  } catch (error) {
+    console.error("Error in getSharedTools:", error);
+    res.status(500).json({ error: error.message });
+  }
+};
+
+// Get borrowed tools
+const getBorrowedTools = async (req, res) => {
+  const { userId } = req.query;
+  if (!userId) {
+    return res
+      .status(400)
+      .json({ message: "userId query parameter is required" });
+  }
+
+  try {
+    const borrowedTools = await Tools.find({ borrower: userId });
+    res.status(200).json(borrowedTools);
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+};
+
 module.exports = {
   getAllTools,
   getToolById,
   createTool,
   patchTool,
   deleteTool,
+  getSharedTools,
+  getBorrowedTools,
 };

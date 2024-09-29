@@ -1,53 +1,39 @@
-
-
-
-
-
-
-.ProfileContainer {
-  padding-right: 1rem;
-  
+.profileContainer {
+  width: 100%;
+  margin-right: 2rem;
   height: 20rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-bottom: 1rem;
 }
 
-.ProfileCard{
+.btn-primary {
   margin-top: 1rem;
- 
+  align-self: center;
+}
+.profileCard {
+  max-width: 30rem;
 }
 
-.ToolsContainer{
-  
-  
+.ToolsContainer {
+  flex: 1;
 }
 
-.ToolCard{
-  width: 15rem;
-  margin: 1rem;
-}
-
-
-
-
-.Tools{
-  padding: 1rem;
-  
-}
-
-.Available{
- 
-  justify-content: center;
+.tool-image-container {
+  height: 200px;
   display: flex;
-  flex-wrap: wrap;
-}
-
-.Borrowed{
+  align-items: center;
   justify-content: center;
-  display: flex;
-  flex-wrap: wrap;
-
 }
 
-.AddButton{
+.tool-image {
+  max-width: 100%;
+  max-height: 100%;
+  object-fit: contain;
+}
+
+.AddButton {
   border-radius: 10px;
   padding: 1rem;
   margin: 1rem;
@@ -55,7 +41,7 @@
   color: white;
 }
 
-.DeleteButton{
+.DeleteButton {
   border-radius: 10px;
   padding: 1rem;
   margin: 1rem;

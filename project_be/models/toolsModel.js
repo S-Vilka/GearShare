@@ -8,9 +8,11 @@ const toolsSchema = new Schema(
     description: { type: String, required: true },
     details: { type: String, required: true },
     available: { type: Boolean, required: true },
+    owner: { type: Schema.Types.ObjectId, ref: "User", required: true },
+    borrower: { type: Schema.Types.ObjectId, ref: "User" },
+    imageUrl: { type: String, required: true },
   },
   { timestamps: true },
   { collection: "tools" }
 );
-
 module.exports = mongoose.model("Tools", toolsSchema);
