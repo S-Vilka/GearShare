@@ -1,9 +1,11 @@
 import React, { useEffect, useState } from "react";
-import { Container, Row, Col } from "react-bootstrap";
+import { Container, Row, Col, Button } from "react-bootstrap";
 import "./Profile.css";
 import UserProfile from "./UserProfile";
 import ToolsCard from "../Tools/Tools";
 import { formatToImageName } from "../FormatImageName";
+import AddItemModal from "./AddItemModal";
+import EditItemModal from "./EditItemModal";
 
 function Profile({ userId }) {
   const testUserId = "66f7e289825c29e39fa3dad9";
@@ -12,6 +14,9 @@ function Profile({ userId }) {
   const [sharedTools, setSharedTools] = useState([]);
   const [borrowedTools, setBorrowedTools] = useState([]);
   const [error, setError] = useState(null);
+  const [showModal, setShowModal] = useState(false);
+  const [showEditModal, setShowEditModal] = useState(false);
+  const [currentTool, setCurrentTool] = useState(null);
 
   useEffect(() => {
     const fetchUserData = async () => {
@@ -25,7 +30,6 @@ function Profile({ userId }) {
           );
         }
         const userJson = await userResponse.json();
-        console.log(userJson);
         setUserData(userJson);
       } catch (error) {
         console.error("Error fetching user data", error);
@@ -82,6 +86,23 @@ function Profile({ userId }) {
     }
   };
 
+  const handleToolAdded = (newTool) => {
+    setSharedTools((prevTools) => [...prevTools, newTool]);
+  };
+
+  const handleEditClick = (tool) => {
+    setCurrentTool(tool);
+    setShowEditModal(true);
+  };
+
+  const handleToolUpdated = (updatedTool) => {
+    setSharedTools((prevTools) =>
+      prevTools.map((tool) =>
+        tool._id === updatedTool._id ? updatedTool : tool
+      )
+    );
+  };
+
   return (
     <div>
       {error && <p>Error: {error}</p>}
@@ -89,12 +110,22 @@ function Profile({ userId }) {
         <Row>
           <Col md={4} lg={3} className="mb-4">
             {userData ? (
-              <UserProfile userData={userData} />
+              <div className="d-flex flex-column align-items-center">
+                <UserProfile userData={userData} className="mb-3" />
+                <Button
+                  onClick={() => setShowModal(true)}
+                  className="btn btn-success mt-3"
+                >
+                  Share Item
+                </Button>
+              </div>
             ) : (
               <div>Loading user data...</div>
             )}
           </Col>
+
           <Col md={8} lg={9}>
+            <Button onClick={() => setShowModal(true)}>Share Item</Button>
             <h1>Shared Tools:</h1>
             <Row xs={1} md={2} lg={3} className="g-4">
               {sharedTools.map((tool) => (
@@ -105,6 +136,7 @@ function Profile({ userId }) {
                     details={tool.details}
                     image={`http://localhost:4000/public/${tool.imageUrl}`}
                     onDelete={() => handleDelete(tool._id)}
+                    onEdit={() => handleEditClick(tool)}
                   />
                 </Col>
               ))}
@@ -127,6 +159,18 @@ function Profile({ userId }) {
           </Col>
         </Row>
       </Container>
+      <AddItemModal
+        show={showModal}
+        onHide={() => setShowModal(false)}
+        userId={effectiveUserId}
+        onToolAdded={handleToolAdded}
+      />
+      <EditItemModal
+        show={showEditModal}
+        onHide={() => setShowEditModal(false)}
+        tool={currentTool}
+        onToolUpdated={handleToolUpdated}
+      />
     </div>
   );
 }

@@ -2,13 +2,8 @@ import React, { useState } from "react";
 import { Card, Image } from "react-bootstrap";
 import "./Profile.css";
 import profilePic from "./PP.jpg";
-import AddItemModal from "./AddItemModal";
 
 function UserProfile({ userData }) {
-  const [showModal, setShowModal] = useState(false);
-  const handleAddItem = () => {
-    setShowModal(true);
-  };
   if (!userData) return <div>Loading...</div>;
 
   return (
@@ -30,14 +25,6 @@ function UserProfile({ userData }) {
           </Card.Text>
         </Card.Body>
       </Card>
-      <button className="btn btn-primary" onClick={handleAddItem}>
-        Share item
-      </button>
-      <AddItemModal
-        show={showModal}
-        onHide={() => setShowModal(false)}
-        userId={userData._id}
-      />
     </div>
   );
 }

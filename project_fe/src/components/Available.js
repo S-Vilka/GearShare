@@ -2,7 +2,6 @@ import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import { Container, Row, Col, Button } from "react-bootstrap";
 import "./Available.css";
-import { formatToImageName } from "./FormatImageName";
 import Pagination from "./Pagination";
 
 const Available = () => {
@@ -66,9 +65,7 @@ const Available = () => {
               <div className="image-placeholder">
                 {tool.name && (
                   <img
-                    src={require(`../images/${formatToImageName(
-                      tool.name
-                    )}.jpg`)}
+                    src={`http://localhost:4000/public/${tool.imageUrl}`}
                     alt={tool.name}
                   />
                 )}

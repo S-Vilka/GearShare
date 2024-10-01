@@ -12,6 +12,7 @@
   margin-top: 1rem;
   align-self: center;
 }
+
 .profileCard {
   max-width: 30rem;
 }
@@ -33,18 +34,44 @@
   object-fit: contain;
 }
 
-.AddButton {
-  border-radius: 10px;
-  padding: 1rem;
-  margin: 1rem;
-  background-color: #28a745;
-  color: white;
+.button-container {
+  display: flex;
+  gap: 10px; /* Adjust the gap as needed */
+  align-items: center; /* Ensure buttons are aligned vertically */
 }
 
-.DeleteButton {
+.edit-button {
+  margin-right: 10px; /* Optional: additional margin if needed */
+}
+
+.profile-column {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.profile-container {
+  width: 100%;
+  margin-right: 2rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-bottom: 1rem;
+}
+
+.profile-card {
+  max-width: 30rem;
+  margin-bottom: 1rem;
+  z-index: 2;
+  position: relative;
+}
+
+.share-button {
   border-radius: 10px;
   padding: 1rem;
   margin: 1rem;
-  background-color: #a72835;
   color: white;
+  z-index: 1;
+  position: relative;
+  align-self: center;
 }

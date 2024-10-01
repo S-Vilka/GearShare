@@ -30,7 +30,7 @@ router.get("/borrowed", getBorrowedTools);
 router.get("/:toolId", getToolById);
 
 // PATCH /tools/:toolId
-router.patch("/:toolId", patchTool);
+router.patch("/:toolId", upload.single("image"), patchTool);
 
 // DELETE /tools/:toolId
 router.delete("/:toolId", deleteTool);

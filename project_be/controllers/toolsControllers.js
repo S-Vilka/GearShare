@@ -57,11 +57,17 @@ const patchTool = async (req, res) => {
   }
 
   try {
+    const updateData = { ...req.body };
+    if (req.file) {
+      updateData.imageUrl = `/toolsImages/${req.file.filename}`;
+    }
+
     const updatedTool = await Tools.findOneAndUpdate(
       { _id: toolId },
-      { ...req.body },
+      updateData,
       { new: true }
     );
+
     if (updatedTool) {
       res.status(200).json(updatedTool);
     } else {

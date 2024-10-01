@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from "react";
 import { useParams, useNavigate } from "react-router-dom";
-import { formatToImageName } from "./FormatImageName";
 import { Container, Row, Col, Button } from "react-bootstrap";
 import "./Description.css";
 
@@ -44,19 +43,22 @@ function Description() {
   return (
     <Container className="tool-container">
       <h1>{tool.name}</h1>
-      <Row className="tool-description" style={{ justifyContent: 'space-between' }}>
+      <Row
+        className="tool-description"
+        style={{ justifyContent: "space-between" }}
+      >
         <Col xs={12} md={5} className="description-section">
           <h2>Tool Description</h2>
           <p>{tool.description}</p>
           <div className="image-placeholder">
             <img
-              src={require(`../images/${formatToImageName(tool.name)}.jpg`)}
+              src={`http://localhost:4000/public/${tool.imageUrl}`}
               alt={tool.name}
             />
           </div>
         </Col>
         <Col xs={12} md={5} className="contact-section">
-          <h2>Contact info:</h2>
+          <h2>Details:</h2>
           <p>{tool.details}</p>
         </Col>
       </Row>

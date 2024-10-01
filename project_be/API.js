@@ -35,6 +35,7 @@ app.use("/api/tools", toolRouter);
 // Error handling
 app.use(unknownEndpoint);
 app.use(errorHandler);
+app.use(requestLogger);
 
 app.listen(port, () =>
   console.log(`Server is running on http://localhost:${port}`)
