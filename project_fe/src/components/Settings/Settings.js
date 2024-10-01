@@ -3,40 +3,41 @@ import { Container, Row, Col, Form, Button } from "react-bootstrap";
 import './Settings.css';
 
 const Settings = () => {
-  const [firstName, setFirstName] = useState('');
-  const [lastName, setLastName] = useState('');
-  const [address, setAddress] = useState('');
-  const [city, setCity] = useState('');
-  const [postalCode, setPostalCode] = useState('');
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
-  const [message, setMessage] = useState('');
+  const [userData, setUserData] = useState({
+    firstName: '',
+    lastName: '',
+    address: '',
+    city: '',
+    postalCode: '',
+    email: '',
+    password: '',
+    newPassword: '',
+    confirmPassword: '',
+  });
   const [profileImage, setProfileImage] = useState(null);
+  const [message, setMessage] = useState('');
+  const [passwordChangeVisible, setPasswordChangeVisible] = useState(false);
+  
+  const userId = "66f9a9a7beee1e7ff3399987";
 
-  const userId = "66f03bd97c72abc72d644b84";  
-
-
-  // Fetch user data based on id
   useEffect(() => {
     const fetchUserData = async () => {
       try {
-        const response = await fetch(`/api/users/${userId}`, {
-          method: 'GET',
-          headers: {
-            'Content-Type': 'application/json'
-          }
-        });
+        const response = await fetch(`/api/users/${userId}`);
         
         if (response.ok) {
-          const userData = await response.json();  
-          setFirstName(userData.firstName);
-          setLastName(userData.lastName);
-          setAddress(userData.address);
-          setCity(userData.city);
-          setPostalCode(userData.postalCode);
-          setEmail(userData.email);
-          //setProfileImage(userData.profileImage);
-          setPassword(userData.password);
+          const fetchedUserData = await response.json();
+          setUserData({
+            firstName: fetchedUserData.firstName || '',
+            lastName: fetchedUserData.lastName || '',
+            address: fetchedUserData.address || '',
+            city: fetchedUserData.city || '',
+            postalCode: fetchedUserData.postalCode || '',
+            email: fetchedUserData.email || '',
+            password: '', 
+            newPassword: '',
+            confirmPassword: '',
+          });
         } else {
           console.error("Failed to fetch user data");
         }
@@ -48,25 +49,33 @@ const Settings = () => {
     fetchUserData();
   }, []);
   
-
-  // Updates user data when form is submitted
+  
+  // Handle form submission (updates user data and optionally changes password)
   const handleSubmit = async (e) => {
     e.preventDefault();
-  
-    const formData = { firstName, lastName, address, city, postalCode, email };
-  
+
+
+    const formData = {
+      firstName: userData.firstName,
+      lastName: userData.lastName,
+      address: userData.address,
+      city: userData.city,
+      postalCode: userData.postalCode,
+      email: userData.email,
+      
+    };
+
     try {
       const response = await fetch(`/api/users/${userId}`, {
         method: 'PATCH',
         headers: {
           'Content-Type': 'application/json'
         },
-        body: JSON.stringify(formData) 
+        body: JSON.stringify(formData)
       });
   
       if (response.ok) {
-        console.log("User data updated successfully");
-        setMessage("Profile updated successfully ")
+        setMessage("Profile updated successfully");
         setTimeout(() => setMessage(''), 3000);
       } else {
         console.error("Failed to update user data");
@@ -75,7 +84,45 @@ const Settings = () => {
       console.error("Error updating user data:", error);
     }
   };
-  
+
+  // Handle password change
+  const handleChangePassword = async (e) => {
+    e.preventDefault();
+
+    if (userData.newPassword !== userData.confirmPassword) {
+      setMessage("New passwords do not match.");
+      setTimeout(() => setMessage(''), 3000);
+      return;
+    }
+
+    try {
+      const response = await fetch(`/api/users/${userId}/change-password`, {
+        method: 'PATCH',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          oldPassword: userData.password,
+          newPassword: userData.newPassword,
+        }),
+      });
+
+      if (response.ok) {
+        setMessage("Password changed successfully.");
+        setUserData({ ...userData, password: '', newPassword: '', confirmPassword: '' });
+        setPasswordChangeVisible(false);
+        setTimeout(() => setMessage(''), 3000);
+      } else {
+        const errorData = await response.json();
+        setMessage(errorData.message || "Failed to change password.");
+        setTimeout(() => setMessage(''), 3000);
+      }
+    } catch (error) {
+      console.error("Error changing password:", error);
+      setMessage("An error occurred while changing the password.");
+      setTimeout(() => setMessage(''), 3000);
+    }
+  };
 
   const handleImageChange = (e) => {
     const file = e.target.files[0];
@@ -91,7 +138,6 @@ const Settings = () => {
         <Col md={8} className="form-container">
           <h1 className="heading mb-4">Settings</h1>
 
-          
           <div className="profile-picture-row">
             <div className="profile-picture-container">
               <div className="profile-picture">
@@ -117,8 +163,8 @@ const Settings = () => {
                   <Form.Label>First Name</Form.Label>
                   <Form.Control
                     type="text"
-                    value={firstName}
-                    onChange={(e) => setFirstName(e.target.value)}
+                    value={userData.firstName}
+                    onChange={(e) => setUserData({ ...userData, firstName: e.target.value })}
                     placeholder="Enter first name"
                   />
                 </Form.Group>
@@ -128,8 +174,8 @@ const Settings = () => {
                   <Form.Label>Last Name</Form.Label>
                   <Form.Control
                     type="text"
-                    value={lastName}
-                    onChange={(e) => setLastName(e.target.value)}
+                    value={userData.lastName}
+                    onChange={(e) => setUserData({ ...userData, lastName: e.target.value })}
                     placeholder="Enter last name"
                   />
                 </Form.Group>
@@ -142,8 +188,8 @@ const Settings = () => {
                   <Form.Label>Address</Form.Label>
                   <Form.Control
                     type="text"
-                    value={address}
-                    onChange={(e) => setAddress(e.target.value)}
+                    value={userData.address}
+                    onChange={(e) => setUserData({ ...userData, address: e.target.value })}
                     placeholder="Enter address"
                   />
                 </Form.Group>
@@ -153,8 +199,8 @@ const Settings = () => {
                   <Form.Label>City</Form.Label>
                   <Form.Control
                     type="text"
-                    value={city}
-                    onChange={(e) => setCity(e.target.value)}
+                    value={userData.city}
+                    onChange={(e) => setUserData({ ...userData, city: e.target.value })}
                     placeholder="Enter city"
                   />
                 </Form.Group>
@@ -167,8 +213,8 @@ const Settings = () => {
                   <Form.Label>Postal Code</Form.Label>
                   <Form.Control
                     type="number"
-                    value={postalCode}
-                    onChange={(e) => setPostalCode(e.target.value)}
+                    value={userData.postalCode}
+                    onChange={(e) => setUserData({ ...userData, postalCode: e.target.value })}
                     placeholder="Enter postal code"
                   />
                 </Form.Group>
@@ -178,8 +224,8 @@ const Settings = () => {
                   <Form.Label>Email</Form.Label>
                   <Form.Control
                     type="email"
-                    value={email}
-                    onChange={(e) => setEmail(e.target.value)}
+                    value={userData.email}
+                    onChange={(e) => setUserData({ ...userData, email: e.target.value })}
                     placeholder="Enter email"
                   />
                 </Form.Group>
@@ -188,25 +234,69 @@ const Settings = () => {
             
             <Row className="mb-3">
               <Col md={6}>
-              <Form.Group className="mb-3" controlId="formPassword">
-              <Form.Label>Password</Form.Label>
-              <Form.Control
-                type="password"
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-                placeholder="Enter password"
-                required
-              />
+                <Form.Group className="mb-3" controlId="formPassword">
+                  <Form.Label>Password</Form.Label>
+                  <Form.Control
+                    type="password"
+                    value={userData.password}
+                    onChange={(e) => setUserData({ ...userData, password: e.target.value })}
+                    placeholder="Enter old password"
+                  />
                 </Form.Group>
+              </Col>
+
+              <Col md={6}>
+                <Button
+                  variant="secondary"
+                  onClick={() => setPasswordChangeVisible(true)}
+                  className="mt-3"
+                >
+                  Change Password
+                </Button>
               </Col>
             </Row>
 
-            <Button variant="primary" type="submit" className="save-btn">
-              Save Changes
-            </Button>
+            {passwordChangeVisible && (
+              <>
+                <Row className="mb-3">
+                  <Col md={6}>
+                    <Form.Group controlId="formNewPassword">
+                      <Form.Label>New Password</Form.Label>
+                      <Form.Control
+                        type="password"
+                        value={userData.newPassword}
+                        onChange={(e) => setUserData({ ...userData, newPassword: e.target.value })}
+                        placeholder="Enter new password"
+                        required
+                      />
+                    </Form.Group>
+                  </Col>
+                  <Col md={6}>
+                    <Form.Group controlId="formConfirmPassword">
+                      <Form.Label>Confirm New Password</Form.Label>
+                      <Form.Control
+                        type="password"
+                        value={userData.confirmPassword}
+                        onChange={(e) => setUserData({ ...userData, confirmPassword: e.target.value })}
+                        placeholder="Confirm new password"
+                        required
+                      />
+                    </Form.Group>
+                  </Col>
+                </Row>
+  
+                <Button variant="primary" onClick={handleChangePassword} className="mb-3">
+                  Submit Password
+                </Button>
+              </>
+            )}
 
-            {message && <p className="settings-message">{message}</p>}
+            <Button variant="primary" type="submit" className="mt-3">
+              Update Profile
+            </Button>
           </Form>
+
+          {message && <div className="alert alert-info mt-3">{message}</div>}
         </Col>
       </Row>
     </Container>

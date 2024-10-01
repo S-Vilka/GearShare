@@ -6,6 +6,7 @@ const {
   createUser,
   patchUser,
   deleteUser,
+  changePassword,
 } = require("../controllers/userController");
 
 // GET /users
@@ -22,5 +23,8 @@ router.patch("/:userId", patchUser);
 
 // DELETE /users/:userId
 router.delete("/:userId", deleteUser);
+
+// POST /users/:userId/check-password
+router.patch("/:userId/change-password", changePassword);
 
 module.exports = router;
