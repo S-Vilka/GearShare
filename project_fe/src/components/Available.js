@@ -44,6 +44,11 @@ const Available = () => {
   const currentTools = tools.slice(indexOfFirstTool, indexOfLastTool);
   const totalPages = Math.ceil(tools.length / toolsPerPage);
 
+  const token = localStorage.getItem("token");
+  if (!token) {
+    window.location.href = "/";
+  }
+
   return (
     <Container fluid className="available-page">
       <Row>

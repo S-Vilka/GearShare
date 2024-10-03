@@ -18,12 +18,3 @@ const authMiddleware = (req, res, next) => {
 };
 
 module.exports = authMiddleware;
-
-
-// To protect a route, simply apply the authMiddleware like this:
-
-// const authMiddleware = require("./middleware/authMiddleware");
-
-// app.get("/protected-route", authMiddleware, (req, res) => {
-//   res.json({ message: "This is a protected route", user: req.user });
-// });

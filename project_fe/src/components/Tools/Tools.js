@@ -25,6 +25,11 @@ function ToolsCard({ name, description, details, image, onDelete, onEdit }) {
     };
   }, [timer]);
 
+  const token = localStorage.getItem("token");
+  if (!token) {
+    window.location.href = "/";
+  }
+
   return (
     <Card>
       <div className="tool-image-container">

@@ -4,6 +4,10 @@ import "./Profile.css";
 import profilePic from "./PP.jpg";
 
 function UserProfile({ userData }) {
+  const token = localStorage.getItem("token");
+  if (!token) {
+    window.location.href = "/";
+  }
   if (!userData) return <div>Loading...</div>;
 
   return (

@@ -1,9 +1,12 @@
 import React, { useState } from "react";
 import { Container, Row, Col, Form, Button } from "react-bootstrap";
+import { useNavigate } from "react-router-dom"; // npm install react-router-dom
+
 
 const Login = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const navigate = useNavigate();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -23,6 +26,8 @@ const Login = () => {
         const result = await response.json();
         console.log("Login successful:", result);
         localStorage.setItem("token", result.token);  // Store the JWT in localStorage
+        window.location.href = "/profile";
+        // navigate("/profile");  // Redirect to the profile page after successful login
       } else {
         console.error("Login failed");
       }

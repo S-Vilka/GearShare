@@ -9,16 +9,25 @@ const Join = () => {
   const [city, setCity] = useState('');
   const [postalCode, setPostalCode] = useState('');
   const [email, setEmail] = useState('');
+  const [confirmEmail, setConfirmEmail] = useState('');        // New state for confirm email
   const [password, setPassword] = useState('');
+  const [confirmPassword, setConfirmPassword] = useState('');  // New state for confirm password
+  const [errorMessage, setErrorMessage] = useState('');        // State for error messages
 
   // Function to handle form submission
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    const formData = { firstName, lastName, address, city, postalCode, email, password };
+    // Check if passwords match
+    if (password !== confirmPassword) {
+      setErrorMessage("Passwords do not match");
+      return;
+    }
+
+    const formData = { firstName, lastName, address, city, postalCode, email, confirmEmail, password, confirmPassword };
 
     try {
-      const response = await fetch("http://localhost:4000/users", {
+      const response = await fetch("http://localhost:4000/api/users", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -29,8 +38,12 @@ const Join = () => {
       if (response.ok) {
         const result = await response.json();
         console.log("User created successfully:", result);
+        setErrorMessage(''); // Clear error message after successful submission
       } else {
         console.error("Failed to create user");
+        const result = await response.json();
+        setErrorMessage(result.message);
+        window.alert(result.message);
       }
     } catch (error) {
       console.error("Error:", error.message);
@@ -43,7 +56,9 @@ const Join = () => {
     setCity('');
     setPostalCode('');
     setEmail('');
+    setConfirmEmail('');
     setPassword('');
+    setConfirmPassword(''); // Clear confirm password
   };
 
   return (
@@ -51,6 +66,7 @@ const Join = () => {
       <Row className="justify-content-center align-items-center">
         <Col md={8} className="form-container">
           <h1 className="heading mb-4">Join Now</h1>
+          {errorMessage && <p style={{ color: 'red' }}>{errorMessage}</p>} {/* Display error message */}
           <Form onSubmit={handleSubmit}>
             <Row className="mb-3">
               <Col md={6}>
@@ -128,6 +144,17 @@ const Join = () => {
               />
             </Form.Group>
 
+            <Form.Group className="mb-3" controlId="formConfirmEmail">
+              <Form.Label>Confirm Email</Form.Label>
+              <Form.Control
+                type="email"
+                value={confirmEmail}
+                onChange={(e) => setConfirmEmail(e.target.value)}
+                placeholder="Enter email again"
+                required
+              />
+            </Form.Group>
+
             <Form.Group className="mb-3" controlId="formPassword">
               <Form.Label>Password</Form.Label>
               <Form.Control
@@ -135,6 +162,17 @@ const Join = () => {
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
                 placeholder="Enter password"
+                required
+              />
+            </Form.Group>
+
+            <Form.Group className="mb-3" controlId="formConfirmPassword"> {/* New confirm password field */}
+              <Form.Label>Confirm Password</Form.Label>
+              <Form.Control
+                type="password"
+                value={confirmPassword}
+                onChange={(e) => setConfirmPassword(e.target.value)}
+                placeholder="Re-enter password"
                 required
               />
             </Form.Group>

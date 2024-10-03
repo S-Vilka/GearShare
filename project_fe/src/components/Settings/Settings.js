@@ -83,6 +83,11 @@ const Settings = () => {
     }
   };
 
+  const token = localStorage.getItem("token");
+  if (!token) {
+    window.location.href = "/";
+  }
+
   return (
     <Container fluid className="settings-page">
       <Row className="justify-content-center align-items-center">

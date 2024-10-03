@@ -2,6 +2,7 @@ const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 const User = require("../models/userModel");
 const mongoose = require("mongoose");
+const validator = require("validator");
 
 // GET /users
 const getAllUsers = async (req, res) => {
@@ -12,12 +13,31 @@ const getAllUsers = async (req, res) => {
     res.status(500).json({ message: "Failed to retrieve users" });
   }
 };
-// POST /users
+
+// POST /users (User Signup)
 const createUser = async (req, res) => {
-  const { firstName, lastName, email, password, address, city, postalCode } =
-    req.body;
+  const { firstName, lastName, email, confirmEmail, password, confirmPassword, city, address, postalCode } = req.body;
 
   try {
+    // Validate email format
+    if (!validator.isEmail(email)) {
+      return res.status(400).json({ message: "Invalid email format" });
+    }
+
+    // Check if passwords match
+    if (email !== confirmEmail) {
+        return res.status(400).json({ message: "Emails do not match" });
+    }
+
+    // Check if passwords match
+    if (password !== confirmPassword) {
+      return res.status(400).json({ message: "Passwords do not match" });
+    }
+
+    if (!validator.isStrongPassword(password)) {
+      return res.status(400).json({ message: "Use strong password" });
+    }
+
     // Check if the user already exists
     const existingUser = await User.findOne({ email });
     if (existingUser) {
@@ -33,13 +53,13 @@ const createUser = async (req, res) => {
       firstName,
       lastName,
       email,
-      password: hashedPassword, // Save the hashed password
-      address,
+      password: hashedPassword,  // Save the hashed password
       city,
-      postalCode,
+      streetName: address,
+      postalCode
     });
-
-    res.status(201).json(newUser);
+    console.log(newUser); //Remove before pushing to production (Testing new user)
+    res.status(201).end();
   } catch (error) {
     res
       .status(400)
@@ -47,7 +67,7 @@ const createUser = async (req, res) => {
   }
 };
 
-// POST /api/users/login
+// POST /api/users/login (User Login)
 const loginUser = async (req, res) => {
   const { email, password } = req.body;
 
