@@ -20,22 +20,27 @@ function Profile({ userId }) {
 
   useEffect(() => {
     const fetchUserData = async () => {
+      const token = localStorage.getItem("token");
       try {
-        const userResponse = await fetch(
-          `http://localhost:4000/api/users/${effectiveUserId}`
+        const response = await fetch(
+          `http://localhost:4000/api/users/${userData._id}`,
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+              "Content-Type": "application/json",
+            },
+          }
         );
-        if (!userResponse.ok) {
-          throw new Error(
-            `Error fetching user data: ${userResponse.statusText}`
-          );
+        if (!response.ok) {
+          throw new Error(`Error fetching user data: ${response.statusText}`);
         }
-        const userJson = await userResponse.json();
+        const userJson = await response.json();
         setUserData(userJson);
       } catch (error) {
         console.error("Error fetching user data", error);
+        setError(error.message);
       }
     };
-    fetchUserData();
 
     const fetchTools = async () => {
       try {
