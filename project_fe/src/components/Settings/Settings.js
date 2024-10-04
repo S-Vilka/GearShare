@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { Container, Row, Col, Form, Button } from "react-bootstrap";
 import './Settings.css';
+// import jwtDecode from "jwt-decode";
 
 const Settings = () => {
   const [userData, setUserData] = useState({
@@ -10,20 +11,36 @@ const Settings = () => {
     city: '',
     postalCode: '',
     email: '',
+  });
+  
+  const [passwordData, setPasswordData] = useState({
     password: '',
     newPassword: '',
     confirmPassword: '',
   });
+
   const [profileImage, setProfileImage] = useState(null);
   const [message, setMessage] = useState('');
-  const [passwordChangeVisible, setPasswordChangeVisible] = useState(false);
   
   const userId = "66f9a9a7beee1e7ff3399987";
+
+  //with token
+  // const token = sessionStorage.getItem('token');
+  // const userId = token ? jwtDecode(token).id : null;
 
   useEffect(() => {
     const fetchUserData = async () => {
       try {
         const response = await fetch(`/api/users/${userId}`);
+
+        // try {
+        //   const token = localStorage.getItem("token");  // Fetch the token
+        //   const response = await fetch(`/api/users/${userId}`, {
+        //     method: "GET",
+        //     headers: {
+        //       "Authorization": `Bearer ${token}`,  // Include token in the Authorization header
+        //     },
+        //   });
         
         if (response.ok) {
           const fetchedUserData = await response.json();
@@ -34,9 +51,6 @@ const Settings = () => {
             city: fetchedUserData.city || '',
             postalCode: fetchedUserData.postalCode || '',
             email: fetchedUserData.email || '',
-            password: '', 
-            newPassword: '',
-            confirmPassword: '',
           });
         } else {
           console.error("Failed to fetch user data");
@@ -49,34 +63,26 @@ const Settings = () => {
     fetchUserData();
   }, []);
   
-  
-  // Handle form submission (updates user data and optionally changes password)
+  // Handle profile update
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-
-    const formData = {
-      firstName: userData.firstName,
-      lastName: userData.lastName,
-      address: userData.address,
-      city: userData.city,
-      postalCode: userData.postalCode,
-      email: userData.email,
-      
-    };
+    const formData = { ...userData };
+    // const token = localStorage.getItem("token");
 
     try {
       const response = await fetch(`/api/users/${userId}`, {
         method: 'PATCH',
         headers: {
-          'Content-Type': 'application/json'
+          'Content-Type': 'application/json',
+          // "Authorization": `Bearer ${token}`,
         },
         body: JSON.stringify(formData)
       });
   
       if (response.ok) {
         setMessage("Profile updated successfully");
-        setTimeout(() => setMessage(''), 3000);
+        setTimeout(() => setMessage(''), 6000);
       } else {
         console.error("Failed to update user data");
       }
@@ -89,38 +95,40 @@ const Settings = () => {
   const handleChangePassword = async (e) => {
     e.preventDefault();
 
-    if (userData.newPassword !== userData.confirmPassword) {
+    if (passwordData.newPassword !== passwordData.confirmPassword) {
       setMessage("New passwords do not match.");
-      setTimeout(() => setMessage(''), 3000);
+      setTimeout(() => setMessage(''), 6000);
       return;
     }
+
+    // const token = sessionStorage.getItem('token');
 
     try {
       const response = await fetch(`/api/users/${userId}/change-password`, {
         method: 'PATCH',
         headers: {
           'Content-Type': 'application/json',
+          // 'Authorization': `Bearer ${token}`,
         },
         body: JSON.stringify({
-          oldPassword: userData.password,
-          newPassword: userData.newPassword,
+          oldPassword: passwordData.password,
+          newPassword: passwordData.newPassword,
         }),
       });
 
       if (response.ok) {
         setMessage("Password changed successfully.");
-        setUserData({ ...userData, password: '', newPassword: '', confirmPassword: '' });
-        setPasswordChangeVisible(false);
-        setTimeout(() => setMessage(''), 3000);
+        setPasswordData({ password: '', newPassword: '', confirmPassword: '' });
+        setTimeout(() => setMessage(''), 6000);
       } else {
         const errorData = await response.json();
         setMessage(errorData.message || "Failed to change password.");
-        setTimeout(() => setMessage(''), 3000);
+        setTimeout(() => setMessage(''), 6000);
       }
     } catch (error) {
       console.error("Error changing password:", error);
       setMessage("An error occurred while changing the password.");
-      setTimeout(() => setMessage(''), 3000);
+      setTimeout(() => setMessage(''), 6000);
     }
   };
 
@@ -231,72 +239,66 @@ const Settings = () => {
                 </Form.Group>
               </Col>
             </Row>
-            
-            <Row className="mb-3">
-              <Col md={6}>
-                <Form.Group className="mb-3" controlId="formPassword">
-                  <Form.Label>Password</Form.Label>
-                  <Form.Control
-                    type="password"
-                    value={userData.password}
-                    onChange={(e) => setUserData({ ...userData, password: e.target.value })}
-                    placeholder="Enter old password"
-                  />
-                </Form.Group>
-              </Col>
-
-              <Col md={6}>
-                <Button
-                  variant="secondary"
-                  onClick={() => setPasswordChangeVisible(true)}
-                  className="mt-3"
-                >
-                  Change Password
-                </Button>
-              </Col>
-            </Row>
-
-            {passwordChangeVisible && (
-              <>
-                <Row className="mb-3">
-                  <Col md={6}>
-                    <Form.Group controlId="formNewPassword">
-                      <Form.Label>New Password</Form.Label>
-                      <Form.Control
-                        type="password"
-                        value={userData.newPassword}
-                        onChange={(e) => setUserData({ ...userData, newPassword: e.target.value })}
-                        placeholder="Enter new password"
-                        required
-                      />
-                    </Form.Group>
-                  </Col>
-                  <Col md={6}>
-                    <Form.Group controlId="formConfirmPassword">
-                      <Form.Label>Confirm New Password</Form.Label>
-                      <Form.Control
-                        type="password"
-                        value={userData.confirmPassword}
-                        onChange={(e) => setUserData({ ...userData, confirmPassword: e.target.value })}
-                        placeholder="Confirm new password"
-                        required
-                      />
-                    </Form.Group>
-                  </Col>
-                </Row>
-  
-                <Button variant="primary" onClick={handleChangePassword} className="mb-3">
-                  Submit Password
-                </Button>
-              </>
-            )}
 
             <Button variant="primary" type="submit" className="mt-3">
               Update Profile
             </Button>
           </Form>
 
-          {message && <div className="alert alert-info mt-3">{message}</div>}
+          {/* Password Change Form */}
+          <Form onSubmit={handleChangePassword}>
+            <Row className="mb-3">
+              <Col md={12}>
+                <h5>Change Password</h5>
+              </Col>
+            </Row>
+            <Row className="mb-3">
+              <Col md={6}>
+                <Form.Group controlId="formPassword">
+                  <Form.Label>Old Password</Form.Label>
+                  <Form.Control
+                    type="password"
+                    value={passwordData.password}
+                    onChange={(e) => setPasswordData({ ...passwordData, password: e.target.value })}
+                    placeholder="Enter old password"
+                  />
+                </Form.Group>
+              </Col>
+              <Col md={6}>
+                <Form.Group controlId="formNewPassword">
+                  <Form.Label>New Password</Form.Label>
+                  <Form.Control
+                    type="password"
+                    value={passwordData.newPassword}
+                    onChange={(e) => setPasswordData({ ...passwordData, newPassword: e.target.value })}
+                    placeholder="Enter new password"
+                    required
+                  />
+                </Form.Group>
+              </Col>
+            </Row>
+            <Row className="mb-3">
+              <Col md={6}>
+                <Form.Group controlId="formConfirmPassword">
+                  <Form.Label>Confirm New Password</Form.Label>
+                  <Form.Control
+                    type="password"
+                    value={passwordData.confirmPassword}
+                    onChange={(e) => setPasswordData({ ...passwordData, confirmPassword: e.target.value })}
+                    placeholder="Confirm new password"
+                    required
+                  />
+                </Form.Group>
+              </Col>
+              <Col md={6} className="d-flex align-items-end">
+                <Button variant="secondary" type="submit">
+                  Change Password
+                </Button>
+              </Col>
+            </Row>
+          </Form>
+
+          {message && <p className="alert alert-info mt-3">{message}</p>}
         </Col>
       </Row>
     </Container>
