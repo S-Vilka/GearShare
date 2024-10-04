@@ -84,6 +84,13 @@
   color: white !important;
 }
 
+/* Log out button */
+.nav-right .logout-btn {
+  background-color: #ff0000 !important; /* Red background color */
+  color: white !important; /* White text color */
+}
+
+
 /* Hover effects */
 .nav-right .btn:hover {
   opacity: 0.8;

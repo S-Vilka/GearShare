@@ -10,6 +10,7 @@ const userSchema = new Schema(
     city: { type: String, required: true },
     streetName: { type: String, required: true },
     postalCode: { type: String, required: true },
+    phone: { type: String, required: true },
     password: { type: String, required: true },
   },
   { timestamps: true }

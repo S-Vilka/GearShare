@@ -8,6 +8,7 @@ const Join = () => {
   const [address, setAddress] = useState('');
   const [city, setCity] = useState('');
   const [postalCode, setPostalCode] = useState('');
+  const [phone, setPhone] = useState(''); // New state for phone number
   const [email, setEmail] = useState('');
   const [confirmEmail, setConfirmEmail] = useState('');        // New state for confirm email
   const [password, setPassword] = useState('');
@@ -24,7 +25,7 @@ const Join = () => {
       return;
     }
 
-    const formData = { firstName, lastName, address, city, postalCode, email, confirmEmail, password, confirmPassword };
+    const formData = { firstName, lastName, address, city, postalCode, phone, email, confirmEmail, password, confirmPassword };
 
     try {
       const response = await fetch("http://localhost:4000/api/users", {
@@ -55,6 +56,7 @@ const Join = () => {
     setAddress('');
     setCity('');
     setPostalCode('');
+    setPhone(''); 
     setEmail('');
     setConfirmEmail('');
     setPassword('');
@@ -132,6 +134,17 @@ const Join = () => {
                 </Form.Group>
               </Col>
             </Row>
+
+            <Form.Group className="mb-3" controlId="formPhone">
+              <Form.Label>Phone</Form.Label>
+              <Form.Control
+                type="text"
+                value={phone}
+                onChange={(e) => setPhone(e.target.value)}
+                placeholder="Enter phopne number"
+                required
+              />
+            </Form.Group>
 
             <Form.Group className="mb-3" controlId="formEmail">
               <Form.Label>Email</Form.Label>

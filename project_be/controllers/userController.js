@@ -16,7 +16,7 @@ const getAllUsers = async (req, res) => {
 
 // POST /users (User Signup)
 const createUser = async (req, res) => {
-  const { firstName, lastName, email, confirmEmail, password, confirmPassword, city, address, postalCode } = req.body;
+  const { firstName, lastName, email, confirmEmail, password, confirmPassword, city, address, postalCode, phone } = req.body;
 
   try {
     // Validate email format
@@ -56,6 +56,7 @@ const createUser = async (req, res) => {
       password: hashedPassword,  // Save the hashed password
       city,
       streetName: address,
+      phone,
       postalCode
     });
     console.log(newUser); //Remove before pushing to production (Testing new user)

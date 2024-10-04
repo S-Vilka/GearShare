@@ -1,0 +1,41 @@
+.about-container {
+    max-width: 800px; /* Limit the width for better readability */
+    margin: 0 auto; /* Center the content */
+    padding: 25px;
+    font-family: "Arial", sans-serif;
+    line-height: 1.6; /* Improves the spacing between lines */
+    background-color: #f9f9f9; /* Light background for contrast */
+    border-radius:20px; /* Soft rounded corners */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Subtle shadow for a raised effect */
+  }
+  
+  h1 {
+    font-size: 2.5rem; /* Larger heading for emphasis */
+    text-align: center; /* Center the title */
+    margin-bottom: 20px;
+    padding: 30px;
+    color: #001858; /* Color to match your brand */
+  }
+  
+  p {
+    font-size: 1.125rem; /* Slightly larger font for better readability */
+    margin-bottom: 20px; /* Space between paragraphs */
+    padding: 15px;
+    text-align: justify; /* Makes the text aligned evenly */
+    color: #333; /* Darker text color for contrast */
+  }
+  
+  @media (max-width: 768px) {
+    .about-container {
+      padding: 15px; /* Reduce padding on smaller screens */
+    }
+  
+    h1 {
+      font-size: 2rem; /* Reduce font size for smaller screens */
+    }
+  
+    p {
+      font-size: 1rem; /* Adjust paragraph size for smaller screens */
+    }
+  }
+  
