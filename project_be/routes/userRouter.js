@@ -8,10 +8,12 @@ const {
   loginUser,
   patchUser,
   deleteUser,
+  // updateUserTools,
+  shareTool,
 } = require("../controllers/userController");
 
 // GET /users
-router.get("/",authMiddleware, getAllUsers);
+router.get("/", authMiddleware, getAllUsers);
 
 // POST /users
 router.post("/", createUser);
@@ -20,12 +22,18 @@ router.post("/", createUser);
 router.post("/login", loginUser);
 
 // GET /users/:userId
-router.get("/:userId",authMiddleware, getUserById);
+router.get("/:userId", authMiddleware, getUserById);
 
-// PUT /users/:userId
+// PATCH /users/:userId
 router.patch("/:userId", authMiddleware, patchUser);
 
 // DELETE /users/:userId
 router.delete("/:userId", authMiddleware, deleteUser);
+
+// Update user tools
+// router.patch("/:userId/tools", authMiddleware, updateUserTools);
+
+// Share tool// PATCH /tools/share-tool
+router.patch("/:userID/tools", authMiddleware, shareTool);
 
 module.exports = router;

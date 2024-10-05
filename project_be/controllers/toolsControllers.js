@@ -31,13 +31,21 @@ const createTool = async (req, res) => {
 // GET /tools/:toolId
 const getToolById = async (req, res) => {
   const { toolId } = req.params;
+  const { includeOwner } = req.query;
 
   if (!mongoose.Types.ObjectId.isValid(toolId)) {
     return res.status(400).json({ message: "Invalid tool ID" });
   }
 
   try {
-    const tool = await Tools.findById(toolId);
+    let query = Tools.findById(toolId);
+
+    if (includeOwner === "true") {
+      query = query.populate("owner", "firstName lastName phone");
+    }
+
+    const tool = await query.exec();
+
     if (tool) {
       res.status(200).json(tool);
     } else {
@@ -98,42 +106,50 @@ const deleteTool = async (req, res) => {
   }
 };
 
-// Get shared tools
-const getSharedTools = async (req, res) => {
+// GET user tools
+const getUserTools = async (req, res) => {
   const { userId } = req.query;
-  console.log("Received userId:", userId);
 
-  if (!userId) {
-    console.log("UserId is missing");
-    return res
-      .status(400)
-      .json({ message: "userId query parameter is required" });
+  if (!mongoose.Types.ObjectId.isValid(userId)) {
+    return res.status(400).json({ message: "Invalid user ID format" });
   }
 
   try {
-    const sharedTools = await Tools.find({ owner: userId });
-    console.log("Shared tools found:", sharedTools.length);
-    res.status(200).json(sharedTools);
+    // Fetch all tools owned by the user
+    const userTools = await Tools.find({ owner: userId });
+
+    // Separate tools into available and borrowed based on the `available` flag
+    const availableTools = userTools.filter((tool) => tool.available);
+    const borrowedTools = userTools.filter((tool) => !tool.available);
+
+    res.status(200).json({ availableTools, borrowedTools });
   } catch (error) {
-    console.error("Error in getSharedTools:", error);
-    res.status(500).json({ error: error.message });
+    console.error("Error fetching user tools:", error);
+    res.status(500).json({ message: "Server error" });
   }
 };
 
-// Get borrowed tools
-const getBorrowedTools = async (req, res) => {
-  const { userId } = req.query;
-  if (!userId) {
-    return res
-      .status(400)
-      .json({ message: "userId query parameter is required" });
+const updateToolAvailability = async (req, res) => {
+  const { toolId } = req.params;
+
+  if (!mongoose.Types.ObjectId.isValid(toolId)) {
+    return res.status(400).json({ message: "Invalid tool ID format" });
   }
 
   try {
-    const borrowedTools = await Tools.find({ borrower: userId });
-    res.status(200).json(borrowedTools);
+    const tool = await Tools.findById(toolId);
+    if (!tool) {
+      return res.status(404).json({ message: "Tool not found" });
+    }
+
+    // Toggle the availability flag
+    tool.available = !tool.available;
+    await tool.save();
+
+    res.status(200).json({ message: "Tool availability updated", tool });
   } catch (error) {
-    res.status(500).json({ error: error.message });
+    console.error("Error updating tool availability:", error);
+    res.status(500).json({ message: "Server error" });
   }
 };
 
@@ -143,6 +159,6 @@ module.exports = {
   createTool,
   patchTool,
   deleteTool,
-  getSharedTools,
-  getBorrowedTools,
+  getUserTools,
+  updateToolAvailability,
 };

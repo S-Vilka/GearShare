@@ -1,32 +1,52 @@
 import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { Container, Row, Col, Form, Button } from "react-bootstrap";
 
 const Join = () => {
-  // State variables to hold form data
-  const [firstName, setFirstName] = useState('');
-  const [lastName, setLastName] = useState('');
-  const [address, setAddress] = useState('');
-  const [city, setCity] = useState('');
-  const [postalCode, setPostalCode] = useState('');
-  const [email, setEmail] = useState('');
-  const [confirmEmail, setConfirmEmail] = useState('');        // New state for confirm email
-  const [password, setPassword] = useState('');
-  const [confirmPassword, setConfirmPassword] = useState('');  // New state for confirm password
-  const [errorMessage, setErrorMessage] = useState('');        // State for error messages
+  const [firstName, setFirstName] = useState("");
+  const [lastName, setLastName] = useState("");
+  const [address, setAddress] = useState("");
+  const [city, setCity] = useState("");
+  const [postalCode, setPostalCode] = useState("");
+  const [phone, setPhone] = useState("");
+  const [email, setEmail] = useState("");
+  const [confirmEmail, setConfirmEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
+  const [errorMessage, setErrorMessage] = useState("");
+  const navigate = useNavigate();
 
-  // Function to handle form submission
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    // Check if passwords match
+    const trimmedEmail = email.trim().toLowerCase();
+    const trimmedConfirmEmail = confirmEmail.trim().toLowerCase();
+
+    if (trimmedEmail !== trimmedConfirmEmail) {
+      setErrorMessage("Emails do not match");
+      return;
+    }
+
     if (password !== confirmPassword) {
       setErrorMessage("Passwords do not match");
       return;
     }
 
-    const formData = { firstName, lastName, address, city, postalCode, email, confirmEmail, password, confirmPassword };
+    const formData = {
+      firstName,
+      lastName,
+      address,
+      city,
+      postalCode,
+      phone,
+      email: trimmedEmail,
+      confirmEmail: trimmedConfirmEmail,
+      password,
+      confirmPassword,
+    };
 
     try {
+      console.log("Sending form data:", formData); // Add this line
       const response = await fetch("http://localhost:4000/api/users", {
         method: "POST",
         headers: {
@@ -38,27 +58,28 @@ const Join = () => {
       if (response.ok) {
         const result = await response.json();
         console.log("User created successfully:", result);
-        setErrorMessage(''); // Clear error message after successful submission
+        setErrorMessage("");
+        navigate("/profile");
       } else {
-        console.error("Failed to create user");
         const result = await response.json();
         setErrorMessage(result.message);
         window.alert(result.message);
       }
     } catch (error) {
       console.error("Error:", error.message);
+      setErrorMessage("Failed to create user");
     }
 
-    // Clear form fields after submission
-    setFirstName('');
-    setLastName('');
-    setAddress('');
-    setCity('');
-    setPostalCode('');
-    setEmail('');
-    setConfirmEmail('');
-    setPassword('');
-    setConfirmPassword(''); // Clear confirm password
+    setFirstName("");
+    setLastName("");
+    setAddress("");
+    setCity("");
+    setPostalCode("");
+    setPhone("");
+    setEmail("");
+    setConfirmEmail("");
+    setPassword("");
+    setConfirmPassword("");
   };
 
   return (
@@ -66,7 +87,7 @@ const Join = () => {
       <Row className="justify-content-center align-items-center">
         <Col md={8} className="form-container">
           <h1 className="heading mb-4">Join Now</h1>
-          {errorMessage && <p style={{ color: 'red' }}>{errorMessage}</p>} {/* Display error message */}
+          {errorMessage && <p style={{ color: "red" }}>{errorMessage}</p>}
           <Form onSubmit={handleSubmit}>
             <Row className="mb-3">
               <Col md={6}>
@@ -133,6 +154,17 @@ const Join = () => {
               </Col>
             </Row>
 
+            <Form.Group className="mb-3" controlId="formPhone">
+              <Form.Label>Phone</Form.Label>
+              <Form.Control
+                type="text"
+                value={phone}
+                onChange={(e) => setPhone(e.target.value)}
+                placeholder="Enter phone number"
+                required
+              />
+            </Form.Group>
+
             <Form.Group className="mb-3" controlId="formEmail">
               <Form.Label>Email</Form.Label>
               <Form.Control
@@ -166,7 +198,7 @@ const Join = () => {
               />
             </Form.Group>
 
-            <Form.Group className="mb-3" controlId="formConfirmPassword"> {/* New confirm password field */}
+            <Form.Group className="mb-3" controlId="formConfirmPassword">
               <Form.Label>Confirm Password</Form.Label>
               <Form.Control
                 type="password"

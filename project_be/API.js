@@ -32,6 +32,7 @@ app.use("/public", express.static(path.join(__dirname, "public")));
 
 app.use("/api/users", userRouter);
 app.use("/api/tools", toolRouter);
+
 // Error handling
 app.use(unknownEndpoint);
 app.use(errorHandler);

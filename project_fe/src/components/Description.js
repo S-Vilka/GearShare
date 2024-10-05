@@ -12,7 +12,9 @@ function Description() {
   useEffect(() => {
     const fetchTool = async () => {
       try {
-        const response = await fetch(`http://localhost:4000/api/tools/${id}`);
+        const response = await fetch(
+          `http://localhost:4000/api/tools/${id}?includeOwner=true`
+        );
         if (!response.ok) {
           throw new Error("Tool not found");
         }
@@ -60,6 +62,15 @@ function Description() {
         <Col xs={12} md={5} className="contact-section">
           <h2>Details:</h2>
           <p>{tool.details}</p>
+          <h2>Owner Information:</h2>
+          {tool.owner && (
+            <>
+              <p>
+                Name: {tool.owner.firstName} {tool.owner.lastName.charAt(0)}.
+              </p>
+              <p>Phone: {tool.owner.phone}</p>
+            </>
+          )}
         </Col>
       </Row>
       <div className="button-container">

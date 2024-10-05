@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { Button, Card } from "react-bootstrap";
 
-function ToolsCard({ name, description, details, image, onDelete, onEdit }) {
+function ToolsCard({ tool, onDelete, onEdit, onShare }) {
   const [confirmDelete, setConfirmDelete] = useState(false);
   const [timer, setTimer] = useState(null);
 
@@ -33,18 +33,31 @@ function ToolsCard({ name, description, details, image, onDelete, onEdit }) {
   return (
     <Card>
       <div className="tool-image-container">
-        <Card.Img variant="top" src={image} alt={name} className="tool-image" />
+        <Card.Img
+          variant="top"
+          src={`http://localhost:4000/public/${tool.imageUrl}`}
+          alt={tool.name}
+          className="tool-image"
+        />
       </div>
       <Card.Body>
-        <Card.Title>{name}</Card.Title>
-        <Card.Text>{description}</Card.Text>
-        <Card.Text>{details}</Card.Text>
+        <Card.Title>{tool.name}</Card.Title>
+        <Card.Text>{tool.description}</Card.Text>
+        <Card.Text>{tool.details}</Card.Text>
         <div className="button-container">
-          <Button onClick={onEdit} className="edit-button">
-            Edit
-          </Button>
-          <Button onClick={handleDeleteClick} className="delete-button">
+          {onEdit && (
+            <Button onClick={onEdit} className="edit-button">
+              Edit
+            </Button>
+          )}
+          <Button
+            onClick={handleDeleteClick}
+            className={`delete-button ${confirmDelete ? "confirm-text" : ""}`}
+          >
             {confirmDelete ? "I'm sure!" : "Delete"}
+          </Button>
+          <Button onClick={() => onShare(tool._id)}>
+            {tool.available ? "Share" : "Return"}
           </Button>
         </div>
       </Card.Body>

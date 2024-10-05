@@ -9,6 +9,7 @@ import Registration from "./components/Registration";
 import Login from "./components/Login";
 import Join from "./components/Join";
 import Settings from "./components/Settings/Settings";
+import ProtectedRoute from "./components/ProtectedRoute"; // Import the ProtectedRoute component
 import "bootstrap/dist/css/bootstrap.min.css";
 
 function App() {
@@ -19,13 +20,22 @@ function App() {
         <Routes>
           <Route path="/" element={<Home />} />
           <Route path="/about" element={<About />} />
-          <Route path="/profile" element={<Profile />} />
+          <Route
+            path="/profile"
+            element={<ProtectedRoute component={Profile} />}
+          />{" "}
           <Route path="/available" element={<Available />} />
           <Route path="/registration" element={<Registration />} />
-          <Route path="/description/:id" element={<Description />} />
+          <Route
+            path="/description/:id"
+            element={<ProtectedRoute component={Description} />}
+          />
           <Route path="/login" element={<Login />} />
           <Route path="/join" element={<Join />} />
-          <Route path="/settings" element={<Settings />} />
+          <Route
+            path="/settings"
+            element={<ProtectedRoute component={Settings} />}
+          />
         </Routes>
       </div>
     </Router>

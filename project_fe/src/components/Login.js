@@ -1,17 +1,17 @@
 import React, { useState } from "react";
 import { Container, Row, Col, Form, Button } from "react-bootstrap";
-import { useNavigate } from "react-router-dom"; // npm install react-router-dom
-
+import { useNavigate } from "react-router-dom";
 
 const Login = () => {
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
   const navigate = useNavigate();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
 
     const formData = { email, password };
+    console.log("Sending form data:", formData); // Add this line
 
     try {
       const response = await fetch("http://localhost:4000/api/users/login", {
@@ -25,19 +25,19 @@ const Login = () => {
       if (response.ok) {
         const result = await response.json();
         console.log("Login successful:", result);
-        localStorage.setItem("token", result.token);  // Store the JWT in localStorage
-        window.location.href = "/profile";
-        // navigate("/profile");  // Redirect to the profile page after successful login
+        localStorage.setItem("token", result.token); // Store the JWT in localStorage
+        navigate("/profile"); // Redirect to the profile page after successful login
       } else {
         console.error("Login failed");
+        const result = await response.json();
+        console.error("Error message:", result.message); // Add this line
       }
     } catch (error) {
       console.error("Error:", error.message);
     }
 
-    // Clear form fields after submission
-    setEmail('');
-    setPassword('');
+    setEmail("");
+    setPassword("");
   };
 
   return (

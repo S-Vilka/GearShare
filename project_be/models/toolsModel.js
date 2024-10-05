@@ -9,8 +9,9 @@ const toolsSchema = new Schema(
     details: { type: String, required: true },
     available: { type: Boolean, required: true },
     owner: { type: Schema.Types.ObjectId, ref: "User", required: true },
-    borrower: { type: Schema.Types.ObjectId, ref: "User" },
+    // borrower: { type: Schema.Types.ObjectId, ref: "User" },
     imageUrl: { type: String, required: true },
+    // status: { type: String, enum: ["shared", "borrowed"], default: "shared" }, // New field
   },
   { timestamps: true },
   { collection: "tools" }

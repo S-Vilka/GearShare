@@ -7,8 +7,8 @@ const {
   createTool,
   patchTool,
   deleteTool,
-  getSharedTools,
-  getBorrowedTools,
+  getUserTools,
+  updateToolAvailability,
 } = require("../controllers/toolsControllers.js");
 
 // ROUTES
@@ -20,11 +20,12 @@ router.get("/", getAllTools);
 
 router.post("/", upload.single("image"), createTool);
 
-// GET shared tools
-router.get("/shared", getSharedTools);
+// GET user tools
+router.get("/user-tools", getUserTools);
 
-// GET borrowed tools
-router.get("/borrowed", getBorrowedTools);
+// PATCH /tools/:toolId/availability
+
+router.patch("/:toolId/availability", updateToolAvailability);
 
 // GET /tools/:toolId
 router.get("/:toolId", getToolById);

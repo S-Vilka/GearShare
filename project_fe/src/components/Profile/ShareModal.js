@@ -1,8 +1,10 @@
-import React, { useState, useEffect } from "react";
-import { Modal, Button, Form } from "react-bootstrap";
+import React, { useState } from "react";
+import { Modal, Button } from "react-bootstrap";
 
-function ShareItemModal({ show, onHide, tool, onShare }) {
+function ShareModal({ show, onHide, tool, onShare }) {
   const [selectedUser, setSelectedUser] = useState("");
+
+  // Add logic to fetch and display list of users if needed
 
   return (
     <Modal show={show} onHide={onHide}>
@@ -22,4 +24,4 @@ function ShareItemModal({ show, onHide, tool, onShare }) {
   );
 }
 
-export default ShareItemModal;
+export default ShareModal;

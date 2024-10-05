@@ -8,12 +8,13 @@ const userSchema = new Schema({
   firstName: { type: String, required: true },
   lastName: { type: String, required: true },
   email: { type: String, required: true },
+  streetName: { type: String, required: true },
   city: { type: String, required: true },
-  address: { type: String, required: true },
   postalCode: { type: String, required: true },
+  phone: { type: String, required: true },
   password: { type: String, required: true },
-  sharedTools: [{ type: String, required: false }],
-  borrowedTools: [{ type: String, required: false }],
+  sharedTools: [{ type: Schema.Types.ObjectId, ref: "Tools" }], // Updated
+  //borrowedTools: [{ type: Schema.Types.ObjectId, ref: "Tools" }], // Updated
 });
 
 //static signup method
@@ -24,6 +25,7 @@ userSchema.statics.Join = async function (
   City,
   StreetName,
   PostalCode,
+  Phone,
   Password
 ) {
   if (
@@ -33,6 +35,7 @@ userSchema.statics.Join = async function (
     !City ||
     !StreetName ||
     !PostalCode ||
+    !Phone ||
     !Password
   ) {
     throw Error("Please add all fields!");
@@ -59,6 +62,8 @@ userSchema.statics.Join = async function (
     City,
     StreetName,
     PostalCode,
+    Phone,
+
     Password: hashedPassword,
   });
   return user;
