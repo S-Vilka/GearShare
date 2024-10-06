@@ -22,14 +22,15 @@ function Navigation() {
             <Nav.Link as={Link} to="/">
               Home
             </Nav.Link>
+            <Nav.Link as={Link} to="/available">
+              Available Tools
+            </Nav.Link>
             {token ? (
               <>
                 <Nav.Link as={Link} to="/profile">
                   Profile
                 </Nav.Link>
-                <Nav.Link as={Link} to="/available">
-                  Available Tools
-                </Nav.Link>
+
                 <Nav.Link as={Link} to="/settings">
                   Settings
                 </Nav.Link>

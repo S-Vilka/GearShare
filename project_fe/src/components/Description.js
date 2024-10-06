@@ -8,31 +8,63 @@ function Description() {
   const navigate = useNavigate();
   const [tool, setTool] = useState(null);
   const [loading, setLoading] = useState(true);
+  const [hasSharedTools, setHasSharedTools] = useState(false);
 
   useEffect(() => {
-    const fetchTool = async () => {
+    const fetchData = async () => {
+      const token = localStorage.getItem("token");
+      const userId = localStorage.getItem("userId");
+      setLoading(true);
+
       try {
-        const response = await fetch(
+        // Fetch user data
+        const userResponse = await fetch(
+          `http://localhost:4000/api/users/${userId}`,
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          }
+        );
+        if (!userResponse.ok) {
+          throw new Error("Failed to fetch user data");
+        }
+        const userData = await userResponse.json();
+        const userHasSharedTools =
+          userData.sharedTools && userData.sharedTools.length > 0;
+        setHasSharedTools(userHasSharedTools);
+
+        if (!userHasSharedTools) {
+          navigate("/profile");
+          return;
+        }
+
+        // Fetch tool data
+        const toolResponse = await fetch(
           `http://localhost:4000/api/tools/${id}?includeOwner=true`
         );
-        if (!response.ok) {
+        if (!toolResponse.ok) {
           throw new Error("Tool not found");
         }
-        const data = await response.json();
-        setTool(data);
+        const toolData = await toolResponse.json();
+        setTool(toolData);
       } catch (error) {
-        console.error("Error fetching tool:", error);
+        console.error("Error fetching data:", error);
       } finally {
         setLoading(false);
       }
     };
 
-    fetchTool();
-  }, [id]);
+    fetchData();
+  }, [id, navigate]);
 
   const handleBackClick = () => {
     navigate(-1);
   };
+
+  if (!hasSharedTools) {
+    return null; // or return a message component
+  }
 
   if (loading) {
     return <div>Loading...</div>;

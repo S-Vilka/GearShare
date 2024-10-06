@@ -185,6 +185,14 @@ const patchUser = async (req, res) => {
   }
 };
 
+const updateUserSharedTools = async (userId, toolId, action) => {
+  const updateOperation =
+    action === "add"
+      ? { $addToSet: { sharedTools: toolId } }
+      : { $pull: { sharedTools: toolId } };
+  await User.findByIdAndUpdate(userId, updateOperation);
+};
+
 const updateUserTools = async (req, res) => {
   const { userId } = req.params;
   const { toolId, action } = req.body; // action can be 'borrow' or 'share'
@@ -289,4 +297,5 @@ module.exports = {
   loginUser,
   updateUserTools,
   shareTool,
+  updateUserSharedTools,
 };

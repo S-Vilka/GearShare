@@ -1,5 +1,6 @@
 const Tools = require("../models/toolsModel.js");
 const mongoose = require("mongoose");
+const { updateUserSharedTools } = require("./userController");
 
 // GET AllTools
 const getAllTools = async (req, res) => {
@@ -15,12 +16,14 @@ const getAllTools = async (req, res) => {
 const createTool = async (req, res) => {
   try {
     console.log("File received:", req.file);
+
     const newTool = new Tools({
       ...req.body,
       imageUrl: req.file ? `/toolsImages/${req.file.filename}` : null,
     });
     console.log("newTool:", newTool);
     const savedTool = await newTool.save();
+    await updateUserSharedTools(savedTool.owner, savedTool._id, "add");
     res.status(201).json(savedTool);
   } catch (error) {
     console.error("Error creating tool:", error);
@@ -97,6 +100,8 @@ const deleteTool = async (req, res) => {
   try {
     const deletedTool = await Tools.findOneAndDelete({ _id: toolId });
     if (deletedTool) {
+      await updateUserSharedTools(deletedTool.owner, toolId, "remove");
+
       res.status(200).json({ message: "Tool deleted successfully" });
     } else {
       res.status(404).json({ message: "Tool not found" });

@@ -15,7 +15,6 @@ function AddItemModal({ show, onHide, userId, onToolAdded }) {
     formData.append("details", details);
     formData.append("owner", userId);
     formData.append("available", true);
-    formData.append("borrowed", false);
     formData.append("image", image);
 
     const createdTool = await createTool(formData);
