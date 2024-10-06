@@ -1,29 +1,85 @@
 import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { Container, Row, Col, Form, Button } from "react-bootstrap";
 
 const Join = () => {
-  const [firstName, setFirstName] = useState('');
-  const [lastName, setLastName] = useState('');
-  const [address, setAddress] = useState('');
-  const [city, setCity] = useState('');
-  const [postalCode, setPostalCode] = useState('');
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
+  const [firstName, setFirstName] = useState("");
+  const [lastName, setLastName] = useState("");
+  const [address, setAddress] = useState("");
+  const [city, setCity] = useState("");
+  const [postalCode, setPostalCode] = useState("");
+  const [phone, setPhone] = useState("");
+  const [email, setEmail] = useState("");
+  const [confirmEmail, setConfirmEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
+  const [errorMessage, setErrorMessage] = useState("");
+  const navigate = useNavigate();
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
 
-    const formData = { firstName, lastName, address, city, postalCode, email, password };
-    console.log('Join Now data submitted:', formData);
+    const trimmedEmail = email.trim().toLowerCase();
+    const trimmedConfirmEmail = confirmEmail.trim().toLowerCase();
 
-    // Clear form fields
-    setFirstName('');
-    setLastName('');
-    setAddress('');
-    setCity('');
-    setPostalCode('');
-    setEmail('');
-    setPassword('');
+    if (trimmedEmail !== trimmedConfirmEmail) {
+      setErrorMessage("Emails do not match");
+      return;
+    }
+
+    if (password !== confirmPassword) {
+      setErrorMessage("Passwords do not match");
+      return;
+    }
+
+    const formData = {
+      firstName,
+      lastName,
+      address,
+      city,
+      postalCode,
+      phone,
+      email: trimmedEmail,
+      confirmEmail: trimmedConfirmEmail,
+      password,
+      confirmPassword,
+    };
+
+    try {
+      console.log("Sending form data:", formData); // Add this line
+      const response = await fetch("http://localhost:4000/api/users", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(formData),
+      });
+
+      if (response.ok) {
+        const result = await response.json();
+        console.log("User created successfully:", result);
+        setErrorMessage("");
+        navigate("/profile");
+      } else {
+        const result = await response.json();
+        setErrorMessage(result.message);
+        window.alert(result.message);
+      }
+    } catch (error) {
+      console.error("Error:", error.message);
+      setErrorMessage("Failed to create user");
+    }
+
+    setFirstName("");
+    setLastName("");
+    setAddress("");
+    setCity("");
+    setPostalCode("");
+    setPhone("");
+    setEmail("");
+    setConfirmEmail("");
+    setPassword("");
+    setConfirmPassword("");
   };
 
   return (
@@ -31,6 +87,7 @@ const Join = () => {
       <Row className="justify-content-center align-items-center">
         <Col md={8} className="form-container">
           <h1 className="heading mb-4">Join Now</h1>
+          {errorMessage && <p style={{ color: "red" }}>{errorMessage}</p>}
           <Form onSubmit={handleSubmit}>
             <Row className="mb-3">
               <Col md={6}>
@@ -97,6 +154,17 @@ const Join = () => {
               </Col>
             </Row>
 
+            <Form.Group className="mb-3" controlId="formPhone">
+              <Form.Label>Phone</Form.Label>
+              <Form.Control
+                type="text"
+                value={phone}
+                onChange={(e) => setPhone(e.target.value)}
+                placeholder="Enter phone number"
+                required
+              />
+            </Form.Group>
+
             <Form.Group className="mb-3" controlId="formEmail">
               <Form.Label>Email</Form.Label>
               <Form.Control
@@ -108,6 +176,17 @@ const Join = () => {
               />
             </Form.Group>
 
+            <Form.Group className="mb-3" controlId="formConfirmEmail">
+              <Form.Label>Confirm Email</Form.Label>
+              <Form.Control
+                type="email"
+                value={confirmEmail}
+                onChange={(e) => setConfirmEmail(e.target.value)}
+                placeholder="Enter email again"
+                required
+              />
+            </Form.Group>
+
             <Form.Group className="mb-3" controlId="formPassword">
               <Form.Label>Password</Form.Label>
               <Form.Control
@@ -115,6 +194,17 @@ const Join = () => {
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
                 placeholder="Enter password"
+                required
+              />
+            </Form.Group>
+
+            <Form.Group className="mb-3" controlId="formConfirmPassword">
+              <Form.Label>Confirm Password</Form.Label>
+              <Form.Control
+                type="password"
+                value={confirmPassword}
+                onChange={(e) => setConfirmPassword(e.target.value)}
+                placeholder="Re-enter password"
                 required
               />
             </Form.Group>

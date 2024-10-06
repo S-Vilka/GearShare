@@ -1,23 +1,33 @@
-import React from "react";
+import React, { useState } from "react";
 import { Card, Image } from "react-bootstrap";
 import "./Profile.css";
 import profilePic from "./PP.jpg";
 
-function UserProfile({ name, address, zip, email }) {
+function UserProfile({ userData }) {
+  const token = localStorage.getItem("token");
+  if (!token) {
+    window.location.href = "/";
+  }
+  if (!userData) return <div>Loading...</div>;
+
   return (
     <div className="profileContainer">
       <Card className="profileCard">
         <Image variant="top" src={profilePic} className="profileImage mb-3" />
         <Card.Body>
-          <Card.Title>{name}</Card.Title>
+          <Card.Title>
+            {userData.firstName} {userData.lastName}
+          </Card.Title>
           <Card.Text>
-            <b>Address:</b> {address}
+            <b>City:</b> {userData.city}
             <br />
-            <b>ZIP: </b>
-            {zip}
+            <b>Street:</b> {userData.streetName}
             <br />
-            <b>Email: </b>
-            {email}
+            <b>PostalCode: </b> {userData.postalCode}
+            <br />
+            <b>Email: </b> {userData.email}
+            <br />
+            <b>Phone: </b> {userData.phone || "N/A"}
           </Card.Text>
         </Card.Body>
       </Card>
