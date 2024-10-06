@@ -11,11 +11,8 @@ const Settings = () => {
     postalCode: "",
     email: "",
     imageUrl: "",
+    imageFile: null,
   });
-
-  useEffect(() => {
-    console.log(userData);
-  }, [userData]);
 
   const [passwordData, setPasswordData] = useState({
     password: "",
@@ -26,9 +23,7 @@ const Settings = () => {
   const [message, setMessage] = useState("");
   const token = localStorage.getItem("token");
   const userId = localStorage.getItem("userId");
-  console.log(userId);
 
-  // fetches userdata when the page opens
   useEffect(() => {
     const fetchUserData = async () => {
       try {
@@ -46,29 +41,39 @@ const Settings = () => {
         setUserData(userData);
       } catch (error) {
         console.error("Error fetching user data", error);
-        alert(`An error occurred: ${error.message}`);
+        setMessage(`An error occurred: ${error.message}`);
       }
     };
 
     fetchUserData();
   }, [userId, token]);
 
-  // patch changed form fields to database
   const handleSubmit = async (e) => {
     e.preventDefault();
-    const formData = { ...userData };
+    const formData = new FormData();
+
+    Object.keys(userData).forEach((key) => {
+      if (key !== "imageFile") {
+        formData.append(key, userData[key]);
+      }
+    });
+
+    if (userData.imageFile) {
+      formData.append("image", userData.imageFile);
+    }
 
     try {
-      const response = await fetch(`/api/users/${userId}`, {
+      const response = await fetch(`/api/users/${userData._id}`, {
         method: "PATCH",
         headers: {
-          "Content-Type": "application/json",
           Authorization: `Bearer ${token}`,
         },
-        body: JSON.stringify(formData),
+        body: formData,
       });
 
       if (response.ok) {
+        const updatedUser = await response.json();
+        setUserData(updatedUser);
         setMessage("Profile updated successfully");
         setTimeout(() => setMessage(""), 6000);
       } else {
@@ -79,7 +84,6 @@ const Settings = () => {
     }
   };
 
-  //handles password change
   const handleChangePassword = async (e) => {
     e.preventDefault();
     if (passwordData.newPassword !== passwordData.confirmPassword) {
@@ -104,30 +108,23 @@ const Settings = () => {
       if (response.ok) {
         setMessage("Password changed successfully.");
         setPasswordData({ password: "", newPassword: "", confirmPassword: "" });
-        setTimeout(() => setMessage(""), 6000);
       } else {
         const errorData = await response.json();
         setMessage(errorData.message || "Failed to change password.");
-        setTimeout(() => setMessage(""), 6000);
       }
     } catch (error) {
       console.error("Error changing password:", error);
       setMessage("An error occurred while changing the password.");
-      setTimeout(() => setMessage(""), 6000);
     }
+    setTimeout(() => setMessage(""), 6000);
   };
 
-  //handles image url change when user add/change photo
   const handleImageChange = (e) => {
     const file = e.target.files[0];
     if (file && file.type.startsWith("image/") && file.size <= 5000000) {
-      // 5MB limit
-      const imageUrl = URL.createObjectURL(file);
-
-      //adds the imageurl to userdata
       setUserData((prevData) => ({
         ...prevData,
-        imageUrl: imageUrl,
+        imageFile: file,
       }));
     } else {
       setMessage("Please select a valid image file (max 5MB).");
@@ -146,7 +143,7 @@ const Settings = () => {
               <div className="profile-picture">
                 {userData.imageUrl ? (
                   <img
-                    src={userData.imageUrl}
+                    src={`http://localhost:4000${userData.imageUrl}`}
                     alt="Profile"
                     className="profile-image"
                   />

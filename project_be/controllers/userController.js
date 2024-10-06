@@ -161,18 +161,25 @@ const getUserById = async (req, res) => {
 
 // PATCH /users/:userId
 const patchUser = async (req, res) => {
-  const { userId } = req.user.userId;
+  const { userId } = req.params;
+  console.log("Received userId:", userId);
 
   if (!mongoose.Types.ObjectId.isValid(userId)) {
     return res.status(400).json({ message: "Invalid user ID" });
   }
 
   try {
+    const updateData = { ...req.body };
+    if (req.file) {
+      updateData.imageUrl = `/profileImages/${req.file.filename}`;
+    }
+
     const updatedUser = await User.findOneAndUpdate(
       { _id: userId },
-      { $set: req.body },
+      { $set: updateData },
       { new: true, runValidators: true }
     );
+
     if (updatedUser) {
       res.status(200).json(updatedUser);
     } else {
