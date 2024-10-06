@@ -13,6 +13,7 @@ const userSchema = new Schema({
   postalCode: { type: String, required: true },
   phone: { type: String, required: true },
   password: { type: String, required: true },
+  imageUrl: { type: String },
   sharedTools: [{ type: Schema.Types.ObjectId, ref: "Tools" }], // Updated
   //borrowedTools: [{ type: Schema.Types.ObjectId, ref: "Tools" }], // Updated
 });

@@ -1,6 +1,8 @@
 const express = require("express");
 const router = express.Router();
 const authMiddleware = require("../middleware/authMiddleware");
+// const uploadProfile = require("../config/multerProfileConfig");
+
 const {
   getAllUsers,
   getUserById,
@@ -8,6 +10,7 @@ const {
   loginUser,
   patchUser,
   deleteUser,
+  changePassword,
   // updateUserTools,
   shareTool,
 } = require("../controllers/userController");
@@ -35,5 +38,8 @@ router.delete("/:userId", authMiddleware, deleteUser);
 
 // Share tool// PATCH /tools/share-tool
 router.patch("/:userID/tools", authMiddleware, shareTool);
+
+// POST /users/:userId/check-password
+router.patch("/:userId/change-password", changePassword);
 
 module.exports = router;

@@ -1,10 +1,20 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import { Navbar, Nav, Container, Button } from "react-bootstrap";
 import "./Navigation.css";
 
 function Navigation() {
   const [token, setToken] = useState(localStorage.getItem("token"));
+
+  useEffect(() => {
+    const checkAuthStatus = () => {
+      const currentToken = localStorage.getItem("token");
+      setToken(currentToken);
+    };
+
+    window.addEventListener("storage", checkAuthStatus);
+    return () => window.removeEventListener("storage", checkAuthStatus);
+  }, []);
 
   const handleLogout = () => {
     localStorage.removeItem("token");

@@ -26,6 +26,8 @@ const Login = () => {
         const result = await response.json();
         console.log("Login successful:", result);
         localStorage.setItem("token", result.token); // Store the JWT in localStorage
+
+        window.dispatchEvent(new Event("storage"));
         navigate("/profile"); // Redirect to the profile page after successful login
       } else {
         console.error("Login failed");

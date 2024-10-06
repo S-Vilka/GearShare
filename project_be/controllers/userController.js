@@ -161,7 +161,7 @@ const getUserById = async (req, res) => {
 
 // PATCH /users/:userId
 const patchUser = async (req, res) => {
-  const { userId } = req.params;
+  const { userId } = req.user.userId;
 
   if (!mongoose.Types.ObjectId.isValid(userId)) {
     return res.status(400).json({ message: "Invalid user ID" });
@@ -288,6 +288,43 @@ const shareTool = async (req, res) => {
       .json({ message: "Failed to move tool", error: error.message });
   }
 };
+
+// Patch, changePassword
+const changePassword = async (req, res) => {
+  const { userId } = req.params;
+  const { oldPassword, newPassword } = req.body;
+
+  // Validate the user ID
+  if (!mongoose.Types.ObjectId.isValid(userId)) {
+    return res.status(400).json({ message: "Invalid user ID" });
+  }
+
+  try {
+    // Find the user by ID
+    const user = await User.findById(userId);
+    if (!user) {
+      return res.status(404).json({ message: "User not found" });
+    }
+
+    // Check if the old password matches
+    const match = await bcrypt.compare(oldPassword, user.password);
+    if (!match) {
+      return res.status(400).json({ message: "Old password is incorrect." });
+    }
+
+    // Hash the new password
+    const salt = await bcrypt.genSalt(10);
+    user.password = await bcrypt.hash(newPassword, salt);
+
+    await user.save();
+
+    return res.status(200).json({ message: "Password changed successfully." });
+  } catch (error) {
+    console.error("Error changing password:", error);
+    return res.status(500).json({ message: "Internal server error." });
+  }
+};
+
 module.exports = {
   getAllUsers,
   getUserById,
@@ -298,4 +335,5 @@ module.exports = {
   updateUserTools,
   shareTool,
   updateUserSharedTools,
+  changePassword,
 };
