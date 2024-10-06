@@ -82,7 +82,7 @@ function Description() {
         style={{ justifyContent: "space-between" }}
       >
         <Col xs={12} md={5} className="description-section">
-          <h2>Tool Description</h2>
+          <h2>Tool Description:</h2>
           <p>{tool.description}</p>
           <div className="image-placeholder">
             <img

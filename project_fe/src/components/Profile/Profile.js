@@ -180,31 +180,46 @@ function Profile() {
             >
               Add Item
             </Button>
-            <h1>Available for Sharing:</h1>
-            <Row xs={1} md={2} lg={3} className="g-4">
-              {sharedTools.map((tool) => (
-                <Col key={tool._id}>
-                  <ToolsCard
-                    tool={tool}
-                    onDelete={() => handleDelete(tool._id)}
-                    onEdit={() => handleEditClick(tool)}
-                    onShare={() => handleShare(tool._id)}
-                  />
-                </Col>
-              ))}
-            </Row>
-            <h1>Currently Borrowed:</h1>
-            <Row xs={1} md={2} lg={3} className="g-4">
-              {borrowedTools.map((tool) => (
-                <Col key={tool._id}>
-                  <ToolsCard
-                    tool={tool}
-                    onDelete={() => handleDelete(tool._id)}
-                    onShare={() => handleShare(tool._id)}
-                  />
-                </Col>
-              ))}
-            </Row>
+            {sharedTools.length === 0 && borrowedTools.length === 0 ? (
+              <div className="no-tools-message">
+                <h1>
+                  You haven't shared any tools yet. Add an item to start
+                  sharing!
+                </h1>
+              </div>
+            ) : (
+              <>
+                <h1>Available for Sharing:</h1>
+                {sharedTools.length > 0 && (
+                  <Row xs={1} md={2} lg={3} className="g-4">
+                    {sharedTools.map((tool) => (
+                      <Col key={tool._id}>
+                        <ToolsCard
+                          tool={tool}
+                          onDelete={() => handleDelete(tool._id)}
+                          onEdit={() => handleEditClick(tool)}
+                          onShare={() => handleShare(tool._id)}
+                        />
+                      </Col>
+                    ))}
+                  </Row>
+                )}
+                <h1>Currently Borrowed:</h1>
+                {borrowedTools.length > 0 && (
+                  <Row xs={1} md={2} lg={3} className="g-4">
+                    {borrowedTools.map((tool) => (
+                      <Col key={tool._id}>
+                        <ToolsCard
+                          tool={tool}
+                          onDelete={() => handleDelete(tool._id)}
+                          onShare={() => handleShare(tool._id)}
+                        />
+                      </Col>
+                    ))}
+                  </Row>
+                )}
+              </>
+            )}
           </Col>
         </Row>
       </Container>

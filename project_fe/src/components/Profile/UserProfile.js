@@ -19,9 +19,11 @@ function UserProfile({ userData }) {
             {userData.firstName} {userData.lastName}
           </Card.Title>
           <Card.Text>
-            <b>Address:</b> {userData.address}
+            <b>City:</b> {userData.city}
             <br />
-            <b>ZIP: </b> {userData.postalCode}
+            <b>Street:</b> {userData.streetName}
+            <br />
+            <b>PostalCode: </b> {userData.postalCode}
             <br />
             <b>Email: </b> {userData.email}
             <br />

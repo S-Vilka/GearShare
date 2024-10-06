@@ -44,19 +44,27 @@ function ToolsCard({ tool, onDelete, onEdit, onShare }) {
         <Card.Title>{tool.name}</Card.Title>
         <Card.Text>{tool.description}</Card.Text>
         <Card.Text>{tool.details}</Card.Text>
-        <div className="button-container">
+        <div className="button-container d-flex flex-wrap justify-content-between">
           {onEdit && (
-            <Button onClick={onEdit} className="edit-button">
+            <Button
+              onClick={onEdit}
+              className="edit-button mb-2 flex-grow-1 mx-1"
+            >
               Edit
             </Button>
           )}
           <Button
             onClick={handleDeleteClick}
-            className={`delete-button ${confirmDelete ? "confirm-text" : ""}`}
+            className={`delete-button mb-2 flex-grow-1 mx-1 ${
+              confirmDelete ? "confirm-state" : ""
+            }`}
           >
             {confirmDelete ? "I'm sure!" : "Delete"}
           </Button>
-          <Button onClick={() => onShare(tool._id)}>
+          <Button
+            onClick={() => onShare(tool._id)}
+            className="mb-2 flex-grow-1 mx-1"
+          >
             {tool.available ? "Share" : "Return"}
           </Button>
         </div>
