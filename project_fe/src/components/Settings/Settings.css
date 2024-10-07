@@ -13,6 +13,21 @@
   padding: 40px 20px;
 }
 
+.message {
+  font-size: 15px; 
+  background-color: #a2a5a8; 
+  color: white; 
+  width: 20%;
+  padding: 5px;
+  border-radius: 8px;
+  text-align: center;
+  margin-top: 20px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  font-weight: bold;
+}
+
+
+
 .headerContent {
   width: 100%;
   text-align: center;

@@ -1,10 +1,11 @@
 import React, { useState } from "react";
-import { Container, Row, Col, Form, Button } from "react-bootstrap";
+import { Container, Row, Col, Form, Button, Alert } from "react-bootstrap";
 import { useNavigate } from "react-router-dom";
 
 const Login = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [errorMessage, setErrorMessage] = useState(""); // New state for error message
   const navigate = useNavigate();
 
   const handleSubmit = async (e) => {
@@ -30,11 +31,11 @@ const Login = () => {
         window.dispatchEvent(new Event("storage"));
         navigate("/profile"); // Redirect to the profile page after successful login
       } else {
-        console.error("Login failed");
         const result = await response.json();
-        console.error("Error message:", result.message); // Add this line
+        setErrorMessage(result.message); // Set the error message if login fails
       }
     } catch (error) {
+      setErrorMessage("An error occurred. Please try again."); // Set generic error message
       console.error("Error:", error.message);
     }
 
@@ -47,6 +48,14 @@ const Login = () => {
       <Row className="justify-content-center align-items-center">
         <Col md={6} className="form-container">
           <h1 className="heading mb-4">Log In</h1>
+
+          {/* Conditional rendering of Alert */}
+          {errorMessage && (
+            <Alert variant="danger" onClose={() => setErrorMessage("")} dismissible>
+              {errorMessage}
+            </Alert>
+          )}
+
           <Form onSubmit={handleSubmit}>
             <Form.Group className="mb-3" controlId="formEmail">
               <Form.Label>Email</Form.Label>

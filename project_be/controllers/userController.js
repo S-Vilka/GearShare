@@ -161,24 +161,35 @@ const getUserById = async (req, res) => {
 
 // PATCH /users/:userId
 const patchUser = async (req, res) => {
-  const { userId } = req.user.userId;
+  const { userId } = req.params;
+  console.log("Received userId:", userId);
 
   if (!mongoose.Types.ObjectId.isValid(userId)) {
     return res.status(400).json({ message: "Invalid user ID" });
   }
 
   try {
+    const updateData = { ...req.body };
+
+    // Check if a file is uploaded and update imageUrl
+    if (req.file) {
+      updateData.imageUrl = `/profileImages/${req.file.filename}`;
+      console.log("Image URL set to:", updateData.imageUrl);
+    }
+
     const updatedUser = await User.findOneAndUpdate(
       { _id: userId },
-      { $set: req.body },
+      updateData, // Directly pass updateData without $set
       { new: true, runValidators: true }
     );
+
     if (updatedUser) {
       res.status(200).json(updatedUser);
     } else {
       res.status(404).json({ message: "User not found" });
     }
   } catch (error) {
+    console.error("Error updating user:", error);
     res
       .status(500)
       .json({ message: "Failed to update user", error: error.message });
@@ -289,13 +300,12 @@ const shareTool = async (req, res) => {
   }
 };
 
-// Patch, changePassword
 const changePassword = async (req, res) => {
   const { userId } = req.params;
   const { oldPassword, newPassword } = req.body;
 
   // Validate the user ID
-  if (!mongoose.Types.ObjectId.isValid(userId)) {
+  if (!userId || userId === "null" || userId === "undefined") {
     return res.status(400).json({ message: "Invalid user ID" });
   }
 
