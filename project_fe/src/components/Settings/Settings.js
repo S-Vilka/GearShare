@@ -108,18 +108,26 @@ const Settings = () => {
       return;
     }
 
+    if (!userData._id) {
+      setMessage("User data not loaded. Please refresh the page.");
+      return;
+    }
+
     try {
-      const response = await fetch(`/api/users/${userId}/change-password`, {
-        method: "PATCH",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${token}`,
-        },
-        body: JSON.stringify({
-          oldPassword: passwordData.password,
-          newPassword: passwordData.newPassword,
-        }),
-      });
+      const response = await fetch(
+        `/api/users/${userData._id}/change-password`,
+        {
+          method: "PATCH",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
+          },
+          body: JSON.stringify({
+            oldPassword: passwordData.password,
+            newPassword: passwordData.newPassword,
+          }),
+        }
+      );
 
       if (response.ok) {
         setMessage("Password changed successfully.");

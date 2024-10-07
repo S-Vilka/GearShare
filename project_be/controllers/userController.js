@@ -300,13 +300,12 @@ const shareTool = async (req, res) => {
   }
 };
 
-// Patch, changePassword
 const changePassword = async (req, res) => {
   const { userId } = req.params;
   const { oldPassword, newPassword } = req.body;
 
   // Validate the user ID
-  if (!mongoose.Types.ObjectId.isValid(userId)) {
+  if (!userId || userId === "null" || userId === "undefined") {
     return res.status(400).json({ message: "Invalid user ID" });
   }
 
