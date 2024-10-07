@@ -1,7 +1,7 @@
-import React, { useState } from "react";
+import React from "react";
 import { Card, Image } from "react-bootstrap";
 import "./Profile.css";
-import profilePic from "./PP.jpg";
+import defaultProfilePic from "./PP.jpg";
 
 function UserProfile({ userData }) {
   const token = localStorage.getItem("token");
@@ -13,7 +13,14 @@ function UserProfile({ userData }) {
   return (
     <div className="profileContainer">
       <Card className="profileCard">
-        <Image variant="top" src={profilePic} className="profileImage mb-3" />
+        <Image
+          variant="tuserop"
+          src={
+            `http://localhost:4000/public/${userData.imageUrl}` ||
+            defaultProfilePic
+          }
+          className="profileImage mb-3"
+        />
         <Card.Body>
           <Card.Title>
             {userData.firstName} {userData.lastName}

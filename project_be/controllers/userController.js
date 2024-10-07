@@ -170,13 +170,16 @@ const patchUser = async (req, res) => {
 
   try {
     const updateData = { ...req.body };
+
+    // Check if a file is uploaded and update imageUrl
     if (req.file) {
       updateData.imageUrl = `/profileImages/${req.file.filename}`;
+      console.log("Image URL set to:", updateData.imageUrl);
     }
 
     const updatedUser = await User.findOneAndUpdate(
       { _id: userId },
-      { $set: updateData },
+      updateData, // Directly pass updateData without $set
       { new: true, runValidators: true }
     );
 
@@ -186,6 +189,7 @@ const patchUser = async (req, res) => {
       res.status(404).json({ message: "User not found" });
     }
   } catch (error) {
+    console.error("Error updating user:", error);
     res
       .status(500)
       .json({ message: "Failed to update user", error: error.message });

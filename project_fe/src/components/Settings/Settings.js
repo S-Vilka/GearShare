@@ -10,8 +10,7 @@ const Settings = () => {
     city: "",
     postalCode: "",
     email: "",
-    imageUrl: "",
-    imageFile: null,
+    imageUrl: null,
   });
 
   const [passwordData, setPasswordData] = useState({
@@ -52,12 +51,14 @@ const Settings = () => {
     e.preventDefault();
     const formData = new FormData();
 
+    // Append user data to formData
     Object.keys(userData).forEach((key) => {
-      if (key !== "imageFile") {
+      if (key !== "imageFile" && key !== "sharedTools") {
         formData.append(key, userData[key]);
       }
     });
 
+    // Append image file if it exists
     if (userData.imageFile) {
       formData.append("image", userData.imageFile);
     }
@@ -77,10 +78,25 @@ const Settings = () => {
         setMessage("Profile updated successfully");
         setTimeout(() => setMessage(""), 6000);
       } else {
-        console.error("Failed to update user data");
+        const errorData = await response.json();
+        setMessage(errorData.message || "Failed to update user data");
       }
     } catch (error) {
       console.error("Error updating user data:", error);
+      setMessage("An error occurred while updating user data");
+    }
+  };
+
+  const handleImageChange = (e) => {
+    const file = e.target.files[0];
+    if (file && file.type.startsWith("image/") && file.size <= 5000000) {
+      setUserData((prevData) => ({
+        ...prevData,
+        imageFile: file,
+      }));
+    } else {
+      setMessage("Please select a valid image file (max 5MB).");
+      setTimeout(() => setMessage(""), 6000);
     }
   };
 
@@ -119,19 +135,6 @@ const Settings = () => {
     setTimeout(() => setMessage(""), 6000);
   };
 
-  const handleImageChange = (e) => {
-    const file = e.target.files[0];
-    if (file && file.type.startsWith("image/") && file.size <= 5000000) {
-      setUserData((prevData) => ({
-        ...prevData,
-        imageFile: file,
-      }));
-    } else {
-      setMessage("Please select a valid image file (max 5MB).");
-      setTimeout(() => setMessage(""), 6000);
-    }
-  };
-
   return (
     <Container fluid className="settings-page">
       <Row className="justify-content-center align-items-center">
@@ -143,7 +146,7 @@ const Settings = () => {
               <div className="profile-picture">
                 {userData.imageUrl ? (
                   <img
-                    src={`http://localhost:4000${userData.imageUrl}`}
+                    src={`http://localhost:4000/public/${userData.imageUrl}`}
                     alt="Profile"
                     className="profile-image"
                   />
