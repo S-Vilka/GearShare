@@ -74,7 +74,7 @@ function ToolsCard({ tool, onDelete, onEdit, onShare }) {
             onClick={() => onShare(tool._id)}
             className="mb-2 flex-grow-1 mx-1"
           >
-            {tool.available ? "Mark as Borrowed" : "Mark as Returned"}
+            {tool.available ? "Mark as Lent" : "Mark as Returned"}
           </Button>
         </div>
       </Card.Body>
