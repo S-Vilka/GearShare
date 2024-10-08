@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
-import { Container, Row, Col, Button } from "react-bootstrap";
+import { Container, Row, Col } from "react-bootstrap";
 import "./Available.css";
 import Pagination from "./Pagination";
 
@@ -57,7 +57,7 @@ const Available = () => {
       </Row>
       <Row className="tool-list">
         {/* Display current page of tools */}
-        {currentTools.map((tool, index) => (
+        {currentTools.filter(tool => tool.available).map((tool, index) => (
           <Col
             key={tool._id || index}
             lg={3}

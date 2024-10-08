@@ -247,6 +247,8 @@ const Settings = () => {
             <Button variant="primary" type="submit">
               Update Profile
             </Button>
+
+            {message && <p className="message">{message}</p>} {/* Message moved here */}
           </Form>
 
           <Form onSubmit={handleChangePassword} className="mt-4">
@@ -302,7 +304,6 @@ const Settings = () => {
             </Button>
           </Form>
 
-          {message && <p className="message">{message}</p>}
         </Col>
       </Row>
     </Container>
