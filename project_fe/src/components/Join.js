@@ -24,6 +24,9 @@ const Join = () => {
     const trimmedEmail = email.trim().toLowerCase();
     const trimmedConfirmEmail = confirmEmail.trim().toLowerCase();
 
+    const trimmedPassword = password.trim().toLowerCase();
+    const trimmedConfirmPasswrod = confirmPassword.trim().toLowerCase();
+
     let hasError = false;
 
     // Validate email and password matching
@@ -33,7 +36,7 @@ const Join = () => {
       hasError = true;
     }
 
-    if (password !== confirmPassword) {
+    if (trimmedPassword !== trimmedConfirmPasswrod) {
       setErrorMessage("Passwords do not match");
       setConfirmPassword("");
       hasError = true;
