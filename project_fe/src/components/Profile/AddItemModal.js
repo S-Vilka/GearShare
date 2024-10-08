@@ -1,39 +1,47 @@
+// Completed code
+
 import React, { useState } from "react";
 import { Modal, Button, Form } from "react-bootstrap";
 
 function AddItemModal({ show, onHide, userId, onToolAdded }) {
+  // State variables to hold input values for the form
   const [itemName, setItemName] = useState("");
   const [description, setDescription] = useState("");
   const [details, setDetails] = useState("");
   const [image, setImage] = useState(null);
 
+  // Handle form submission
   const handleSubmit = async (e) => {
     e.preventDefault();
+    
+    // Prepare form data to send to the backend
     const formData = new FormData();
     formData.append("name", itemName);
     formData.append("description", description);
     formData.append("details", details);
-    formData.append("owner", userId);
-    formData.append("available", true);
-    formData.append("image", image);
+    formData.append("owner", userId);  // Include the user's ID
+    formData.append("available", true); // Set availability status
+    formData.append("image", image);    // Add image file
 
+    // Create the tool and trigger callback on success
     const createdTool = await createTool(formData);
     if (createdTool) {
-      onToolAdded(createdTool); // Call the callback with the new tool
-      onHide();
+      onToolAdded(createdTool); // Notify parent component about the new tool
+      onHide(); // Close the modal after adding the item
     }
   };
 
+  // Function to send a POST request to the API for creating a new tool
   const createTool = async (formData) => {
     try {
       const response = await fetch("http://localhost:4000/api/tools", {
         method: "POST",
-        body: formData,
+        body: formData, // Send form data in the request body
       });
       if (!response.ok) {
         throw new Error("Failed to create tool");
       }
-      return await response.json();
+      return await response.json(); // Return the created tool data
     } catch (error) {
       console.error("Error creating tool:", error);
     }
@@ -45,6 +53,7 @@ function AddItemModal({ show, onHide, userId, onToolAdded }) {
         <Modal.Title>Add New Item</Modal.Title>
       </Modal.Header>
       <Modal.Body>
+        {/* Form to add new item */}
         <Form onSubmit={handleSubmit}>
           <Form.Group>
             <Form.Label>Item Name</Form.Label>

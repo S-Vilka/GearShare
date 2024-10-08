@@ -122,20 +122,7 @@ const loginUser = async (req, res) => {
   }
 };
 
-// GET /users/me
 
-const getMe = async (req, res) => {
-  try {
-    const user = await User.findById(req.user.userId).select("-password");
-    if (user) {
-      res.status(200).json(user);
-    } else {
-      res.status(404).json({ message: "User not found" });
-    }
-  } catch (error) {
-    res.status(500).json({ message: "Failed to retrieve user data" });
-  }
-};
 
 // GET /users/:userId
 const getUserById = async (req, res) => {
@@ -179,7 +166,7 @@ const patchUser = async (req, res) => {
 
     const updatedUser = await User.findOneAndUpdate(
       { _id: userId },
-      updateData, // Directly pass updateData without $set
+      updateData, 
       { new: true, runValidators: true }
     );
 
@@ -196,6 +183,7 @@ const patchUser = async (req, res) => {
   }
 };
 
+// used in toolsController
 const updateUserSharedTools = async (userId, toolId, action) => {
   const updateOperation =
     action === "add"
@@ -204,40 +192,7 @@ const updateUserSharedTools = async (userId, toolId, action) => {
   await User.findByIdAndUpdate(userId, updateOperation);
 };
 
-const updateUserTools = async (req, res) => {
-  const { userId } = req.params;
-  const { toolId, action } = req.body; // action can be 'borrow' or 'share'
 
-  try {
-    const user = await User.findById(userId);
-    if (!user) {
-      return res.status(404).json({ message: "User not found" });
-    }
-
-    console.log("Before update:", user.sharedTools, user.borrowedTools);
-
-    if (action === "borrow") {
-      // Move tool from shared to borrowed
-      user.sharedTools = user.sharedTools.filter((id) => id !== toolId);
-      user.borrowedTools.push(toolId);
-    } else if (action === "share") {
-      // Move tool from borrowed to shared
-      user.borrowedTools = user.borrowedTools.filter((id) => id !== toolId);
-      user.sharedTools.push(toolId);
-    }
-
-    await user.save();
-
-    console.log("After update:", user.sharedTools, user.borrowedTools);
-
-    res.status(200).json(user);
-  } catch (error) {
-    console.error("Error updating user tools:", error);
-    res
-      .status(500)
-      .json({ message: "Failed to update user tools", error: error.message });
-  }
-};
 // DELETE /users/:userId
 const deleteUser = async (req, res) => {
   const { userId } = req.params;
@@ -342,7 +297,6 @@ module.exports = {
   patchUser,
   deleteUser,
   loginUser,
-  updateUserTools,
   shareTool,
   updateUserSharedTools,
   changePassword,

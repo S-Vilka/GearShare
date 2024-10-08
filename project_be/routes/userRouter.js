@@ -12,7 +12,6 @@ const {
   patchUser,
   deleteUser,
   changePassword,
-  // updateUserTools,
   shareTool,
 } = require("../controllers/userController");
 
@@ -39,8 +38,7 @@ router.patch(
 // DELETE /users/:userId
 router.delete("/:userId", authMiddleware, deleteUser);
 
-// Update user tools
-// router.patch("/:userId/tools", authMiddleware, updateUserTools);
+
 
 // Share tool// PATCH /tools/share-tool
 router.patch("/:userID/tools", authMiddleware, shareTool);
