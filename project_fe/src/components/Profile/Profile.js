@@ -217,7 +217,7 @@ function Profile() {
                     ))}
                   </Row>
                 )}
-                <h1>Currently Borrowed:</h1>
+                <h1>Currently Lent:</h1>
                 {/* Display borrowed tools */}
                 {borrowedTools.length > 0 && (
                   <Row xs={1} md={2} lg={3} className="g-4">
