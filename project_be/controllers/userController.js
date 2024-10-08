@@ -98,14 +98,14 @@ const loginUser = async (req, res) => {
     const user = await User.findOne({ email });
     if (!user) {
       console.log("User not found"); // Add this line
-      return res.status(400).json({ message: "Invalid credentials" });
+      return res.status(400).json({ message: "Invalid email or password" });
     }
 
     // Compare the password with the hashed password in the database
     const isPasswordValid = await bcrypt.compare(password, user.password);
     if (!isPasswordValid) {
       console.log("Invalid password"); // Add this line
-      return res.status(400).json({ message: "Invalid credentials" });
+      return res.status(400).json({ message: "Invalid email or password" });
     }
 
     // Create a JWT token

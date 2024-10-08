@@ -60,20 +60,21 @@ function ToolsCard({ tool, onDelete, onEdit, onShare }) {
             </Button>
           )}
           {/* Delete button with confirmation */}
-          <Button
-            onClick={handleDeleteClick}
-            className={`delete-button mb-2 flex-grow-1 mx-1 ${
-              confirmDelete ? "confirm-state" : ""
-            }`}
-          >
-            {confirmDelete ? "I'm sure!" : "Delete"}
-          </Button>
+
+          {onDelete && (
+            <Button
+              onClick={handleDeleteClick}
+              className={`delete-button mb-2 flex-grow-1 mx-1 ${confirmDelete ? "confirm-state" : ""}`}
+            >
+              {confirmDelete ? "I'm sure!" : "Delete"}
+            </Button>
+            )}
           {/* Share button to toggle sharing/returning */}
           <Button
             onClick={() => onShare(tool._id)}
             className="mb-2 flex-grow-1 mx-1"
           >
-            {tool.available ? "Share" : "Return"}
+            {tool.available ? "Mark as Borrowed" : "Mark as Returned"}
           </Button>
         </div>
       </Card.Body>

@@ -194,9 +194,11 @@ function Profile() {
             {/* Conditional rendering for tools display */}
             {sharedTools.length === 0 && borrowedTools.length === 0 ? (
               <div className="no-tools-message">
-                <h1>
-                  You haven't shared any tools yet. Add an item to start
-                  sharing!
+                <h1 className="profile-headertext">
+                Welcome to GearShare!
+                 You haven't shared any items yet.<br />
+                You can borrow items from others when you're ready to lend out your own.
+                Add an item to get started!
                 </h1>
               </div>
             ) : (
@@ -225,7 +227,6 @@ function Profile() {
                       <Col key={tool._id}>
                         <ToolsCard
                           tool={tool}
-                          onDelete={() => handleDelete(tool._id)} // Delete tool
                           onShare={() => handleShare(tool._id)} // Share tool
                         />
                       </Col>

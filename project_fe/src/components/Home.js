@@ -5,6 +5,8 @@ import battery from '../images/battery.webp';
 import './Home.css';
 
 function Home() {
+  const isLoggedIn = localStorage.getItem('token');
+
   return (
     <Container fluid className="home-page">
       <Row className="align-items-center">
@@ -14,9 +16,11 @@ function Home() {
             <h1 className="heading">Find and Share Tools in Your Building</h1>
             <p className="description">Join our community and lend or borrow tools from your neighbors.</p>
             {/* Button to join the platform */}
-            <Button as={Link} to="/join" variant="primary" className="join-btn">
-              Join Now
-            </Button>
+            {!isLoggedIn && (
+              <Button as={Link} to="/join" variant="primary" className="join-btn">
+                Join Now
+              </Button>
+            )}
             <ul className="list-unstyled mt-3">
               <li>
                 {/* Button to browse available tools */}
