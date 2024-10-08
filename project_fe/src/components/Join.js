@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { Container, Row, Col, Form, Button } from "react-bootstrap";
 
 const Join = () => {
+  // State variables to manage form inputs
   const [firstName, setFirstName] = useState("");
   const [lastName, setLastName] = useState("");
   const [address, setAddress] = useState("");
@@ -14,8 +15,9 @@ const Join = () => {
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
   const [errorMessage, setErrorMessage] = useState("");
-  const navigate = useNavigate();
+  const navigate = useNavigate(); // Hook to navigate programmatically
 
+  // Handle form submission
   const handleSubmit = async (e) => {
     e.preventDefault();
 
@@ -24,6 +26,7 @@ const Join = () => {
 
     let hasError = false;
 
+    // Validate email and password matching
     if (trimmedEmail !== trimmedConfirmEmail) {
       setErrorMessage("Emails do not match");
       setConfirmEmail("");
@@ -35,10 +38,12 @@ const Join = () => {
       setConfirmPassword("");
       hasError = true;
     }
-    if (hasError){
-      return;
+
+    if (hasError) {
+      return; // Stop the form submission if there is an error
     }
 
+    // Collect form data to send to the backend
     const formData = {
       firstName,
       lastName,
@@ -53,7 +58,10 @@ const Join = () => {
     };
 
     try {
-      console.log("Sending form data:", formData); // Add this line
+      // Log form data for debugging purposes
+      console.log("Sending form data:", formData);
+
+      // Send the form data to the server
       const response = await fetch("http://localhost:4000/api/users", {
         method: "POST",
         headers: {
@@ -66,7 +74,7 @@ const Join = () => {
         const result = await response.json();
         console.log("User created successfully:", result);
         setErrorMessage("");
-        navigate("/profile");
+        navigate("/profile"); // Redirect to the profile page after successful registration
       } else {
         const result = await response.json();
         setErrorMessage(result.message);
@@ -77,6 +85,7 @@ const Join = () => {
       setErrorMessage("Failed to create user");
     }
 
+    // Clear form inputs after submission
     setFirstName("");
     setLastName("");
     setAddress("");
@@ -216,6 +225,7 @@ const Join = () => {
               />
             </Form.Group>
 
+            {/* Submit button */}
             <Button variant="primary" type="submit" className="save-btn">
               Join Now
             </Button>

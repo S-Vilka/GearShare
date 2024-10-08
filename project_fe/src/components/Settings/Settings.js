@@ -19,8 +19,7 @@ const Settings = () => {
     confirmPassword: "",
   });
 
-  const [profileMessage, setProfileMessage] = useState("");
-  const [passwordMessage, setPasswordMessage] = useState("");
+  const [message, setMessage] = useState("");
   const token = localStorage.getItem("token");
   const userId = localStorage.getItem("userId");
 
@@ -41,7 +40,7 @@ const Settings = () => {
         setUserData(userData);
       } catch (error) {
         console.error("Error fetching user data", error);
-        setProfileMessage(`An error occurred: ${error.message}`);
+        setMessage(`An error occurred: ${error.message}`);
       }
     };
 
@@ -76,15 +75,15 @@ const Settings = () => {
       if (response.ok) {
         const updatedUser = await response.json();
         setUserData(updatedUser);
-        setProfileMessage("Profile updated successfully");
-        setTimeout(() => setProfileMessage(""), 6000);
+        setMessage("Profile updated successfully");
+        setTimeout(() => setMessage(""), 6000);
       } else {
         const errorData = await response.json();
-        setProfileMessage(errorData.message || "Failed to update user data");
+        setMessage(errorData.message || "Failed to update user data");
       }
     } catch (error) {
       console.error("Error updating user data:", error);
-      setProfileMessage("An error occurred while updating user data");
+      setMessage("An error occurred while updating user data");
     }
   };
 
@@ -96,44 +95,52 @@ const Settings = () => {
         imageFile: file,
       }));
     } else {
-      setProfileMessage("Please select a valid image file (max 5MB).");
-      setTimeout(() => setProfileMessage(""), 6000);
+      setMessage("Please select a valid image file (max 5MB).");
+      setTimeout(() => setMessage(""), 6000);
     }
   };
 
   const handleChangePassword = async (e) => {
     e.preventDefault();
     if (passwordData.newPassword !== passwordData.confirmPassword) {
-      setPasswordMessage("New passwords do not match.");
-      setTimeout(() => setPasswordMessage(""), 6000);
+      setMessage("New passwords do not match.");
+      setTimeout(() => setMessage(""), 6000);
+      return;
+    }
+
+    if (!userData._id) {
+      setMessage("User data not loaded. Please refresh the page.");
       return;
     }
 
     try {
-      const response = await fetch(`/api/users/${userId}/change-password`, {
-        method: "PATCH",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${token}`,
-        },
-        body: JSON.stringify({
-          oldPassword: passwordData.password,
-          newPassword: passwordData.newPassword,
-        }),
-      });
+      const response = await fetch(
+        `/api/users/${userData._id}/change-password`,
+        {
+          method: "PATCH",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
+          },
+          body: JSON.stringify({
+            oldPassword: passwordData.password,
+            newPassword: passwordData.newPassword,
+          }),
+        }
+      );
 
       if (response.ok) {
-        setPasswordMessage("Password changed successfully.");
+        setMessage("Password changed successfully.");
         setPasswordData({ password: "", newPassword: "", confirmPassword: "" });
       } else {
         const errorData = await response.json();
-        setPasswordMessage(errorData.message || "Failed to change password.");
+        setMessage(errorData.message || "Failed to change password.");
       }
     } catch (error) {
       console.error("Error changing password:", error);
-      setPasswordMessage("An error occurred while changing the password.");
+      setMessage("An error occurred while changing the password.");
     }
-    setTimeout(() => setPasswordMessage(""), 6000);
+    setTimeout(() => setMessage(""), 6000);
   };
 
   return (
@@ -240,7 +247,6 @@ const Settings = () => {
             <Button variant="primary" type="submit">
               Update Profile
             </Button>
-            {profileMessage && <p className="message">{profileMessage}</p>}
           </Form>
 
           <Form onSubmit={handleChangePassword} className="mt-4">
@@ -296,7 +302,7 @@ const Settings = () => {
             </Button>
           </Form>
 
-          {passwordMessage && <p className="message">{passwordMessage}</p>}
+          {message && <p className="message">{message}</p>}
         </Col>
       </Row>
     </Container>

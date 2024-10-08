@@ -3,42 +3,48 @@ import { Container, Row, Col, Form, Button, Alert } from "react-bootstrap";
 import { useNavigate } from "react-router-dom";
 
 const Login = () => {
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  const [errorMessage, setErrorMessage] = useState(""); // New state for error message
-  const navigate = useNavigate();
+  const [email, setEmail] = useState(""); // State for email input
+  const [password, setPassword] = useState(""); // State for password input
+  const [errorMessage, setErrorMessage] = useState(""); // State for storing error messages
+  const navigate = useNavigate(); // Hook for navigation
 
+  // Handle form submission
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    const formData = { email, password };
-    console.log("Sending form data:", formData); // Add this line
+    const formData = { email, password }; // Collect form data
+    console.log("Sending form data:", formData); // Log the form data for debugging
 
     try {
+      // Make POST request to login API
       const response = await fetch("http://localhost:4000/api/users/login", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify(formData),
+        body: JSON.stringify(formData), // Send form data as JSON
       });
 
       if (response.ok) {
+        // Handle successful login
         const result = await response.json();
         console.log("Login successful:", result);
-        localStorage.setItem("token", result.token); // Store the JWT in localStorage
+        localStorage.setItem("token", result.token); // Store JWT in localStorage
 
-        window.dispatchEvent(new Event("storage"));
-        navigate("/profile"); // Redirect to the profile page after successful login
+        window.dispatchEvent(new Event("storage")); // Trigger storage event to update app state
+        navigate("/profile"); // Redirect to profile page after login
       } else {
+        // Handle failed login
         const result = await response.json();
-        setErrorMessage(result.message); // Set the error message if login fails
+        setErrorMessage(result.message); // Set error message if login fails
       }
     } catch (error) {
-      setErrorMessage("An error occurred. Please try again."); // Set generic error message
+      // Catch any unexpected errors
+      setErrorMessage("An error occurred. Please try again."); // Set a generic error message
       console.error("Error:", error.message);
     }
 
+    // Clear form fields after submission
     setEmail("");
     setPassword("");
   };
@@ -49,20 +55,21 @@ const Login = () => {
         <Col md={6} className="form-container">
           <h1 className="heading mb-4">Log In</h1>
 
-          {/* Conditional rendering of Alert */}
+          {/* Display error message if there is one */}
           {errorMessage && (
             <Alert variant="danger" onClose={() => setErrorMessage("")} dismissible>
               {errorMessage}
             </Alert>
           )}
 
+          {/* Login form */}
           <Form onSubmit={handleSubmit}>
             <Form.Group className="mb-3" controlId="formEmail">
               <Form.Label>Email</Form.Label>
               <Form.Control
                 type="email"
                 value={email}
-                onChange={(e) => setEmail(e.target.value)}
+                onChange={(e) => setEmail(e.target.value)} // Update email state on change
                 placeholder="Enter email"
                 required
               />
@@ -73,12 +80,13 @@ const Login = () => {
               <Form.Control
                 type="password"
                 value={password}
-                onChange={(e) => setPassword(e.target.value)}
+                onChange={(e) => setPassword(e.target.value)} // Update password state on change
                 placeholder="Enter password"
                 required
               />
             </Form.Group>
 
+            {/* Submit button */}
             <Button variant="primary" type="submit" className="save-btn">
               Log In
             </Button>

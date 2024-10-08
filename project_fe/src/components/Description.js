@@ -4,20 +4,21 @@ import { Container, Row, Col, Button } from "react-bootstrap";
 import "./Description.css";
 
 function Description() {
-  const { id } = useParams();
-  const navigate = useNavigate();
-  const [tool, setTool] = useState(null);
-  const [loading, setLoading] = useState(true);
-  const [hasSharedTools, setHasSharedTools] = useState(false);
+  const { id } = useParams(); // Get the tool ID from the URL
+  const navigate = useNavigate(); // Hook to programmatically navigate
+  const [tool, setTool] = useState(null); // State to hold tool data
+  const [loading, setLoading] = useState(true); // State to manage loading status
+  const [hasSharedTools, setHasSharedTools] = useState(false); // State to track if the user has shared tools
 
+  // Fetch tool and user data when component mounts or 'id' changes
   useEffect(() => {
     const fetchData = async () => {
       const token = localStorage.getItem("token");
       const userId = localStorage.getItem("userId");
-      setLoading(true);
+      setLoading(true); // Set loading state before fetching
 
       try {
-        // Fetch user data
+        // Fetch user data to check if they have shared tools
         const userResponse = await fetch(
           `http://localhost:4000/api/users/${userId}`,
           {
@@ -32,14 +33,15 @@ function Description() {
         const userData = await userResponse.json();
         const userHasSharedTools =
           userData.sharedTools && userData.sharedTools.length > 0;
-        setHasSharedTools(userHasSharedTools);
+        setHasSharedTools(userHasSharedTools); // Set the state if user has shared tools
 
+        // Redirect to profile if no shared tools
         if (!userHasSharedTools) {
           navigate("/profile");
           return;
         }
 
-        // Fetch tool data
+        // Fetch tool data using tool ID
         const toolResponse = await fetch(
           `http://localhost:4000/api/tools/${id}?includeOwner=true`
         );
@@ -47,29 +49,33 @@ function Description() {
           throw new Error("Tool not found");
         }
         const toolData = await toolResponse.json();
-        setTool(toolData);
+        setTool(toolData); // Set tool data in state
       } catch (error) {
         console.error("Error fetching data:", error);
       } finally {
-        setLoading(false);
+        setLoading(false); // Turn off loading state
       }
     };
 
-    fetchData();
+    fetchData(); // Trigger data fetching
   }, [id, navigate]);
 
+  // Handle back button click to navigate to the previous page
   const handleBackClick = () => {
     navigate(-1);
   };
 
+  // Return nothing if the user has no shared tools (handled by redirect)
   if (!hasSharedTools) {
-    return null; // or return a message component
+    return null; // Optionally return a message component
   }
 
+  // Show loading state while fetching data
   if (loading) {
     return <div>Loading...</div>;
   }
 
+  // Show message if tool data is not found
   if (!tool) {
     return <div>Tool not found</div>;
   }
@@ -81,6 +87,7 @@ function Description() {
         className="tool-description"
         style={{ justifyContent: "space-between" }}
       >
+        {/* Tool description and image section */}
         <Col xs={12} md={5} className="description-section">
           <h2>Tool Description:</h2>
           <p>{tool.description}</p>
@@ -91,6 +98,7 @@ function Description() {
             />
           </div>
         </Col>
+        {/* Tool details and owner information section */}
         <Col xs={12} md={5} className="contact-section">
           <h2>Details:</h2>
           <p>{tool.details}</p>
@@ -105,6 +113,7 @@ function Description() {
           )}
         </Col>
       </Row>
+      {/* Back button to navigate back to the previous page */}
       <div className="button-container">
         <Button className="back-button" onClick={handleBackClick}>
           Back
