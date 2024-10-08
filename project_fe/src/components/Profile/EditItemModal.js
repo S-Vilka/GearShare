@@ -1,12 +1,16 @@
+// Completed code 
+
 import React, { useState, useEffect } from "react";
 import { Modal, Button, Form } from "react-bootstrap";
 
 function EditItemModal({ show, onHide, tool, onToolUpdated }) {
+  // State variables to manage form inputs
   const [itemName, setItemName] = useState("");
   const [description, setDescription] = useState("");
   const [details, setDetails] = useState("");
   const [image, setImage] = useState(null);
 
+  // Populate form fields with existing tool data when the modal opens
   useEffect(() => {
     if (tool) {
       setItemName(tool.name);
@@ -15,36 +19,43 @@ function EditItemModal({ show, onHide, tool, onToolUpdated }) {
     }
   }, [tool]);
 
+  // Handle form submission
   const handleSubmit = async (e) => {
     e.preventDefault();
+    
+    // Prepare form data to send to the backend
     const formData = new FormData();
     formData.append("name", itemName);
     formData.append("description", description);
     formData.append("details", details);
+    
+    // Append image if a new one is selected
     if (image) {
       formData.append("image", image);
     }
 
+    // Update the tool and call the callback on success
     const updatedTool = await updateTool(tool._id, formData);
     if (updatedTool) {
-      onToolUpdated(updatedTool);
-      onHide();
+      onToolUpdated(updatedTool); // Notify parent component of changes
+      onHide(); // Close the modal after saving changes
     }
   };
 
+  // Function to send a PATCH request to the API for updating the tool
   const updateTool = async (toolId, formData) => {
     try {
       const response = await fetch(
         `http://localhost:4000/api/tools/${toolId}`,
         {
           method: "PATCH",
-          body: formData,
+          body: formData, // Send form data in the request body
         }
       );
       if (!response.ok) {
         throw new Error("Failed to update tool");
       }
-      return await response.json();
+      return await response.json(); // Return updated tool data
     } catch (error) {
       console.error("Error updating tool:", error);
     }
@@ -56,6 +67,7 @@ function EditItemModal({ show, onHide, tool, onToolUpdated }) {
         <Modal.Title>Edit Item</Modal.Title>
       </Modal.Header>
       <Modal.Body>
+        {/* Form to edit the existing item */}
         <Form onSubmit={handleSubmit}>
           <Form.Group>
             <Form.Label>Item Name</Form.Label>

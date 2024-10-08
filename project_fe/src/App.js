@@ -5,7 +5,6 @@ import About from "./components/About";
 import Profile from "./components/Profile/Profile";
 import Available from "./components/Available";
 import Description from "./components/Description";
-import Registration from "./components/Registration";
 import Login from "./components/Login";
 import Join from "./components/Join";
 import Settings from "./components/Settings/Settings";
@@ -25,7 +24,6 @@ function App() {
             element={<ProtectedRoute component={Profile} />}
           />{" "}
           <Route path="/available" element={<Available />} />
-          <Route path="/registration" element={<Registration />} />
           <Route
             path="/description/:id"
             element={<ProtectedRoute component={Description} />}

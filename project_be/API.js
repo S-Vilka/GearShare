@@ -13,13 +13,23 @@ const {
 const app = express();
 const port = process.env.PORT || 4000;
 const fs = require("fs");
-const uploadDir = path.join(__dirname, "public", "toolsImages");
+const uploadDirTools = path.join(__dirname, "public", "toolsImages");
+const uploadDirProfile = path.join(__dirname, "public", "profileImages");
 
-fs.access(uploadDir, fs.constants.W_OK, (err) => {
+// Check if the directory exists and has write permissions
+fs.access(uploadDirProfile, fs.constants.W_OK, (err) => {
   if (err) {
-    console.log(`No write permissions for ${uploadDir}`);
+    console.log(`No write permissions for ${uploadDirProfile}`);
   } else {
-    console.log(`Write permissions confirmed for ${uploadDir}`);
+    console.log(`Write permissions confirmed for ${uploadDirProfile}`);
+  }
+});
+
+fs.access(uploadDirTools, fs.constants.W_OK, (err) => {
+  if (err) {
+    console.log(`No write permissions for ${uploadDirTools}`);
+  } else {
+    console.log(`Write permissions confirmed for ${uploadDirTools}`);
   }
 });
 
@@ -28,6 +38,10 @@ connectDB();
 app.use(cors());
 app.use(express.json());
 app.use("/toolsImages", express.static(path.join(__dirname, "toolsImages")));
+app.use(
+  "/profileImages",
+  express.static(path.join(__dirname, "profileImages"))
+);
 app.use("/public", express.static(path.join(__dirname, "public")));
 
 app.use("/api/users", userRouter);

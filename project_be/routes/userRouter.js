@@ -1,7 +1,8 @@
 const express = require("express");
 const router = express.Router();
+
 const authMiddleware = require("../middleware/authMiddleware");
-// const uploadProfile = require("../config/multerProfileConfig");
+const uploadProfile = require("../middleware/multerProfileConfig");
 
 const {
   getAllUsers,
@@ -11,7 +12,6 @@ const {
   patchUser,
   deleteUser,
   changePassword,
-  // updateUserTools,
   shareTool,
 } = require("../controllers/userController");
 
@@ -28,13 +28,17 @@ router.post("/login", loginUser);
 router.get("/:userId", authMiddleware, getUserById);
 
 // PATCH /users/:userId
-router.patch("/:userId", authMiddleware, patchUser);
+router.patch(
+  "/:userId",
+  authMiddleware,
+  uploadProfile.single("image"),
+  patchUser
+);
 
 // DELETE /users/:userId
 router.delete("/:userId", authMiddleware, deleteUser);
 
-// Update user tools
-// router.patch("/:userId/tools", authMiddleware, updateUserTools);
+
 
 // Share tool// PATCH /tools/share-tool
 router.patch("/:userID/tools", authMiddleware, shareTool);
