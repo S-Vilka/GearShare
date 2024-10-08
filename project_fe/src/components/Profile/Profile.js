@@ -7,7 +7,6 @@ import UserProfile from "./UserProfile";
 import ToolsCard from "../Tools/Tools";
 import AddItemModal from "./AddItemModal";
 import EditItemModal from "./EditItemModal";
-import { useNavigate } from "react-router-dom";
 
 function Profile() {
   // State variables for user data, tools, modals, and error handling
@@ -18,7 +17,6 @@ function Profile() {
   const [showModal, setShowModal] = useState(false);
   const [showEditModal, setShowEditModal] = useState(false);
   const [currentTool, setCurrentTool] = useState(null);
-  const navigate = useNavigate();
 
   // Fetch user data on component mount
   useEffect(() => {
@@ -194,9 +192,11 @@ function Profile() {
             {/* Conditional rendering for tools display */}
             {sharedTools.length === 0 && borrowedTools.length === 0 ? (
               <div className="no-tools-message">
-                <h1>
-                  You haven't shared any tools yet. Add an item to start
-                  sharing!
+                <h1 className="profile-headertext">
+                Welcome to GearShare!
+                 You haven't shared any items yet.<br />
+                You can borrow items from others when you're ready to lend out your own.
+                Add an item to get started!
                 </h1>
               </div>
             ) : (
@@ -225,7 +225,6 @@ function Profile() {
                       <Col key={tool._id}>
                         <ToolsCard
                           tool={tool}
-                          onDelete={() => handleDelete(tool._id)} // Delete tool
                           onShare={() => handleShare(tool._id)} // Share tool
                         />
                       </Col>

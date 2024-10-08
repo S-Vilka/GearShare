@@ -33,10 +33,10 @@ const createUser = async (req, res) => {
     const trimmedEmail = email.trim().toLowerCase();
     const trimmedConfirmEmail = confirmEmail.trim().toLowerCase();
 
-    console.log("Received email:", trimmedEmail);
-    console.log("Received confirmEmail:", trimmedConfirmEmail);
-    console.log("Received password:", password);
-    console.log("Received confirmPassword:", confirmPassword);
+    // console.log("Received email:", trimmedEmail);
+    // console.log("Received confirmEmail:", trimmedConfirmEmail);
+    // console.log("Received password:", password);
+    // console.log("Received confirmPassword:", confirmPassword);
 
     // Validate email format
     if (!validator.isEmail(trimmedEmail)) {
@@ -78,7 +78,6 @@ const createUser = async (req, res) => {
       postalCode,
       phone,
     });
-    console.log(newUser); //Remove before pushing to production (Testing new user)
     res.status(201).json(newUser);
   } catch (error) {
     console.error("Error creating user:", error);
@@ -91,21 +90,21 @@ const createUser = async (req, res) => {
 // POST /api/users/login (User Login)
 const loginUser = async (req, res) => {
   const { email, password } = req.body;
-  console.log("Received login data:", req.body); // Add this line
+  // console.log("Received login data:", req.body); // Add this line
 
   try {
     // Check if the user exists
     const user = await User.findOne({ email });
     if (!user) {
       console.log("User not found"); // Add this line
-      return res.status(400).json({ message: "Invalid credentials" });
+      return res.status(400).json({ message: "Invalid email or password" });
     }
 
     // Compare the password with the hashed password in the database
     const isPasswordValid = await bcrypt.compare(password, user.password);
     if (!isPasswordValid) {
       console.log("Invalid password"); // Add this line
-      return res.status(400).json({ message: "Invalid credentials" });
+      return res.status(400).json({ message: "Invalid email or password" });
     }
 
     // Create a JWT token

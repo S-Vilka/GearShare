@@ -13,7 +13,7 @@ const Login = () => {
     e.preventDefault();
 
     const formData = { email, password }; // Collect form data
-    console.log("Sending form data:", formData); // Log the form data for debugging
+    // console.log("Sending form data:", formData); // Log the form data for debugging
 
     try {
       // Make POST request to login API
@@ -59,6 +59,7 @@ const Login = () => {
           {errorMessage && (
             <Alert variant="danger" onClose={() => setErrorMessage("")} dismissible>
               {errorMessage}
+              
             </Alert>
           )}
 

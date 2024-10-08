@@ -7,6 +7,9 @@
   align-items: center;
   margin-bottom: 1rem;
 }
+.profile-headertext {
+  font-size: 24px;
+}
 
 /* .btn-primary {
   margin-top: 1rem;
