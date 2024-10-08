@@ -8,7 +8,7 @@ import Description from "./components/Description";
 import Login from "./components/Login";
 import Join from "./components/Join";
 import Settings from "./components/Settings/Settings";
-import ProtectedRoute from "./components/ProtectedRoute"; // Import the ProtectedRoute component
+import ProtectedRoute from "./components/ProtectedRoute"; 
 import "bootstrap/dist/css/bootstrap.min.css";
 
 function App() {

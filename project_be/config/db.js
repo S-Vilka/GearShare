@@ -1,6 +1,7 @@
 const mongoose = require("mongoose");
 require("dotenv").config();
 
+// Function to connect to the MongoDB database
 const connectDB = async () => {
   try {
     const conn = await mongoose.connect(process.env.MONGODB_URI, {
@@ -14,6 +15,7 @@ const connectDB = async () => {
   }
 };
 
+// Event listener for the SIGINT signal (e.g., when the application is terminated)
 process.on("SIGINT", async () => {
   try {
     await mongoose.connection.close();
