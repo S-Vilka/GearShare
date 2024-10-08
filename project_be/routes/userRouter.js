@@ -1,7 +1,8 @@
 const express = require("express");
 const router = express.Router();
+
 const authMiddleware = require("../middleware/authMiddleware");
-// const uploadProfile = require("../config/multerProfileConfig");
+const uploadProfile = require("../middleware/multerProfileConfig");
 
 const {
   getAllUsers,
@@ -28,7 +29,12 @@ router.post("/login", loginUser);
 router.get("/:userId", authMiddleware, getUserById);
 
 // PATCH /users/:userId
-router.patch("/:userId", authMiddleware, patchUser);
+router.patch(
+  "/:userId",
+  authMiddleware,
+  uploadProfile.single("image"),
+  patchUser
+);
 
 // DELETE /users/:userId
 router.delete("/:userId", authMiddleware, deleteUser);

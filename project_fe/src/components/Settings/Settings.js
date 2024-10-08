@@ -10,12 +10,8 @@ const Settings = () => {
     city: "",
     postalCode: "",
     email: "",
-    imageUrl: "",
+    imageUrl: null,
   });
-
-  useEffect(() => {
-    console.log(userData);
-  }, [userData]);
 
   const [passwordData, setPasswordData] = useState({
     password: "",
@@ -23,12 +19,11 @@ const Settings = () => {
     confirmPassword: "",
   });
 
-  const [message, setMessage] = useState("");
+  const [profileMessage, setProfileMessage] = useState("");
+  const [passwordMessage, setPasswordMessage] = useState("");
   const token = localStorage.getItem("token");
   const userId = localStorage.getItem("userId");
-  console.log(userId);
 
-  // fetches userdata when the page opens
   useEffect(() => {
     const fetchUserData = async () => {
       try {
@@ -46,45 +41,71 @@ const Settings = () => {
         setUserData(userData);
       } catch (error) {
         console.error("Error fetching user data", error);
-        alert(`An error occurred: ${error.message}`);
+        setProfileMessage(`An error occurred: ${error.message}`);
       }
     };
 
     fetchUserData();
   }, [userId, token]);
 
-  // patch changed form fields to database
   const handleSubmit = async (e) => {
     e.preventDefault();
-    const formData = { ...userData };
+    const formData = new FormData();
+
+    // Append user data to formData
+    Object.keys(userData).forEach((key) => {
+      if (key !== "imageFile" && key !== "sharedTools") {
+        formData.append(key, userData[key]);
+      }
+    });
+
+    // Append image file if it exists
+    if (userData.imageFile) {
+      formData.append("image", userData.imageFile);
+    }
 
     try {
-      const response = await fetch(`/api/users/${userId}`, {
+      const response = await fetch(`/api/users/${userData._id}`, {
         method: "PATCH",
         headers: {
-          "Content-Type": "application/json",
           Authorization: `Bearer ${token}`,
         },
-        body: JSON.stringify(formData),
+        body: formData,
       });
 
       if (response.ok) {
-        setMessage("Profile updated successfully");
-        setTimeout(() => setMessage(""), 6000);
+        const updatedUser = await response.json();
+        setUserData(updatedUser);
+        setProfileMessage("Profile updated successfully");
+        setTimeout(() => setProfileMessage(""), 6000);
       } else {
-        console.error("Failed to update user data");
+        const errorData = await response.json();
+        setProfileMessage(errorData.message || "Failed to update user data");
       }
     } catch (error) {
       console.error("Error updating user data:", error);
+      setProfileMessage("An error occurred while updating user data");
     }
   };
 
-  //handles password change
+  const handleImageChange = (e) => {
+    const file = e.target.files[0];
+    if (file && file.type.startsWith("image/") && file.size <= 5000000) {
+      setUserData((prevData) => ({
+        ...prevData,
+        imageFile: file,
+      }));
+    } else {
+      setProfileMessage("Please select a valid image file (max 5MB).");
+      setTimeout(() => setProfileMessage(""), 6000);
+    }
+  };
+
   const handleChangePassword = async (e) => {
     e.preventDefault();
     if (passwordData.newPassword !== passwordData.confirmPassword) {
-      setMessage("New passwords do not match.");
-      setTimeout(() => setMessage(""), 6000);
+      setPasswordMessage("New passwords do not match.");
+      setTimeout(() => setPasswordMessage(""), 6000);
       return;
     }
 
@@ -102,37 +123,17 @@ const Settings = () => {
       });
 
       if (response.ok) {
-        setMessage("Password changed successfully.");
+        setPasswordMessage("Password changed successfully.");
         setPasswordData({ password: "", newPassword: "", confirmPassword: "" });
-        setTimeout(() => setMessage(""), 6000);
       } else {
         const errorData = await response.json();
-        setMessage(errorData.message || "Failed to change password.");
-        setTimeout(() => setMessage(""), 6000);
+        setPasswordMessage(errorData.message || "Failed to change password.");
       }
     } catch (error) {
       console.error("Error changing password:", error);
-      setMessage("An error occurred while changing the password.");
-      setTimeout(() => setMessage(""), 6000);
+      setPasswordMessage("An error occurred while changing the password.");
     }
-  };
-
-  //handles image url change when user add/change photo
-  const handleImageChange = (e) => {
-    const file = e.target.files[0];
-    if (file && file.type.startsWith("image/") && file.size <= 5000000) {
-      // 5MB limit
-      const imageUrl = URL.createObjectURL(file);
-
-      //adds the imageurl to userdata
-      setUserData((prevData) => ({
-        ...prevData,
-        imageUrl: imageUrl,
-      }));
-    } else {
-      setMessage("Please select a valid image file (max 5MB).");
-      setTimeout(() => setMessage(""), 6000);
-    }
+    setTimeout(() => setPasswordMessage(""), 6000);
   };
 
   return (
@@ -146,7 +147,7 @@ const Settings = () => {
               <div className="profile-picture">
                 {userData.imageUrl ? (
                   <img
-                    src={userData.imageUrl}
+                    src={`http://localhost:4000/public/${userData.imageUrl}`}
                     alt="Profile"
                     className="profile-image"
                   />
@@ -239,6 +240,7 @@ const Settings = () => {
             <Button variant="primary" type="submit">
               Update Profile
             </Button>
+            {profileMessage && <p className="message">{profileMessage}</p>}
           </Form>
 
           <Form onSubmit={handleChangePassword} className="mt-4">
@@ -294,7 +296,7 @@ const Settings = () => {
             </Button>
           </Form>
 
-          {message && <p className="message">{message}</p>}
+          {passwordMessage && <p className="message">{passwordMessage}</p>}
         </Col>
       </Row>
     </Container>

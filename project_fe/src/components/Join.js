@@ -22,13 +22,20 @@ const Join = () => {
     const trimmedEmail = email.trim().toLowerCase();
     const trimmedConfirmEmail = confirmEmail.trim().toLowerCase();
 
+    let hasError = false;
+
     if (trimmedEmail !== trimmedConfirmEmail) {
       setErrorMessage("Emails do not match");
-      return;
+      setConfirmEmail("");
+      hasError = true;
     }
 
     if (password !== confirmPassword) {
       setErrorMessage("Passwords do not match");
+      setConfirmPassword("");
+      hasError = true;
+    }
+    if (hasError){
       return;
     }
 
