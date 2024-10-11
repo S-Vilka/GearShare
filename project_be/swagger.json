@@ -7,7 +7,7 @@
   },
   "servers": [
     {
-      "url": "http://localhost:4000/api-docs"
+      "url": "http://localhost:4000/api"
     }
   ],
   "paths": {
@@ -86,7 +86,8 @@
                   "type": "object",
                   "properties": {
                     "token": { "type": "string" },
-                    "userId": { "type": "string" }
+                    "userId": { "type": "string" },
+                    "email": { "type": "string" }
                   }
                 }
               }
@@ -144,7 +145,7 @@
         "requestBody": {
           "required": true,
           "content": {
-            "application/json": {
+            "multipart/form-data": {
               "schema": {
                 "$ref": "#/components/schemas/UpdateUser"
               }
@@ -161,6 +162,31 @@
                 }
               }
             }
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "404": {
+            "description": "User not found"
+          }
+        }
+      },
+      "delete": {
+        "summary": "Delete user",
+        "security": [{ "bearerAuth": [] }],
+        "parameters": [
+          {
+            "in": "path",
+            "name": "userId",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "User deleted successfully"
           },
           "401": {
             "description": "Unauthorized"
@@ -245,7 +271,6 @@
         }
       }
     },
-
     "/tools": {
       "get": {
         "summary": "Get all tools",
@@ -305,6 +330,13 @@
             "required": true,
             "schema": {
               "type": "string"
+            }
+          },
+          {
+            "in": "query",
+            "name": "includeOwner",
+            "schema": {
+              "type": "boolean"
             }
           }
         ],
@@ -391,104 +423,6 @@
           }
         }
       }
-    }
-  },
-  "components": {
-    "securitySchemes": {
-      "bearerAuth": {
-        "type": "http",
-        "scheme": "bearer",
-        "bearerFormat": "JWT"
-      }
-    },
-    "schemas": {
-      "User": {
-        "type": "object",
-        "properties": {
-          "_id": { "type": "string" },
-          "firstName": { "type": "string" },
-          "lastName": { "type": "string" },
-          "email": { "type": "string" },
-          "streetName": { "type": "string" },
-          "city": { "type": "string" },
-          "postalCode": { "type": "string" },
-          "phone": { "type": "string" },
-          "imageUrl": { "type": "string" },
-          "sharedTools": {
-            "type": "array",
-            "items": { "type": "string" }
-          }
-        }
-      },
-      "NewUser": {
-        "type": "object",
-        "required": [
-          "firstName",
-          "lastName",
-          "email",
-          "password",
-          "streetName",
-          "city",
-          "postalCode",
-          "phone"
-        ],
-        "properties": {
-          "firstName": { "type": "string" },
-          "lastName": { "type": "string" },
-          "email": { "type": "string" },
-          "password": { "type": "string" },
-          "streetName": { "type": "string" },
-          "city": { "type": "string" },
-          "postalCode": { "type": "string" },
-          "phone": { "type": "string" }
-        }
-      },
-      "UpdateUser": {
-        "type": "object",
-        "properties": {
-          "firstName": { "type": "string" },
-          "lastName": { "type": "string" },
-          "streetName": { "type": "string" },
-          "city": { "type": "string" },
-          "postalCode": { "type": "string" },
-          "phone": { "type": "string" },
-          "image": { "type": "string", "format": "binary" }
-        }
-      },
-      "Tool": {
-        "type": "object",
-        "properties": {
-          "_id": { "type": "string" },
-          "name": { "type": "string" },
-          "description": { "type": "string" },
-          "details": { "type": "string" },
-          "available": { "type": "boolean" },
-          "owner": { "type": "string" },
-          "imageUrl": { "type": "string" }
-        }
-      },
-      "NewTool": {
-        "type": "object",
-        "required": ["name", "description", "details", "available", "owner"],
-        "properties": {
-          "name": { "type": "string" },
-          "description": { "type": "string" },
-          "details": { "type": "string" },
-          "available": { "type": "boolean" },
-          "owner": { "type": "string" },
-          "image": { "type": "string", "format": "binary" }
-        }
-      },
-      "UpdateTool": {
-        "type": "object",
-        "properties": {
-          "name": { "type": "string" },
-          "description": { "type": "string" },
-          "details": { "type": "string" },
-          "available": { "type": "boolean" },
-          "image": { "type": "string", "format": "binary" }
-        }
-      }
     },
     "/tools/user-tools": {
       "get": {
@@ -566,6 +500,108 @@
           "404": {
             "description": "Tool not found"
           }
+        }
+      }
+    }
+  },
+  "components": {
+    "securitySchemes": {
+      "bearerAuth": {
+        "type": "http",
+        "scheme": "bearer",
+        "bearerFormat": "JWT"
+      }
+    },
+    "schemas": {
+      "User": {
+        "type": "object",
+        "properties": {
+          "_id": { "type": "string" },
+          "firstName": { "type": "string" },
+          "lastName": { "type": "string" },
+          "email": { "type": "string" },
+          "streetName": { "type": "string" },
+          "city": { "type": "string" },
+          "postalCode": { "type": "string" },
+          "phone": { "type": "string" },
+          "imageUrl": { "type": "string" },
+          "sharedTools": {
+            "type": "array",
+            "items": { "type": "string" }
+          }
+        }
+      },
+      "NewUser": {
+        "type": "object",
+        "required": [
+          "firstName",
+          "lastName",
+          "email",
+          "password",
+          "confirmEmail",
+          "confirmPassword",
+          "city",
+          "address",
+          "postalCode",
+          "phone"
+        ],
+        "properties": {
+          "firstName": { "type": "string" },
+          "lastName": { "type": "string" },
+          "email": { "type": "string" },
+          "confirmEmail": { "type": "string" },
+          "password": { "type": "string" },
+          "confirmPassword": { "type": "string" },
+          "city": { "type": "string" },
+          "address": { "type": "string" },
+          "postalCode": { "type": "string" },
+          "phone": { "type": "string" }
+        }
+      },
+      "UpdateUser": {
+        "type": "object",
+        "properties": {
+          "firstName": { "type": "string" },
+          "lastName": { "type": "string" },
+          "streetName": { "type": "string" },
+          "city": { "type": "string" },
+          "postalCode": { "type": "string" },
+          "phone": { "type": "string" },
+          "image": { "type": "string", "format": "binary" }
+        }
+      },
+      "Tool": {
+        "type": "object",
+        "properties": {
+          "_id": { "type": "string" },
+          "name": { "type": "string" },
+          "description": { "type": "string" },
+          "details": { "type": "string" },
+          "available": { "type": "boolean" },
+          "owner": { "type": "string" },
+          "imageUrl": { "type": "string" }
+        }
+      },
+      "NewTool": {
+        "type": "object",
+        "required": ["name", "description", "details", "available", "owner"],
+        "properties": {
+          "name": { "type": "string" },
+          "description": { "type": "string" },
+          "details": { "type": "string" },
+          "available": { "type": "boolean" },
+          "owner": { "type": "string" },
+          "image": { "type": "string", "format": "binary" }
+        }
+      },
+      "UpdateTool": {
+        "type": "object",
+        "properties": {
+          "name": { "type": "string" },
+          "description": { "type": "string" },
+          "details": { "type": "string" },
+          "available": { "type": "boolean" },
+          "image": { "type": "string", "format": "binary" }
         }
       }
     }
