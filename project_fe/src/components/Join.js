@@ -65,13 +65,16 @@ const Join = () => {
       console.log("Sending form data:", formData);
 
       // Send the form data to the server
-      const response = await fetch("http://localhost:4000/api/users", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(formData),
-      });
+      const response = await fetch(
+        "https://group-5-project-1.onrender.com/api/users",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(formData),
+        }
+      );
 
       if (response.ok) {
         const result = await response.json();

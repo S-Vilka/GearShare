@@ -1,4 +1,4 @@
-// Completed code 
+// Completed code
 
 import React, { useEffect, useState } from "react";
 import { Container, Row, Col, Button } from "react-bootstrap";
@@ -26,7 +26,7 @@ function Profile() {
         const userId = localStorage.getItem("userId");
 
         const response = await fetch(
-          `http://localhost:4000/api/users/${userId}`,
+          `https://group-5-project-1.onrender.com/api/users/${userId}`,
           {
             headers: {
               Authorization: `Bearer ${token}`,
@@ -58,7 +58,7 @@ function Profile() {
         const token = localStorage.getItem("token");
 
         const response = await fetch(
-          `http://localhost:4000/api/tools/user-tools?userId=${userData._id}`,
+          `https://group-5-project-1.onrender.com/api/tools/user-tools?userId=${userData._id}`,
           {
             headers: {
               Authorization: `Bearer ${token}`,
@@ -88,7 +88,7 @@ function Profile() {
 
     try {
       const response = await fetch(
-        `http://localhost:4000/api/tools/${toolId}/availability`,
+        `https://group-5-project-1.onrender.com/api/tools/${toolId}/availability`,
         {
           method: "PATCH",
           headers: {
@@ -128,7 +128,7 @@ function Profile() {
     try {
       const token = localStorage.getItem("token");
       const response = await fetch(
-        `http://localhost:4000/api/tools/${toolId}`,
+        `https://group-5-project-1.onrender.com/api/tools/${toolId}`,
         {
           method: "DELETE",
           headers: {
@@ -174,7 +174,8 @@ function Profile() {
           <Col md={4} lg={3} className="mb-4">
             {userData ? (
               <div className="d-flex flex-column align-items-center">
-                <UserProfile userData={userData} className="mb-3" /> {/* Display user profile */}
+                <UserProfile userData={userData} className="mb-3" />{" "}
+                {/* Display user profile */}
               </div>
             ) : (
               <div>Loading user data...</div>
@@ -193,10 +194,10 @@ function Profile() {
             {sharedTools.length === 0 && borrowedTools.length === 0 ? (
               <div className="no-tools-message">
                 <h1 className="profile-headertext">
-                Welcome to GearShare!
-                 You haven't shared any items yet.<br />
-                You can borrow items from others when you're ready to lend out your own.
-                Add an item to get started!
+                  Welcome to GearShare! You haven't shared any items yet.
+                  <br />
+                  You can borrow items from others when you're ready to lend out
+                  your own. Add an item to get started!
                 </h1>
               </div>
             ) : (

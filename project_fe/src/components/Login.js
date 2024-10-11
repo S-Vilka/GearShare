@@ -17,13 +17,16 @@ const Login = () => {
 
     try {
       // Make POST request to login API
-      const response = await fetch("http://localhost:4000/api/users/login", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(formData), // Send form data as JSON
-      });
+      const response = await fetch(
+        "https://group-5-project-1.onrender.com/api/users/login",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(formData), // Send form data as JSON
+        }
+      );
 
       if (response.ok) {
         // Handle successful login
@@ -57,9 +60,12 @@ const Login = () => {
 
           {/* Display error message if there is one */}
           {errorMessage && (
-            <Alert variant="danger" onClose={() => setErrorMessage("")} dismissible>
+            <Alert
+              variant="danger"
+              onClose={() => setErrorMessage("")}
+              dismissible
+            >
               {errorMessage}
-              
             </Alert>
           )}
 

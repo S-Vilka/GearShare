@@ -16,7 +16,9 @@ const Available = () => {
     const fetchTools = async () => {
       try {
         setLoading(true); // Set loading state before fetching data
-        const response = await fetch("http://localhost:4000/api/tools");
+        const response = await fetch(
+          "https://group-5-project-1.onrender.com/api/tools"
+        );
         if (!response.ok) {
           throw new Error(`HTTP error! status: ${response.status}`);
         }
@@ -57,30 +59,32 @@ const Available = () => {
       </Row>
       <Row className="tool-list">
         {/* Display current page of tools */}
-        {currentTools.filter(tool => tool.available).map((tool, index) => (
-          <Col
-            key={tool._id || index}
-            lg={3}
-            md={4}
-            sm={6}
-            xs={12}
-            className="tool-item mb-4"
-          >
-            <Link to={`/description/${tool._id}`} className="tool-link">
-              <div className="image-placeholder">
-                {/* Display tool image if available */}
-                {tool.name && (
-                  <img
-                    src={`http://localhost:4000/public/${tool.imageUrl}`}
-                    alt={tool.name}
-                  />
-                )}
-              </div>
-              {/* Display tool name or default if no name is available */}
-              <h3>{tool.name || "Unnamed Tool"}</h3>
-            </Link>
-          </Col>
-        ))}
+        {currentTools
+          .filter((tool) => tool.available)
+          .map((tool, index) => (
+            <Col
+              key={tool._id || index}
+              lg={3}
+              md={4}
+              sm={6}
+              xs={12}
+              className="tool-item mb-4"
+            >
+              <Link to={`/description/${tool._id}`} className="tool-link">
+                <div className="image-placeholder">
+                  {/* Display tool image if available */}
+                  {tool.name && (
+                    <img
+                      src={`https://group-5-project-1.onrender.com/public/${tool.imageUrl}`}
+                      alt={tool.name}
+                    />
+                  )}
+                </div>
+                {/* Display tool name or default if no name is available */}
+                <h3>{tool.name || "Unnamed Tool"}</h3>
+              </Link>
+            </Col>
+          ))}
       </Row>
       <Row className="pagination-row">
         <Col>

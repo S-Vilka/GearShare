@@ -11,15 +11,15 @@ function AddItemModal({ show, onHide, userId, onToolAdded }) {
   // Handle form submission
   const handleSubmit = async (e) => {
     e.preventDefault();
-    
+
     // Prepare form data to send to the backend
     const formData = new FormData();
     formData.append("name", itemName);
     formData.append("description", description);
     formData.append("details", details);
-    formData.append("owner", userId);  // Include the user's ID
+    formData.append("owner", userId); // Include the user's ID
     formData.append("available", true); // Set availability status
-    formData.append("image", image);    // Add image file
+    formData.append("image", image); // Add image file
 
     // Create the tool and trigger callback on success
     const createdTool = await createTool(formData);
@@ -32,10 +32,13 @@ function AddItemModal({ show, onHide, userId, onToolAdded }) {
   // Function to send a POST request to the API for creating a new tool
   const createTool = async (formData) => {
     try {
-      const response = await fetch("http://localhost:4000/api/tools", {
-        method: "POST",
-        body: formData, // Send form data in the request body
-      });
+      const response = await fetch(
+        "https://group-5-project-1.onrender.com/api/tools",
+        {
+          method: "POST",
+          body: formData, // Send form data in the request body
+        }
+      );
       if (!response.ok) {
         throw new Error("Failed to create tool");
       }

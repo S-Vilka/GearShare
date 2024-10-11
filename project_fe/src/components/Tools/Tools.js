@@ -12,7 +12,7 @@ function ToolsCard({ tool, onDelete, onEdit, onShare }) {
     } else {
       setConfirmDelete(true); // Set delete confirmation state
       const newTimer = setTimeout(() => {
-        setConfirmDelete(false); 
+        setConfirmDelete(false);
       }, 3000);
       setTimer(newTimer); // Store timer to clear later if needed
     }
@@ -39,7 +39,7 @@ function ToolsCard({ tool, onDelete, onEdit, onShare }) {
         {/* Display tool image */}
         <Card.Img
           variant="top"
-          src={`http://localhost:4000/public/${tool.imageUrl}`}
+          src={`https://group-5-project-1.onrender.com/public/${tool.imageUrl}`}
           alt={tool.name}
           className="tool-image"
         />
@@ -64,11 +64,13 @@ function ToolsCard({ tool, onDelete, onEdit, onShare }) {
           {onDelete && (
             <Button
               onClick={handleDeleteClick}
-              className={`delete-button mb-2 flex-grow-1 mx-1 ${confirmDelete ? "confirm-state" : ""}`}
+              className={`delete-button mb-2 flex-grow-1 mx-1 ${
+                confirmDelete ? "confirm-state" : ""
+              }`}
             >
               {confirmDelete ? "I'm sure!" : "Delete"}
             </Button>
-            )}
+          )}
           {/* Share button to toggle sharing/returning */}
           <Button
             onClick={() => onShare(tool._id)}
