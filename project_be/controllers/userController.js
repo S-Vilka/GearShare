@@ -100,7 +100,7 @@ const loginUser = async (req, res) => {
 
   try {
     // Check if the user exists
-    const user = await User.findOne({ email });
+    const user = await User.findOne({ email});
     if (!user) {
       console.log("User not found"); // Add this line
       return res.status(400).json({ message: "Invalid email or password" });
@@ -130,7 +130,7 @@ const loginUser = async (req, res) => {
 // GET /users/:userId
 const getUserById = async (req, res) => {
   console.log("Entire req.user object:", req.user);
-  const userId = req.user.userId;
+  const {userId} = req.params;
   console.log("Received userId:", userId);
   if (!mongoose.Types.ObjectId.isValid(userId)) {
     console.log("Invalid user ID");

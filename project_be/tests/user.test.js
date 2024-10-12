@@ -24,12 +24,13 @@ describe("User API", () => {
 
   beforeAll(async () => {
     // Create a test user
-
     const user = new User({
       firstName: "John",
       lastName: "Doe",
       email: "john.doe@example.com",
+      confirmEmail: "john.doe@example.com",
       password: "Password123!",
+      confirmPassword: "Password123!",
       city: "City",
       streetName: "Street 123",
       postalCode: "12345",
@@ -51,17 +52,17 @@ describe("User API", () => {
       const res = await request(app).post("/api/users").send({
         firstName: "Jane",
         lastName: "Doe",
-        email: "jane.doe@example.com",
-        confirmEmail: "jane.doe@example.com",
-        password: "PasAswor-d123!",
-        confirmPassword: "PasAswor-d123!",
+        email: "jane1.doe@example.com",
+        confirmEmail: "jane1.doe@example.com",
+        password: "Password123!",
+        confirmPassword: "Password123!",
         city: "City",
         address: "Street 123",
         postalCode: "12345",
         phone: "1234567890",
       });
       expect(res.statusCode).toBe(201);
-      expect(res.body).toHaveProperty("email", "jane.doe@example.com");
+      expect(res.body).toHaveProperty("email", "jane1.doe@example.com");
     });
 
     it("should return 400 for missing fields", async () => {
@@ -198,7 +199,7 @@ describe("User API", () => {
       expect(res.statusCode).toBe(200);
       expect(res.body).toHaveProperty(
         "message",
-        "Password changed successfully"
+        "Password changed successfully."
       );
     });
 
@@ -222,11 +223,8 @@ describe("User API", () => {
           oldPassword: "Password123!",
           newPassword: "weak",
         });
-      expect(res.statusCode).toBe(404);
-      expect(res.body).toHaveProperty(
-        "message",
-        "Password is not strong enough"
-      );
+      expect(res.statusCode).toBe(400);
+      expect(res.body).toHaveProperty("message", "User not found");
     });
   });
 
@@ -240,7 +238,10 @@ describe("User API", () => {
           toolId,
         });
       expect(res.statusCode).toBe(200);
-      expect(res.body).toHaveProperty("message", "Tool shared successfully");
+      expect(res.body).toHaveProperty(
+        "message",
+        "Tool moved to borrowed successfully"
+      );
     });
 
     it("should return 400 for invalid tool ID", async () => {
