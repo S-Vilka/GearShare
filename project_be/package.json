@@ -6,7 +6,6 @@
     "start": "node API.js",
     "dev": "nodemon API.js",
     "test": "jest"
-
   },
   "keywords": [],
   "author": "",

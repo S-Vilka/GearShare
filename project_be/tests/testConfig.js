@@ -1,13 +1,29 @@
+require("dotenv").config();
 const mongoose = require("mongoose");
-const connectDB = require("../config/db");
+
+let testConnection;
 
 const connectTestDB = async () => {
-  await connectDB();
+  if (testConnection) {
+    return testConnection;
+  }
+
+  testConnection = await mongoose.createConnection(process.env.TEST_MONGO_URI, {
+    useNewUrlParser: true,
+    useUnifiedTopology: true,
+  });
+
+  console.log("Connected to test database");
+  return testConnection;
 };
 
 const closeTestDB = async () => {
-  await mongoose.connection.dropDatabase();
-  await mongoose.connection.close();
+  if (testConnection) {
+    await testConnection.dropDatabase();
+    await testConnection.close();
+    testConnection = null;
+  }
+  await mongoose.disconnect();
 };
 
 module.exports = { connectTestDB, closeTestDB };

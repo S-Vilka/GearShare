@@ -24,7 +24,7 @@ describe("User API", () => {
 
   beforeAll(async () => {
     // Create a test user
-    
+
     const user = new User({
       firstName: "John",
       lastName: "Doe",
@@ -48,41 +48,40 @@ describe("User API", () => {
 
   describe("POST /api/users", () => {
     it("should create a new user", async () => {
-      const res = await request(app)
-        .post("/api/users")
-        .send({
-          firstName: "Jane",
-          lastName: "Doe",
-          email: "jane.doe@example.com",
-          password: "Password123!",
-          city: "City",
-          streetName: "Street 123",
-          postalCode: "12345",
-          phone: "1234567890",
-        });
+      const res = await request(app).post("/api/users").send({
+        firstName: "Jane",
+        lastName: "Doe",
+        email: "jane.doe@example.com",
+        confirmEmail: "jane.doe@example.com",
+        password: "PasAswor-d123!",
+        confirmPassword: "PasAswor-d123!",
+        city: "City",
+        address: "Street 123",
+        postalCode: "12345",
+        phone: "1234567890",
+      });
       expect(res.statusCode).toBe(201);
       expect(res.body).toHaveProperty("email", "jane.doe@example.com");
     });
 
     it("should return 400 for missing fields", async () => {
-      const res = await request(app)
-        .post("/api/users")
-        .send({
-          firstName: "Jane",
-        });
+      const res = await request(app).post("/api/users").send({
+        firstName: "Jane",
+      });
       expect(res.statusCode).toBe(400);
-      expect(res.body).toHaveProperty("message", "Failed to create user");
+      expect(res.body).toHaveProperty(
+        "message",
+        "Email and confirmation email are required"
+      );
     });
   });
 
   describe("POST /api/users/login", () => {
     it("should login a user and return a token", async () => {
-      const res = await request(app)
-        .post("/api/users/login")
-        .send({
-          email: "john.doe@example.com",
-          password: "Password123!",
-        });
+      const res = await request(app).post("/api/users/login").send({
+        email: "jane.doe@example.com",
+        password: "PasAswor-d123!",
+      });
       expect(res.statusCode).toBe(200);
       expect(res.body).toHaveProperty("token");
       expect(res.body).toHaveProperty("userId");
@@ -90,12 +89,10 @@ describe("User API", () => {
     });
 
     it("should return 400 for invalid email or password", async () => {
-      const res = await request(app)
-        .post("/api/users/login")
-        .send({
-          email: "invalid@example.com",
-          password: "wrongpassword",
-        });
+      const res = await request(app).post("/api/users/login").send({
+        email: "invalid@example.com",
+        password: "wrongpassword",
+      });
       expect(res.statusCode).toBe(400);
       expect(res.body).toHaveProperty("message", "Invalid email or password");
     });
@@ -197,10 +194,12 @@ describe("User API", () => {
           oldPassword: "Password123!",
           newPassword: "NewPassword123!",
         });
-        
 
       expect(res.statusCode).toBe(200);
-      expect(res.body).toHaveProperty("message", "Password changed successfully");
+      expect(res.body).toHaveProperty(
+        "message",
+        "Password changed successfully"
+      );
     });
 
     it("should return 400 for incorrect old password", async () => {
@@ -224,7 +223,10 @@ describe("User API", () => {
           newPassword: "weak",
         });
       expect(res.statusCode).toBe(404);
-      expect(res.body).toHaveProperty("message", "Password is not strong enough");
+      expect(res.body).toHaveProperty(
+        "message",
+        "Password is not strong enough"
+      );
     });
   });
 

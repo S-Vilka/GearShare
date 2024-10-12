@@ -30,13 +30,19 @@ const createUser = async (req, res) => {
   } = req.body;
 
   try {
+    if (!email || !confirmEmail) {
+      return res
+        .status(400)
+        .json({ message: "Email and confirmation email are required" });
+    }
+
     const trimmedEmail = email.trim().toLowerCase();
     const trimmedConfirmEmail = confirmEmail.trim().toLowerCase();
 
-    // console.log("Received email:", trimmedEmail);
-    // console.log("Received confirmEmail:", trimmedConfirmEmail);
-    // console.log("Received password:", password);
-    // console.log("Received confirmPassword:", confirmPassword);
+    console.log("Received email:", trimmedEmail);
+    console.log("Received confirmEmail:", trimmedConfirmEmail);
+    console.log("Received password:", password);
+    console.log("Received confirmPassword:", confirmPassword);
 
     // Validate email format
     if (!validator.isEmail(trimmedEmail)) {
@@ -121,8 +127,6 @@ const loginUser = async (req, res) => {
   }
 };
 
-
-
 // GET /users/:userId
 const getUserById = async (req, res) => {
   console.log("Entire req.user object:", req.user);
@@ -165,7 +169,7 @@ const patchUser = async (req, res) => {
 
     const updatedUser = await User.findOneAndUpdate(
       { _id: userId },
-      updateData, 
+      updateData,
       { new: true, runValidators: true }
     );
 
@@ -190,7 +194,6 @@ const updateUserSharedTools = async (userId, toolId, action) => {
       : { $pull: { sharedTools: toolId } };
   await User.findByIdAndUpdate(userId, updateOperation);
 };
-
 
 // DELETE /users/:userId
 const deleteUser = async (req, res) => {
