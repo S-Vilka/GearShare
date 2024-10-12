@@ -100,7 +100,7 @@ const loginUser = async (req, res) => {
 
   try {
     // Check if the user exists
-    const user = await User.findOne({ email});
+    const user = await User.findOne({ email });
     if (!user) {
       console.log("User not found"); // Add this line
       return res.status(400).json({ message: "Invalid email or password" });
@@ -130,7 +130,7 @@ const loginUser = async (req, res) => {
 // GET /users/:userId
 const getUserById = async (req, res) => {
   console.log("Entire req.user object:", req.user);
-  const {userId} = req.params;
+  const { userId } = req.params;
   console.log("Received userId:", userId);
   if (!mongoose.Types.ObjectId.isValid(userId)) {
     console.log("Invalid user ID");
@@ -221,14 +221,13 @@ const shareTool = async (req, res) => {
 
   const { toolId } = req.body;
   const userId = req.user.userId;
-
-  console.log("Received toolId:", toolId);
-  console.log("User ID from token:", userId);
+  console.log("Received toolId:", req.body);
 
   if (!mongoose.Types.ObjectId.isValid(toolId)) {
     return res.status(400).json({ message: "Invalid tool ID format" });
   }
-
+  console.log("received toolId:", toolId);
+  console.log("User ID from token:", userId);
   try {
     const updatedUser = await User.findByIdAndUpdate(
       userId,
@@ -260,6 +259,7 @@ const shareTool = async (req, res) => {
 const changePassword = async (req, res) => {
   const { userId } = req.params;
   const { oldPassword, newPassword } = req.body;
+  console.log("Request received:", { userId, oldPassword, newPassword });
 
   // Validate the user ID
   if (!userId || userId === "null" || userId === "undefined") {

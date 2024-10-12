@@ -4,6 +4,7 @@ const jwt = require("jsonwebtoken");
 const app = require("../API"); // Adjust the path to your app file
 const { connectTestDB, closeTestDB } = require("./testConfig");
 const User = require("../models/userModel");
+const Tool = require("../models/toolsModel");
 require("dotenv").config();
 
 let server;
@@ -14,6 +15,7 @@ beforeAll(async () => {
 });
 
 afterAll(async () => {
+  await User.deleteMany({});
   await closeTestDB();
   server.close();
 });
@@ -21,16 +23,18 @@ afterAll(async () => {
 describe("User API", () => {
   let token;
   let userId;
+  let toolId;
 
   beforeAll(async () => {
     // Create a test user
     const user = new User({
-      firstName: "John",
+      _id: new mongoose.Types.ObjectId(),
+      firstName: "Jane",
       lastName: "Doe",
-      email: "john.doe@example.com",
-      confirmEmail: "john.doe@example.com",
-      password: "Password123!",
-      confirmPassword: "Password123!",
+      email: "jane.doe@example.com",
+      confirmEmail: "jane.doe@example.com",
+      password: "Pass.word1-23!",
+      confirmPassword: "Pass.word1-23!",
       city: "City",
       streetName: "Street 123",
       postalCode: "12345",
@@ -45,6 +49,22 @@ describe("User API", () => {
       process.env.JWT_SECRET, // Secret key from .env file
       { expiresIn: "1h" } // Token expiration (1 hour)
     );
+    const tool = new Tool({
+      name: "Hammer",
+      description: "A useful tool for construction",
+      details: "A hammer for various tasks",
+      available: true,
+      owner: userId,
+      imageUrl: null,
+    });
+    await tool.save();
+    toolId = tool._id.toString();
+
+    // Add the tool to the user's shared tools
+    user.sharedTools.push(toolId);
+    console.log("User", user);
+    console.log("Tool", tool);
+    await user.save();
   });
 
   describe("POST /api/users", () => {
@@ -54,8 +74,8 @@ describe("User API", () => {
         lastName: "Doe",
         email: "jane1.doe@example.com",
         confirmEmail: "jane1.doe@example.com",
-        password: "Password123!",
-        confirmPassword: "Password123!",
+        password: "Pass.word1-23!",
+        confirmPassword: "Pass.word1-23!",
         city: "City",
         address: "Street 123",
         postalCode: "12345",
@@ -80,8 +100,8 @@ describe("User API", () => {
   describe("POST /api/users/login", () => {
     it("should login a user and return a token", async () => {
       const res = await request(app).post("/api/users/login").send({
-        email: "jane.doe@example.com",
-        password: "PasAswor-d123!",
+        email: "jane1.doe@example.com",
+        password: "Pass.word1-23!",
       });
       expect(res.statusCode).toBe(200);
       expect(res.body).toHaveProperty("token");
@@ -101,6 +121,7 @@ describe("User API", () => {
 
   describe("GET /api/users/:userId", () => {
     it("should fetch a user by ID", async () => {
+      console.log("userId:", userId);
       const res = await request(app)
         .get(`/api/users/${userId}`)
         .set("Authorization", `Bearer ${token}`);
@@ -127,6 +148,7 @@ describe("User API", () => {
 
   describe("PATCH /api/users/:userId", () => {
     it("should update a user", async () => {
+      console.log("userId:", userId);
       const res = await request(app)
         .patch(`/api/users/${userId}`)
         .set("Authorization", `Bearer ${token}`)
@@ -192,8 +214,8 @@ describe("User API", () => {
         .patch(`/api/users/${userId}/change-password`)
         .set("Authorization", `Bearer ${token}`)
         .send({
-          oldPassword: "Password123!",
-          newPassword: "NewPassword123!",
+          oldPassword: "Pass.word1-23!",
+          newPassword: "Pass.word1-23!@d",
         });
 
       expect(res.statusCode).toBe(200);
@@ -207,6 +229,7 @@ describe("User API", () => {
       const res = await request(app)
         .patch(`/api/users/${userId}/change-password`)
         .set("Authorization", `Bearer ${token}`)
+        .set("Content-Type", "application/json")
         .send({
           oldPassword: "WrongPassword",
           newPassword: "NewPassword123!",
@@ -230,7 +253,6 @@ describe("User API", () => {
 
   describe("PATCH /api/users/:userId/tools", () => {
     it("should share a tool", async () => {
-      const toolId = new mongoose.Types.ObjectId();
       const res = await request(app)
         .patch(`/api/users/${userId}/tools`)
         .set("Authorization", `Bearer ${token}`)
@@ -256,7 +278,6 @@ describe("User API", () => {
     });
 
     it("should return 404 if user not found", async () => {
-      const toolId = new mongoose.Types.ObjectId();
       const res = await request(app)
         .patch(`/api/users/${new mongoose.Types.ObjectId()}/tools`)
         .set("Authorization", `Bearer ${token}`)

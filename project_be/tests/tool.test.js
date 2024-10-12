@@ -56,7 +56,7 @@ describe("Tool API", () => {
         firstName: "Test",
         lastName: "User",
         email: "testuser@example.com",
-        address: "123 Test St", // Make sure this line is present
+        streetName: "123 Test St", // Make sure this line is present
         city: "Test City",
         postalCode: "12345",
         phone: "555-5555",
@@ -112,6 +112,7 @@ describe("Tool API", () => {
         firstName: "Test",
         lastName: "User",
         email: "testuser@example.com",
+        confirmEmail: "testuser@example.com",
         streetName: "123 Test St",
         city: "Testville",
         postalCode: "12345",
