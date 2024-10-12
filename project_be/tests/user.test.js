@@ -54,8 +54,8 @@ describe("User API", () => {
         .send({
           firstName: "Jane",
           lastName: "Doe",
-          email: "jane.doe@example.com",
-          confirmEmail: "jane.doe@example.com",
+          email: "jane1.doe@example.com",
+          confirmEmail: "jane1.doe@example.com",
           password: "Password123!",
           confirmPassword: "Password123!",
           city: "City",
@@ -64,7 +64,7 @@ describe("User API", () => {
           phone: "1234567890",
         });
       expect(res.statusCode).toBe(201);
-      expect(res.body).toHaveProperty("email", "jane.doe@example.com");
+      expect(res.body).toHaveProperty("email", "jane1.doe@example.com");
     });
 
     it("should return 400 for missing fields", async () => {
