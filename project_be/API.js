@@ -15,6 +15,12 @@ const port = process.env.PORT || 4000;
 const fs = require("fs");
 const uploadDirTools = path.join(__dirname, "public", "toolsImages");
 const uploadDirProfile = path.join(__dirname, "public", "profileImages");
+// Swagger
+const swaggerUI = require("swagger-ui-express");
+const swaggerSpec = require("./swagger.json");
+
+// Swagger documentation
+app.use("/api-docs", swaggerUI.serve, swaggerUI.setup(swaggerSpec));
 
 // Check if the directory exists and has write permissions
 fs.access(uploadDirProfile, fs.constants.W_OK, (err) => {
