@@ -1,573 +1,575 @@
 {
-  "openapi": "3.0.0",
-  "info": {
-    "title": "GearShare API",
-    "version": "1.0.0",
-    "description": "API for managing users and tools in the GearShare application"
-  },
-  "servers": [
-    {
-      "url": "http://localhost:4000/api-docs"
-    }
-  ],
-  "paths": {
-    "/users": {
-      "get": {
-        "summary": "Get all users",
-        "security": [{ "bearerAuth": [] }],
-        "responses": {
-          "200": {
-            "description": "Successful response",
+    "openapi": "3.0.0",
+    "info": {
+      "title": "GearShare API",
+      "version": "1.0.0",
+      "description": "API for managing users and tools in the GearShare application"
+    },
+    "servers": [
+      {
+        "url": "http://localhost:4000/api-docs"
+      }
+    ],
+    "paths": {
+      "/users": {
+        "get": {
+          "summary": "Get all users",
+          "security": [{ "bearerAuth": [] }],
+          "responses": {
+            "200": {
+              "description": "Successful response",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "type": "array",
+                    "items": {
+                      "$ref": "#/components/schemas/User"
+                    }
+                  }
+                }
+              }
+            },
+            "401": {
+              "description": "Unauthorized"
+            }
+          }
+        },
+        "post": {
+          "summary": "Create a new user",
+          "requestBody": {
+            "required": true,
             "content": {
               "application/json": {
                 "schema": {
-                  "type": "array",
-                  "items": {
+                  "$ref": "#/components/schemas/NewUser"
+                }
+              }
+            }
+          },
+          "responses": {
+            "201": {
+              "description": "User created successfully",
+              "content": {
+                "application/json": {
+                  "schema": {
                     "$ref": "#/components/schemas/User"
                   }
                 }
               }
             }
-          },
-          "401": {
-            "description": "Unauthorized"
           }
         }
       },
-      "post": {
-        "summary": "Create a new user",
-        "requestBody": {
-          "required": true,
-          "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/NewUser"
-              }
-            }
-          }
-        },
-        "responses": {
-          "201": {
-            "description": "User created successfully",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/User"
-                }
-              }
-            }
-          }
-        }
-      }
-    },
-    "/users/login": {
-      "post": {
-        "summary": "User login",
-        "requestBody": {
-          "required": true,
-          "content": {
-            "application/json": {
-              "schema": {
-                "type": "object",
-                "properties": {
-                  "email": { "type": "string" },
-                  "password": { "type": "string" }
-                }
-              }
-            }
-          }
-        },
-        "responses": {
-          "200": {
-            "description": "Login successful",
+      "/users/login": {
+        "post": {
+          "summary": "User login",
+          "requestBody": {
+            "required": true,
             "content": {
               "application/json": {
                 "schema": {
                   "type": "object",
                   "properties": {
-                    "token": { "type": "string" },
-                    "userId": { "type": "string" }
+                    "email": { "type": "string" },
+                    "password": { "type": "string" }
                   }
                 }
               }
             }
-          }
-        }
-      }
-    },
-    "/users/{userId}": {
-      "get": {
-        "summary": "Get user by ID",
-        "security": [{ "bearerAuth": [] }],
-        "parameters": [
-          {
-            "in": "path",
-            "name": "userId",
-            "required": true,
-            "schema": {
-              "type": "string"
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "Successful response",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/User"
-                }
-              }
-            }
           },
-          "401": {
-            "description": "Unauthorized"
-          },
-          "404": {
-            "description": "User not found"
-          }
-        }
-      },
-      "patch": {
-        "summary": "Update user",
-        "security": [{ "bearerAuth": [] }],
-        "parameters": [
-          {
-            "in": "path",
-            "name": "userId",
-            "required": true,
-            "schema": {
-              "type": "string"
-            }
-          }
-        ],
-        "requestBody": {
-          "required": true,
-          "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/UpdateUser"
-              }
-            }
-          }
-        },
-        "responses": {
-          "200": {
-            "description": "User updated successfully",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/User"
-                }
-              }
-            }
-          },
-          "401": {
-            "description": "Unauthorized"
-          },
-          "404": {
-            "description": "User not found"
-          }
-        }
-      }
-    },
-    "/users/{userId}/tools": {
-      "patch": {
-        "summary": "Share a tool",
-        "security": [{ "bearerAuth": [] }],
-        "parameters": [
-          {
-            "in": "path",
-            "name": "userId",
-            "required": true,
-            "schema": {
-              "type": "string"
-            }
-          }
-        ],
-        "requestBody": {
-          "required": true,
-          "content": {
-            "application/json": {
-              "schema": {
-                "type": "object",
-                "properties": {
-                  "toolId": { "type": "string" }
-                }
-              }
-            }
-          }
-        },
-        "responses": {
-          "200": {
-            "description": "Tool shared successfully"
-          },
-          "401": {
-            "description": "Unauthorized"
-          }
-        }
-      }
-    },
-    "/users/{userId}/change-password": {
-      "patch": {
-        "summary": "Change user password",
-        "parameters": [
-          {
-            "in": "path",
-            "name": "userId",
-            "required": true,
-            "schema": {
-              "type": "string"
-            }
-          }
-        ],
-        "requestBody": {
-          "required": true,
-          "content": {
-            "application/json": {
-              "schema": {
-                "type": "object",
-                "properties": {
-                  "oldPassword": { "type": "string" },
-                  "newPassword": { "type": "string" }
-                }
-              }
-            }
-          }
-        },
-        "responses": {
-          "200": {
-            "description": "Password changed successfully"
-          },
-          "400": {
-            "description": "Invalid request"
-          }
-        }
-      }
-    },
-
-    "/tools": {
-      "get": {
-        "summary": "Get all tools",
-        "responses": {
-          "200": {
-            "description": "Successful response",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "array",
-                  "items": {
-                    "$ref": "#/components/schemas/Tool"
-                  }
-                }
-              }
-            }
-          }
-        }
-      },
-      "post": {
-        "summary": "Create a new tool",
-        "security": [{ "bearerAuth": [] }],
-        "requestBody": {
-          "required": true,
-          "content": {
-            "multipart/form-data": {
-              "schema": {
-                "$ref": "#/components/schemas/NewTool"
-              }
-            }
-          }
-        },
-        "responses": {
-          "201": {
-            "description": "Tool created successfully",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/Tool"
-                }
-              }
-            }
-          },
-          "401": {
-            "description": "Unauthorized"
-          }
-        }
-      }
-    },
-    "/tools/{toolId}": {
-      "get": {
-        "summary": "Get tool by ID",
-        "parameters": [
-          {
-            "in": "path",
-            "name": "toolId",
-            "required": true,
-            "schema": {
-              "type": "string"
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "Successful response",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/Tool"
-                }
-              }
-            }
-          },
-          "404": {
-            "description": "Tool not found"
-          }
-        }
-      },
-      "patch": {
-        "summary": "Update tool",
-        "security": [{ "bearerAuth": [] }],
-        "parameters": [
-          {
-            "in": "path",
-            "name": "toolId",
-            "required": true,
-            "schema": {
-              "type": "string"
-            }
-          }
-        ],
-        "requestBody": {
-          "required": true,
-          "content": {
-            "multipart/form-data": {
-              "schema": {
-                "$ref": "#/components/schemas/UpdateTool"
-              }
-            }
-          }
-        },
-        "responses": {
-          "200": {
-            "description": "Tool updated successfully",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/Tool"
-                }
-              }
-            }
-          },
-          "401": {
-            "description": "Unauthorized"
-          },
-          "404": {
-            "description": "Tool not found"
-          }
-        }
-      },
-      "delete": {
-        "summary": "Delete tool",
-        "security": [{ "bearerAuth": [] }],
-        "parameters": [
-          {
-            "in": "path",
-            "name": "toolId",
-            "required": true,
-            "schema": {
-              "type": "string"
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "Tool deleted successfully"
-          },
-          "401": {
-            "description": "Unauthorized"
-          },
-          "404": {
-            "description": "Tool not found"
-          }
-        }
-      }
-    }
-  },
-  "components": {
-    "securitySchemes": {
-      "bearerAuth": {
-        "type": "http",
-        "scheme": "bearer",
-        "bearerFormat": "JWT"
-      }
-    },
-    "schemas": {
-      "User": {
-        "type": "object",
-        "properties": {
-          "_id": { "type": "string" },
-          "firstName": { "type": "string" },
-          "lastName": { "type": "string" },
-          "email": { "type": "string" },
-          "streetName": { "type": "string" },
-          "city": { "type": "string" },
-          "postalCode": { "type": "string" },
-          "phone": { "type": "string" },
-          "imageUrl": { "type": "string" },
-          "sharedTools": {
-            "type": "array",
-            "items": { "type": "string" }
-          }
-        }
-      },
-      "NewUser": {
-        "type": "object",
-        "required": [
-          "firstName",
-          "lastName",
-          "email",
-          "password",
-          "streetName",
-          "city",
-          "postalCode",
-          "phone"
-        ],
-        "properties": {
-          "firstName": { "type": "string" },
-          "lastName": { "type": "string" },
-          "email": { "type": "string" },
-          "password": { "type": "string" },
-          "streetName": { "type": "string" },
-          "city": { "type": "string" },
-          "postalCode": { "type": "string" },
-          "phone": { "type": "string" }
-        }
-      },
-      "UpdateUser": {
-        "type": "object",
-        "properties": {
-          "firstName": { "type": "string" },
-          "lastName": { "type": "string" },
-          "streetName": { "type": "string" },
-          "city": { "type": "string" },
-          "postalCode": { "type": "string" },
-          "phone": { "type": "string" },
-          "image": { "type": "string", "format": "binary" }
-        }
-      },
-      "Tool": {
-        "type": "object",
-        "properties": {
-          "_id": { "type": "string" },
-          "name": { "type": "string" },
-          "description": { "type": "string" },
-          "details": { "type": "string" },
-          "available": { "type": "boolean" },
-          "owner": { "type": "string" },
-          "imageUrl": { "type": "string" }
-        }
-      },
-      "NewTool": {
-        "type": "object",
-        "required": ["name", "description", "details", "available", "owner"],
-        "properties": {
-          "name": { "type": "string" },
-          "description": { "type": "string" },
-          "details": { "type": "string" },
-          "available": { "type": "boolean" },
-          "owner": { "type": "string" },
-          "image": { "type": "string", "format": "binary" }
-        }
-      },
-      "UpdateTool": {
-        "type": "object",
-        "properties": {
-          "name": { "type": "string" },
-          "description": { "type": "string" },
-          "details": { "type": "string" },
-          "available": { "type": "boolean" },
-          "image": { "type": "string", "format": "binary" }
-        }
-      }
-    },
-    "/tools/user-tools": {
-      "get": {
-        "summary": "Get user tools",
-        "security": [{ "bearerAuth": [] }],
-        "parameters": [
-          {
-            "in": "query",
-            "name": "userId",
-            "required": true,
-            "schema": {
-              "type": "string"
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "Successful response",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object",
-                  "properties": {
-                    "availableTools": {
-                      "type": "array",
-                      "items": {
-                        "$ref": "#/components/schemas/Tool"
-                      }
-                    },
-                    "borrowedTools": {
-                      "type": "array",
-                      "items": {
-                        "$ref": "#/components/schemas/Tool"
-                      }
+          "responses": {
+            "200": {
+              "description": "Login successful",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "type": "object",
+                    "properties": {
+                      "token": { "type": "string" },
+                      "userId": { "type": "string" }
                     }
                   }
                 }
               }
             }
-          },
-          "401": {
-            "description": "Unauthorized"
           }
         }
-      }
-    },
-    "/tools/{toolId}/availability": {
-      "patch": {
-        "summary": "Update tool availability",
-        "security": [{ "bearerAuth": [] }],
-        "parameters": [
-          {
-            "in": "path",
-            "name": "toolId",
-            "required": true,
-            "schema": {
-              "type": "string"
+      },
+      "/users/{userId}": {
+        "get": {
+          "summary": "Get user by ID",
+          "security": [{ "bearerAuth": [] }],
+          "parameters": [
+            {
+              "in": "path",
+              "name": "userId",
+              "required": true,
+              "schema": {
+                "type": "string"
+              }
+            }
+          ],
+          "responses": {
+            "200": {
+              "description": "Successful response",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "$ref": "#/components/schemas/User"
+                  }
+                }
+              }
+            },
+            "401": {
+              "description": "Unauthorized"
+            },
+            "404": {
+              "description": "User not found"
             }
           }
-        ],
-        "responses": {
-          "200": {
-            "description": "Tool availability updated successfully",
+        },
+        "patch": {
+          "summary": "Update user",
+          "security": [{ "bearerAuth": [] }],
+          "parameters": [
+            {
+              "in": "path",
+              "name": "userId",
+              "required": true,
+              "schema": {
+                "type": "string"
+              }
+            }
+          ],
+          "requestBody": {
+            "required": true,
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/Tool"
+                  "$ref": "#/components/schemas/UpdateUser"
                 }
               }
             }
           },
-          "401": {
-            "description": "Unauthorized"
+          "responses": {
+            "200": {
+              "description": "User updated successfully",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "$ref": "#/components/schemas/User"
+                  }
+                }
+              }
+            },
+            "401": {
+              "description": "Unauthorized"
+            },
+            "404": {
+              "description": "User not found"
+            }
+          }
+        }
+      },
+      "/users/{userId}/tools": {
+        "patch": {
+          "summary": "Share a tool",
+          "security": [{ "bearerAuth": [] }],
+          "parameters": [
+            {
+              "in": "path",
+              "name": "userId",
+              "required": true,
+              "schema": {
+                "type": "string"
+              }
+            }
+          ],
+          "requestBody": {
+            "required": true,
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "toolId": { "type": "string" }
+                  }
+                }
+              }
+            }
           },
-          "404": {
-            "description": "Tool not found"
+          "responses": {
+            "200": {
+              "description": "Tool shared successfully"
+            },
+            "401": {
+              "description": "Unauthorized"
+            }
+          }
+        }
+      },
+      "/users/{userId}/change-password": {
+        "patch": {
+          "summary": "Change user password",
+          "parameters": [
+            {
+              "in": "path",
+              "name": "userId",
+              "required": true,
+              "schema": {
+                "type": "string"
+              }
+            }
+          ],
+          "requestBody": {
+            "required": true,
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "oldPassword": { "type": "string" },
+                    "newPassword": { "type": "string" }
+                  }
+                }
+              }
+            }
+          },
+          "responses": {
+            "200": {
+              "description": "Password changed successfully"
+            },
+            "400": {
+              "description": "Invalid request"
+            }
+          }
+        }
+      },
+  
+      "/tools": {
+        "get": {
+          "summary": "Get all tools",
+          "responses": {
+            "200": {
+              "description": "Successful response",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "type": "array",
+                    "items": {
+                      "$ref": "#/components/schemas/Tool"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "post": {
+          "summary": "Create a new tool",
+          "security": [{ "bearerAuth": [] }],
+          "requestBody": {
+            "required": true,
+            "content": {
+              "multipart/form-data": {
+                "schema": {
+                  "$ref": "#/components/schemas/NewTool"
+                }
+              }
+            }
+          },
+          "responses": {
+            "201": {
+              "description": "Tool created successfully",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "$ref": "#/components/schemas/Tool"
+                  }
+                }
+              }
+            },
+            "401": {
+              "description": "Unauthorized"
+            }
+          }
+        }
+      },
+      "/tools/{toolId}": {
+        "get": {
+          "summary": "Get tool by ID",
+          "parameters": [
+            {
+              "in": "path",
+              "name": "toolId",
+              "required": true,
+              "schema": {
+                "type": "string"
+              }
+            }
+          ],
+          "responses": {
+            "200": {
+              "description": "Successful response",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "$ref": "#/components/schemas/Tool"
+                  }
+                }
+              }
+            },
+            "404": {
+              "description": "Tool not found"
+            }
+          }
+        },
+        "patch": {
+          "summary": "Update tool",
+          "security": [{ "bearerAuth": [] }],
+          "parameters": [
+            {
+              "in": "path",
+              "name": "toolId",
+              "required": true,
+              "schema": {
+                "type": "string"
+              }
+            }
+          ],
+          "requestBody": {
+            "required": true,
+            "content": {
+              "multipart/form-data": {
+                "schema": {
+                  "$ref": "#/components/schemas/UpdateTool"
+                }
+              }
+            }
+          },
+          "responses": {
+            "200": {
+              "description": "Tool updated successfully",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "$ref": "#/components/schemas/Tool"
+                  }
+                }
+              }
+            },
+            "401": {
+              "description": "Unauthorized"
+            },
+            "404": {
+              "description": "Tool not found"
+            }
+          }
+        },
+        "delete": {
+          "summary": "Delete tool",
+          "security": [{ "bearerAuth": [] }],
+          "parameters": [
+            {
+              "in": "path",
+              "name": "toolId",
+              "required": true,
+              "schema": {
+                "type": "string"
+              }
+            }
+          ],
+          "responses": {
+            "200": {
+              "description": "Tool deleted successfully"
+            },
+            "401": {
+              "description": "Unauthorized"
+            },
+            "404": {
+              "description": "Tool not found"
+            }
+          }
+        }
+      }
+    },
+    "components": {
+      "securitySchemes": {
+        "bearerAuth": {
+          "type": "http",
+          "scheme": "bearer",
+          "bearerFormat": "JWT"
+        }
+      },
+      "schemas": {
+        "User": {
+          "type": "object",
+          "properties": {
+            "_id": { "type": "string" },
+            "firstName": { "type": "string" },
+            "lastName": { "type": "string" },
+            "email": { "type": "string" },
+            "streetName": { "type": "string" },
+            "city": { "type": "string" },
+            "postalCode": { "type": "string" },
+            "phone": { "type": "string" },
+            "imageUrl": { "type": "string" },
+            "sharedTools": {
+              "type": "array",
+              "items": { "type": "string" }
+            }
+          }
+        },
+        "NewUser": {
+          "type": "object",
+          "required": [
+            "firstName",
+            "lastName",
+            "email",
+            "password",
+            "streetName",
+            "city",
+            "postalCode",
+            "phone"
+          ],
+          "properties": {
+            "firstName": { "type": "string" },
+            "lastName": { "type": "string" },
+            "email": { "type": "string" },
+            "password": { "type": "string" },
+            "streetName": { "type": "string" },
+            "city": { "type": "string" },
+            "postalCode": { "type": "string" },
+            "phone": { "type": "string" }
+          }
+        },
+        "UpdateUser": {
+          "type": "object",
+          "properties": {
+            "firstName": { "type": "string" },
+            "lastName": { "type": "string" },
+            "streetName": { "type": "string" },
+            "city": { "type": "string" },
+            "postalCode": { "type": "string" },
+            "phone": { "type": "string" },
+            "image": { "type": "string", "format": "binary" }
+          }
+        },
+        "Tool": {
+          "type": "object",
+          "properties": {
+            "_id": { "type": "string" },
+            "name": { "type": "string" },
+            "description": { "type": "string" },
+            "details": { "type": "string" },
+            "available": { "type": "boolean" },
+            "owner": { "type": "string" },
+            "imageUrl": { "type": "string" }
+          }
+        },
+        "NewTool": {
+          "type": "object",
+          "required": ["name", "description", "details", "available", "owner"],
+          "properties": {
+            "name": { "type": "string" },
+            "description": { "type": "string" },
+            "details": { "type": "string" },
+            "available": { "type": "boolean" },
+            "owner": { "type": "string" },
+            "image": { "type": "string", "format": "binary" }
+          }
+        },
+        "UpdateTool": {
+          "type": "object",
+          "properties": {
+            "name": { "type": "string" },
+            "description": { "type": "string" },
+            "details": { "type": "string" },
+            "available": { "type": "boolean" },
+            "image": { "type": "string", "format": "binary" }
+          }
+        }
+      },
+      "/tools/user-tools": {
+        "get": {
+          "summary": "Get user tools",
+          "security": [{ "bearerAuth": [] }],
+          "parameters": [
+            {
+              "in": "query",
+              "name": "userId",
+              "required": true,
+              "schema": {
+                "type": "string"
+              }
+            }
+          ],
+          "responses": {
+            "200": {
+              "description": "Successful response",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "type": "object",
+                    "properties": {
+                      "availableTools": {
+                        "type": "array",
+                        "items": {
+                          "$ref": "#/components/schemas/Tool"
+                        }
+                      },
+                      "borrowedTools": {
+                        "type": "array",
+                        "items": {
+                          "$ref": "#/components/schemas/Tool"
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            },
+            "401": {
+              "description": "Unauthorized"
+            }
+          }
+        }
+      },
+      "/tools/{toolId}/availability": {
+        "patch": {
+          "summary": "Update tool availability",
+          "security": [{ "bearerAuth": [] }],
+          "parameters": [
+            {
+              "in": "path",
+              "name": "toolId",
+              "required": true,
+              "schema": {
+                "type": "string"
+              }
+            }
+          ],
+          "responses": {
+            "200": {
+              "description": "Tool availability updated successfully",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "$ref": "#/components/schemas/Tool"
+                  }
+                }
+              }
+            },
+            "401": {
+              "description": "Unauthorized"
+            },
+            "404": {
+              "description": "Tool not found"
+            }
           }
         }
       }
     }
   }
 }
+

@@ -30,13 +30,19 @@ const createUser = async (req, res) => {
   } = req.body;
 
   try {
+    if (!email || !confirmEmail) {
+      return res
+        .status(400)
+        .json({ message: "Email and confirmation email are required" });
+    }
+
     const trimmedEmail = email.trim().toLowerCase();
     const trimmedConfirmEmail = confirmEmail.trim().toLowerCase();
 
-    // console.log("Received email:", trimmedEmail);
-    // console.log("Received confirmEmail:", trimmedConfirmEmail);
-    // console.log("Received password:", password);
-    // console.log("Received confirmPassword:", confirmPassword);
+    console.log("Received email:", trimmedEmail);
+    console.log("Received confirmEmail:", trimmedConfirmEmail);
+    console.log("Received password:", password);
+    console.log("Received confirmPassword:", confirmPassword);
 
     // Validate email format
     if (!validator.isEmail(trimmedEmail)) {
@@ -121,12 +127,10 @@ const loginUser = async (req, res) => {
   }
 };
 
-
-
 // GET /users/:userId
 const getUserById = async (req, res) => {
   console.log("Entire req.user object:", req.user);
-  const userId = req.user.userId;
+  const { userId } = req.params;
   console.log("Received userId:", userId);
   if (!mongoose.Types.ObjectId.isValid(userId)) {
     console.log("Invalid user ID");
@@ -165,7 +169,7 @@ const patchUser = async (req, res) => {
 
     const updatedUser = await User.findOneAndUpdate(
       { _id: userId },
-      updateData, 
+      updateData,
       { new: true, runValidators: true }
     );
 
@@ -191,7 +195,6 @@ const updateUserSharedTools = async (userId, toolId, action) => {
   await User.findByIdAndUpdate(userId, updateOperation);
 };
 
-
 // DELETE /users/:userId
 const deleteUser = async (req, res) => {
   const { userId } = req.params;
@@ -214,15 +217,15 @@ const deleteUser = async (req, res) => {
 };
 
 const shareTool = async (req, res) => {
-  console.log("Received request to share tool");
-
   const { toolId } = req.body;
-  const userId = req.user.userId;
+  const { userId } = req.params;
+  console.log("Received USERId:", userId);
+  console.log("Received TOOLId:", toolId);
 
-  console.log("Received toolId:", toolId);
-  console.log("User ID from token:", userId);
-
-  if (!mongoose.Types.ObjectId.isValid(toolId)) {
+  if (
+    !mongoose.Types.ObjectId.isValid(userId) ||
+    !mongoose.Types.ObjectId.isValid(toolId)
+  ) {
     return res.status(400).json({ message: "Invalid tool ID format" });
   }
 
@@ -240,8 +243,6 @@ const shareTool = async (req, res) => {
       return res.status(404).json({ message: "User not found" });
     }
 
-    console.log("Updated user:", updatedUser);
-
     res.status(200).json({
       message: "Tool moved to borrowed successfully",
       user: updatedUser,
@@ -257,6 +258,7 @@ const shareTool = async (req, res) => {
 const changePassword = async (req, res) => {
   const { userId } = req.params;
   const { oldPassword, newPassword } = req.body;
+  console.log("Request received:", { userId, oldPassword, newPassword });
 
   // Validate the user ID
   if (!userId || userId === "null" || userId === "undefined") {
@@ -266,14 +268,17 @@ const changePassword = async (req, res) => {
   try {
     // Find the user by ID
     const user = await User.findById(userId);
+    console.log("User found:", user);
     if (!user) {
-      return res.status(404).json({ message: "User not found" });
+      return res.status(400).json({ message: "User not found" });
     }
 
     // Check if the old password matches
     const match = await bcrypt.compare(oldPassword, user.password);
+    console.log("Password match:", match);
     if (!match) {
-      return res.status(400).json({ message: "Old password is incorrect." });
+      return res.status(400).json({ message: "Incorrect old password" });
+      console.log("Incorrect old password");
     }
 
     // Hash the new password
