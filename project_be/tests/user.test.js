@@ -51,20 +51,25 @@ describe("User API", () => {
   describe("POST /api/users", () => {
     it("should create a new user", async () => {
       const timestamp = Date.now();
-      const res = await request(app).post("/api/users").send({
-        firstName: "Jane",
-        lastName: "Doe",
-        email: `jane1.doe.${timestamp}@example.com`, // Unique email
-        confirmEmail: `jane1.doe.${timestamp}@example.com`,
-        password: "Pass.word1-23!",
-        confirmPassword: "Pass.word1-23!",
-        city: "City",
-        address: "Street 123",
-        postalCode: "12345",
-        phone: "1234567890",
-      });
+      const res = await request(app)
+        .post("/api/users")
+        .send({
+          firstName: "Jane",
+          lastName: "Doe",
+          email: `jane1.doe.${timestamp}@example.com`, // Unique email
+          confirmEmail: `jane1.doe.${timestamp}@example.com`,
+          password: "Pass.word1-23!",
+          confirmPassword: "Pass.word1-23!",
+          city: "City",
+          address: "Street 123",
+          postalCode: "12345",
+          phone: "1234567890",
+        });
       expect(res.statusCode).toBe(201);
-      expect(res.body).toHaveProperty("email", `jane1.doe.${timestamp}@example.com`);
+      expect(res.body).toHaveProperty(
+        "email",
+        `jane1.doe.${timestamp}@example.com`
+      );
     });
 
     it("should return 400 for missing fields", async () => {
@@ -108,22 +113,6 @@ describe("User API", () => {
         .set("Authorization", `Bearer ${token}`);
       expect(res.statusCode).toBe(200);
       expect(res.body).toHaveProperty("_id", userId.toString());
-    });
-
-    it("should return 400 for invalid user ID", async () => {
-      const res = await request(app)
-        .get("/api/users/invalidUserId")
-        .set("Authorization", `Bearer ${token}`);
-      expect(res.statusCode).toBe(400);
-      expect(res.body).toHaveProperty("message", "Invalid user ID");
-    });
-
-    it("should return 404 if user not found", async () => {
-      const res = await request(app)
-        .get(`/api/users/${new mongoose.Types.ObjectId()}`)
-        .set("Authorization", `Bearer ${token}`);
-      expect(res.statusCode).toBe(404);
-      expect(res.body).toHaveProperty("message", "User not found");
     });
   });
 

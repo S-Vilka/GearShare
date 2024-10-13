@@ -130,7 +130,7 @@ const loginUser = async (req, res) => {
 // GET /users/:userId
 const getUserById = async (req, res) => {
   console.log("Entire req.user object:", req.user);
-  const { userId } = req.params;
+  const userId = req.user.userId;
   console.log("Received userId:", userId);
   if (!mongoose.Types.ObjectId.isValid(userId)) {
     console.log("Invalid user ID");
