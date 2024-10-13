@@ -12,6 +12,7 @@ const {
   patchUser,
   deleteUser,
   changePassword,
+  shareTool,
 } = require("../controllers/userController");
 
 // GET /users
@@ -36,6 +37,9 @@ router.patch(
 
 // DELETE /users/:userId
 router.delete("/:userId", authMiddleware, deleteUser);
+
+// Share tool// PATCH /tools/share-tool
+router.patch("/:userID/tools", authMiddleware, shareTool);
 
 // POST /users/:userId/check-password
 router.patch("/:userId/change-password", changePassword);
