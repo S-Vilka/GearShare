@@ -217,17 +217,18 @@ const deleteUser = async (req, res) => {
 };
 
 const shareTool = async (req, res) => {
-  console.log("Received request to share tool");
-
   const { toolId } = req.body;
-  const userId = req.user.userId;
-  console.log("Received toolId:", req.body);
+  const { userId } = req.params;
+  console.log("Received USERId:", userId);
+  console.log("Received TOOLId:", toolId);
 
-  if (!mongoose.Types.ObjectId.isValid(toolId)) {
+  if (
+    !mongoose.Types.ObjectId.isValid(userId) ||
+    !mongoose.Types.ObjectId.isValid(toolId)
+  ) {
     return res.status(400).json({ message: "Invalid tool ID format" });
   }
-  console.log("received toolId:", toolId);
-  console.log("User ID from token:", userId);
+
   try {
     const updatedUser = await User.findByIdAndUpdate(
       userId,
@@ -241,8 +242,6 @@ const shareTool = async (req, res) => {
     if (!updatedUser) {
       return res.status(404).json({ message: "User not found" });
     }
-
-    console.log("Updated user:", updatedUser);
 
     res.status(200).json({
       message: "Tool moved to borrowed successfully",
@@ -269,14 +268,17 @@ const changePassword = async (req, res) => {
   try {
     // Find the user by ID
     const user = await User.findById(userId);
+    console.log("User found:", user);
     if (!user) {
       return res.status(400).json({ message: "User not found" });
     }
 
     // Check if the old password matches
     const match = await bcrypt.compare(oldPassword, user.password);
+    console.log("Password match:", match);
     if (!match) {
       return res.status(400).json({ message: "Incorrect old password" });
+      console.log("Incorrect old password");
     }
 
     // Hash the new password

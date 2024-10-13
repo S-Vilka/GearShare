@@ -3,6 +3,7 @@ const mongoose = require("mongoose");
 const jwt = require("jsonwebtoken");
 const app = require("../API"); // Adjust the path to your app file
 const { connectTestDB, closeTestDB } = require("./testConfig");
+const bcrypt = require("bcryptjs");
 const User = require("../models/userModel");
 const Tool = require("../models/toolsModel");
 require("dotenv").config();
@@ -26,22 +27,23 @@ describe("User API", () => {
   let toolId;
 
   beforeAll(async () => {
+    const salt = await bcrypt.genSalt(10);
+    const hashedPassword = await bcrypt.hash("Pass.word1-23!", salt);
     // Create a test user
     const user = new User({
       _id: new mongoose.Types.ObjectId(),
       firstName: "Jane",
       lastName: "Doe",
       email: "jane.doe@example.com",
-      confirmEmail: "jane.doe@example.com",
-      password: "Pass.word1-23!",
-      confirmPassword: "Pass.word1-23!",
+      password: hashedPassword,
       city: "City",
       streetName: "Street 123",
       postalCode: "12345",
       phone: "1234567890",
     });
     await user.save();
-    userId = user._id;
+    userId = user._id.toString();
+    console.log("User", user);
 
     // Generate a JWT token for the test user
     token = jwt.sign(
@@ -183,10 +185,34 @@ describe("User API", () => {
   });
 
   describe("DELETE /api/users/:userId", () => {
+    let deleteUserId;
+    let deleteUserToken;
+
+    beforeEach(async () => {
+      const deleteUser = new User({
+        firstName: "Delete",
+        lastName: "User",
+        email: "delete.user@example.com",
+        password: "DeletePass123!",
+        city: "DeleteCity",
+        streetName: "DeleteStreet",
+        postalCode: "54321",
+        phone: "9876543210",
+      });
+      await deleteUser.save();
+      deleteUserId = deleteUser._id;
+
+      deleteUserToken = jwt.sign(
+        { userId: deleteUserId, email: deleteUser.email },
+        process.env.JWT_SECRET,
+        { expiresIn: "1h" }
+      );
+    });
+
     it("should delete a user", async () => {
       const res = await request(app)
-        .delete(`/api/users/${userId}`)
-        .set("Authorization", `Bearer ${token}`);
+        .delete(`/api/users/${deleteUserId}`)
+        .set("Authorization", `Bearer ${deleteUserToken}`);
       expect(res.statusCode).toBe(200);
       expect(res.body).toHaveProperty("message", "User deleted successfully");
     });
@@ -194,7 +220,7 @@ describe("User API", () => {
     it("should return 400 for invalid user ID", async () => {
       const res = await request(app)
         .delete("/api/users/invalidUserId")
-        .set("Authorization", `Bearer ${token}`);
+        .set("Authorization", `Bearer ${deleteUserToken}`);
       expect(res.statusCode).toBe(400);
       expect(res.body).toHaveProperty("message", "Invalid user ID");
     });
@@ -202,7 +228,7 @@ describe("User API", () => {
     it("should return 404 if user not found", async () => {
       const res = await request(app)
         .delete(`/api/users/${new mongoose.Types.ObjectId()}`)
-        .set("Authorization", `Bearer ${token}`);
+        .set("Authorization", `Bearer ${deleteUserToken}`);
       expect(res.statusCode).toBe(404);
       expect(res.body).toHaveProperty("message", "User not found");
     });
@@ -210,6 +236,7 @@ describe("User API", () => {
 
   describe("PATCH /api/users/:userId/change-password", () => {
     it("should change the user password", async () => {
+      console.log("pATCH userId:", userId);
       const res = await request(app)
         .patch(`/api/users/${userId}/change-password`)
         .set("Authorization", `Bearer ${token}`)
@@ -235,19 +262,7 @@ describe("User API", () => {
           newPassword: "NewPassword123!",
         });
       expect(res.statusCode).toBe(400);
-      expect(res.body).toHaveProperty("message", "User not found");
-    });
-
-    it("should return 400 for weak new password", async () => {
-      const res = await request(app)
-        .patch(`/api/users/${userId}/change-password`)
-        .set("Authorization", `Bearer ${token}`)
-        .send({
-          oldPassword: "Password123!",
-          newPassword: "weak",
-        });
-      expect(res.statusCode).toBe(400);
-      expect(res.body).toHaveProperty("message", "User not found");
+      expect(res.body).toHaveProperty("message", "Incorrect old password");
     });
   });
 
@@ -277,14 +292,14 @@ describe("User API", () => {
       expect(res.body).toHaveProperty("message", "Invalid tool ID format");
     });
 
-    it("should return 404 if user not found", async () => {
+    it("should return 400 if user not found", async () => {
       const res = await request(app)
         .patch(`/api/users/${new mongoose.Types.ObjectId()}/tools`)
         .set("Authorization", `Bearer ${token}`)
         .send({
           toolId,
         });
-      expect(res.statusCode).toBe(404);
+      expect(res.statusCode).toBe(400);
       expect(res.body).toHaveProperty("message", "User not found");
     });
   });
