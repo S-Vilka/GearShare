@@ -5,7 +5,7 @@ import defaultProfilePic from "./PP.jpg";
 
 function UserProfile({ userData }) {
   const token = localStorage.getItem("token");
-  
+
   // Redirect to home if the user is not authenticated
   if (!token) {
     window.location.href = "/";
@@ -21,7 +21,8 @@ function UserProfile({ userData }) {
         <Image
           variant="top"
           src={
-            `http://localhost:4000/public/${userData.imageUrl}` || defaultProfilePic
+            `https://group-5-project-1.onrender.com/public/${userData.imageUrl}` ||
+            defaultProfilePic
           }
           className="profileImage mb-3"
         />

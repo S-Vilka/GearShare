@@ -9,11 +9,9 @@ const toolsSchema = new Schema(
     details: { type: String, required: true },
     available: { type: Boolean, required: true },
     owner: { type: Schema.Types.ObjectId, ref: "User", required: true },
-    // borrower: { type: Schema.Types.ObjectId, ref: "User" },
-    imageUrl: { type: String, required: true },
-    // status: { type: String, enum: ["shared", "borrowed"], default: "shared" }, // New field
+    imageUrl: { type: String, required: false },
   },
-  { timestamps: true },
-  { collection: "tools" }
+  { timestamps: true }
 );
+
 module.exports = mongoose.model("Tools", toolsSchema);

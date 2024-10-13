@@ -20,7 +20,7 @@ function Description() {
       try {
         // Fetch user data to check if they have shared tools
         const userResponse = await fetch(
-          `http://localhost:4000/api/users/${userId}`,
+          `https://group-5-project-1.onrender.com/api/users/${userId}`,
           {
             headers: {
               Authorization: `Bearer ${token}`,
@@ -43,7 +43,7 @@ function Description() {
 
         // Fetch tool data using tool ID
         const toolResponse = await fetch(
-          `http://localhost:4000/api/tools/${id}?includeOwner=true`
+          `https://group-5-project-1.onrender.com/api/tools/${id}?includeOwner=true`
         );
         if (!toolResponse.ok) {
           throw new Error("Tool not found");
@@ -93,7 +93,7 @@ function Description() {
           <p>{tool.description}</p>
           <div className="image-placeholder">
             <img
-              src={`http://localhost:4000/public/${tool.imageUrl}`}
+              src={`https://group-5-project-1.onrender.com/public/${tool.imageUrl}`}
               alt={tool.name}
             />
           </div>

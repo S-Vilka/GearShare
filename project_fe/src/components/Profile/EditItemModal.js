@@ -20,13 +20,13 @@ function EditItemModal({ show, onHide, tool, onToolUpdated }) {
   // Handle form submission
   const handleSubmit = async (e) => {
     e.preventDefault();
-    
+
     // Prepare form data to send to the backend
     const formData = new FormData();
     formData.append("name", itemName);
     formData.append("description", description);
     formData.append("details", details);
-    
+
     // Append image if a new one is selected
     if (image) {
       formData.append("image", image);
@@ -44,7 +44,7 @@ function EditItemModal({ show, onHide, tool, onToolUpdated }) {
   const updateTool = async (toolId, formData) => {
     try {
       const response = await fetch(
-        `http://localhost:4000/api/tools/${toolId}`,
+        `https://group-5-project-1.onrender.com/api/tools/${toolId}`,
         {
           method: "PATCH",
           body: formData, // Send form data in the request body

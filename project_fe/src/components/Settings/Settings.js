@@ -26,11 +26,14 @@ const Settings = () => {
   useEffect(() => {
     const fetchUserData = async () => {
       try {
-        const response = await fetch(`/api/users/${userId}`, {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        });
+        const response = await fetch(
+          `https://group-5-project-1.onrender.com/api/users/${userId}`,
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          }
+        );
 
         if (!response.ok) {
           throw new Error(`Error fetching user data: ${response.statusText}`);
@@ -64,13 +67,16 @@ const Settings = () => {
     }
 
     try {
-      const response = await fetch(`/api/users/${userData._id}`, {
-        method: "PATCH",
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-        body: formData,
-      });
+      const response = await fetch(
+        `https://group-5-project-1.onrender.com/api/users/${userData._id}`,
+        {
+          method: "PATCH",
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+          body: formData,
+        }
+      );
 
       if (response.ok) {
         const updatedUser = await response.json();
@@ -115,7 +121,7 @@ const Settings = () => {
 
     try {
       const response = await fetch(
-        `/api/users/${userData._id}/change-password`,
+        `https://group-5-project-1.onrender.com/api/users/${userData._id}/change-password`,
         {
           method: "PATCH",
           headers: {
@@ -154,7 +160,7 @@ const Settings = () => {
               <div className="profile-picture">
                 {userData.imageUrl ? (
                   <img
-                    src={`http://localhost:4000/public/${userData.imageUrl}`}
+                    src={`https://group-5-project-1.onrender.com/public/${userData.imageUrl}`}
                     alt="Profile"
                     className="profile-image"
                   />
@@ -183,7 +189,6 @@ const Settings = () => {
                 }
               />
             </Form.Group>
-
             <Form.Group controlId="lastName">
               <Form.Label>Last Name</Form.Label>
               <Form.Control
@@ -195,7 +200,6 @@ const Settings = () => {
                 }
               />
             </Form.Group>
-
             <Form.Group controlId="address">
               <Form.Label>Address</Form.Label>
               <Form.Control
@@ -207,7 +211,6 @@ const Settings = () => {
                 }
               />
             </Form.Group>
-
             <Form.Group controlId="city">
               <Form.Label>City</Form.Label>
               <Form.Control
@@ -219,7 +222,6 @@ const Settings = () => {
                 }
               />
             </Form.Group>
-
             <Form.Group controlId="postalCode">
               <Form.Label>Postal Code</Form.Label>
               <Form.Control
@@ -231,7 +233,6 @@ const Settings = () => {
                 }
               />
             </Form.Group>
-
             <Form.Group controlId="email">
               <Form.Label>Email</Form.Label>
               <Form.Control
@@ -243,12 +244,11 @@ const Settings = () => {
                 }
               />
             </Form.Group>
-
             <Button variant="primary" type="submit">
               Update Profile
             </Button>
-
-            {message && <p className="message">{message}</p>} {/* Message moved here */}
+            {message && <p className="message">{message}</p>}{" "}
+            {/* Message moved here */}
           </Form>
 
           <Form onSubmit={handleChangePassword} className="mt-4">
@@ -303,7 +303,6 @@ const Settings = () => {
               Change Password
             </Button>
           </Form>
-
         </Col>
       </Row>
     </Container>
