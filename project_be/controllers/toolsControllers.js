@@ -15,13 +15,10 @@ const getAllTools = async (req, res) => {
 // POST /tools
 const createTool = async (req, res) => {
   try {
-    console.log("File received:", req.file);
-
     const newTool = new Tools({
       ...req.body,
       imageUrl: req.file ? `/toolsImages/${req.file.filename}` : null,
     });
-    console.log("newTool:", newTool);
     const savedTool = await newTool.save();
     await updateUserSharedTools(savedTool.owner, savedTool._id, "add");
     res.status(201).json(savedTool);

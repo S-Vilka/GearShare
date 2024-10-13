@@ -7,7 +7,7 @@
   },
   "servers": [
     {
-      "url": "http://localhost:4000/api"
+      "url": "https://group-5-project-1.onrender.com/api"
     }
   ],
   "paths": {
@@ -197,43 +197,7 @@
         }
       }
     },
-    "/users/{userId}/tools": {
-      "patch": {
-        "summary": "Share a tool",
-        "security": [{ "bearerAuth": [] }],
-        "parameters": [
-          {
-            "in": "path",
-            "name": "userId",
-            "required": true,
-            "schema": {
-              "type": "string"
-            }
-          }
-        ],
-        "requestBody": {
-          "required": true,
-          "content": {
-            "application/json": {
-              "schema": {
-                "type": "object",
-                "properties": {
-                  "toolId": { "type": "string" }
-                }
-              }
-            }
-          }
-        },
-        "responses": {
-          "200": {
-            "description": "Tool shared successfully"
-          },
-          "401": {
-            "description": "Unauthorized"
-          }
-        }
-      }
-    },
+
     "/users/{userId}/change-password": {
       "patch": {
         "summary": "Change user password",
