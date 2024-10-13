@@ -7,7 +7,7 @@ const bcrypt = require("bcryptjs");
 const User = require("../models/userModel");
 
 let server;
-let user; // Define the user variable here
+let user;
 let token;
 let userId;
 
@@ -159,6 +159,37 @@ describe("User API", () => {
         });
       expect(res.statusCode).toBe(404);
       expect(res.body).toHaveProperty("message", "User not found");
+    });
+  });
+
+  describe("PATCH /api/users/:userId/change-password", () => {
+    it("should change the user password", async () => {
+      const res = await request(app)
+        .patch(`/api/users/${userId}/change-password`)
+        .set("Authorization", `Bearer ${token}`)
+        .send({
+          oldPassword: "Pass.word1-23!",
+          newPassword: "Pass.word1-23!@d",
+        });
+
+      expect(res.statusCode).toBe(200);
+      expect(res.body).toHaveProperty(
+        "message",
+        "Password changed successfully."
+      );
+    });
+
+    it("should return 400 for incorrect old password", async () => {
+      const res = await request(app)
+        .patch(`/api/users/${userId}/change-password`)
+        .set("Authorization", `Bearer ${token}`)
+        .set("Content-Type", "application/json")
+        .send({
+          oldPassword: "WrongPassword",
+          newPassword: "NewPassword123!",
+        });
+      expect(res.statusCode).toBe(400);
+      expect(res.body).toHaveProperty("message", "Incorrect old password");
     });
   });
 
