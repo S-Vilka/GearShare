@@ -216,45 +216,6 @@ const deleteUser = async (req, res) => {
   }
 };
 
-const shareTool = async (req, res) => {
-  const { toolId } = req.body;
-  const { userId } = req.params;
-  console.log("Received USERId:", userId);
-  console.log("Received TOOLId:", toolId);
-
-  if (
-    !mongoose.Types.ObjectId.isValid(userId) ||
-    !mongoose.Types.ObjectId.isValid(toolId)
-  ) {
-    return res.status(400).json({ message: "Invalid tool ID format" });
-  }
-
-  try {
-    const updatedUser = await User.findByIdAndUpdate(
-      userId,
-      {
-        $pull: { sharedTools: toolId },
-        $addToSet: { borrowedTools: toolId },
-      },
-      { new: true }
-    );
-
-    if (!updatedUser) {
-      return res.status(404).json({ message: "User not found" });
-    }
-
-    res.status(200).json({
-      message: "Tool moved to borrowed successfully",
-      user: updatedUser,
-    });
-  } catch (error) {
-    console.error("Error moving tool:", error);
-    res
-      .status(500)
-      .json({ message: "Failed to move tool", error: error.message });
-  }
-};
-
 const changePassword = async (req, res) => {
   const { userId } = req.params;
   const { oldPassword, newPassword } = req.body;
@@ -301,7 +262,6 @@ module.exports = {
   patchUser,
   deleteUser,
   loginUser,
-  shareTool,
   updateUserSharedTools,
   changePassword,
 };
