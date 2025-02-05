@@ -6,12 +6,12 @@ GearShare is a web platform that enables neighbors within the same apartment com
 
 ## 🚀 Features  
 
-- 🔹 **User Authentication** – Register and log in securely using JWT authentication.  
-- 🔹 **Profile Management** – Users can modify their profiles, including contact details.  
-- 🔹 **Address-Based Grouping** – Users are grouped by their apartment complex, ensuring localized sharing.  
-- 🔹 **Equipment Listing** – Users can add and remove items they are willing to share from their profile.  
-- 🔹 **Equipment Browsing** – Users can view available equipment within their apartment complex.  
-- 🔹 **Item Details** – Click on an item to view additional information and contact details for borrowing.  
+🔹 **User Authentication** – Register and log in securely using JWT authentication.  
+🔹 **Profile Management** – Users can modify their profiles, including contact details.  
+🔹 **Address-Based Grouping** – Users are grouped by their apartment complex, ensuring localized sharing.  
+🔹 **Equipment Listing** – Users can add and remove items they are willing to share from their profile.  
+🔹 **Equipment Browsing** – Users can view available equipment within their apartment complex.  
+🔹 **Item Details** – Click on an item to view additional information and contact details for borrowing.  
 
 ## 🛠️ Tech Stack  
 
